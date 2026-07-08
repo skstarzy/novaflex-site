@@ -425,6 +425,11 @@
   @media (max-width:380px){
     .prod-grid{grid-template-columns:repeat(2,1fr);}
   }
+  /* Best Sellers holds 6 products — force 3-up on wide desktop too so it
+     always fills as even 2x3 rows (the catalog stays 4-up). */
+  @media (min-width:1101px){
+    #featuredGrid{grid-template-columns:repeat(3,1fr);max-width:64%;}
+  }
 
   /* filter tabs */
   .filter-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:32px;}
@@ -1007,7 +1012,7 @@ const PRODUCTS = [
   {name:"Bacteriostatic Water", spec:"10ml vial", cat:"Supplies", price:20, slug:"bacwater-10ml"},
 ];
 
-const FEATURED_NAMES = ["Retatrutide","Tesamorelin","GHK-Cu 100mg vial","Glow Blend","Melanotan II","Klow Blend","BPC-157","Tirzepatide"];
+const FEATURED_NAMES = ["Retatrutide","Tesamorelin","GHK-Cu 100mg vial","Glow Blend","Melanotan II","Klow Blend"];
 
 // ---------------- Cart state ----------------
 let cart = []; // { name, spec, price, qty }
