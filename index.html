@@ -380,7 +380,7 @@
   .badge{
     position:absolute;top:10px;left:10px;
     font-family:'IBM Plex Mono';font-size:9.5px;letter-spacing:0.08em;text-transform:uppercase;
-    padding:4px 8px;border-radius:2px;font-weight:600;
+    padding:4px 8px;border-radius:2px;font-weight:600;z-index:3;
   }
   .badge.bestseller{background:var(--gold);color:#141008;}
   .badge.new{background:var(--silver);color:#141008;}
@@ -388,7 +388,7 @@
   .purity-tag{
     position:absolute;bottom:10px;right:10px;
     font-family:'IBM Plex Mono';font-size:10.5px;color:var(--gold-bright);
-    background:rgba(0,0,0,0.55);padding:3px 8px;border-radius:2px;border:1px solid var(--line-strong);
+    background:rgba(0,0,0,0.55);padding:3px 8px;border-radius:2px;border:1px solid var(--line-strong);z-index:3;
   }
   .prod-body{padding:18px 18px 20px;display:flex;flex-direction:column;gap:6px;flex:1;}
   .prod-cat{font-size:10.5px;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;font-family:'IBM Plex Mono';}
@@ -425,10 +425,13 @@
   @media (max-width:380px){
     .prod-grid{grid-template-columns:repeat(2,1fr);}
   }
-  /* Best Sellers holds 6 products — force 3-up on wide desktop too so it
-     always fills as even 2x3 rows (the catalog stays 4-up). */
-  @media (min-width:1101px){
-    #featuredGrid{grid-template-columns:repeat(3,1fr);max-width:64%;}
+  /* Best Sellers keeps all 8 on wide desktop (even 2x4 rows — left unchanged).
+     On narrower/mobile widths the grid is 3-up, where 8 leaves an uneven row,
+     so hide the two non-badged fillers there for clean 2x3 rows. Both still
+     appear in the full catalog below. */
+  @media (max-width:1100px){
+    #featuredGrid .prod-card[data-slug="tirz-10mg"],
+    #featuredGrid .prod-card[data-slug="bpc157-5mg"]{display:none;}
   }
 
   /* filter tabs */
@@ -1012,7 +1015,7 @@ const PRODUCTS = [
   {name:"Bacteriostatic Water", spec:"10ml vial", cat:"Supplies", price:20, slug:"bacwater-10ml"},
 ];
 
-const FEATURED_NAMES = ["Retatrutide","Tesamorelin","GHK-Cu 100mg vial","Glow Blend","Melanotan II","Klow Blend"];
+const FEATURED_NAMES = ["Retatrutide","Tesamorelin","GHK-Cu 100mg vial","Glow Blend","Melanotan II","Klow Blend","BPC-157","Tirzepatide"];
 
 // ---------------- Cart state ----------------
 let cart = []; // { name, spec, price, qty }
@@ -1214,7 +1217,7 @@ function productCard(p){
   const badgeHTML = p.badge ? `<span class="badge ${p.badge}">${p.badge === 'bestseller' ? 'Bestseller' : p.badge === 'new' ? 'New' : p.badge}</span>` : '';
   const purityHTML = p.purity ? `<span class="purity-tag">${p.purity}</span>` : '';
   return `
-  <div class="prod-card" data-cat="${p.cat}">
+  <div class="prod-card" data-cat="${p.cat}" data-slug="${p.slug}">
     <div class="prod-media">
       ${badgeHTML}
       <img class="vial-photo" src="assets/vials/NF-${p.slug}.webp" alt="${p.name} ${p.spec} — NovaFlex Peptides" loading="lazy">
