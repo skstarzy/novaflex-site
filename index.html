@@ -383,6 +383,7 @@
   .badge.bestseller{background:var(--gold);color:#141008;}
   .badge.new{background:var(--silver);color:#141008;}
   .badge.signature{background:transparent;border:1px solid var(--gold);color:var(--gold-bright);}
+  .badge.soldout{background:rgba(0,0,0,0.65);border:1px solid var(--line-strong);color:var(--silver-dim);}
   .purity-tag{
     position:absolute;bottom:10px;right:10px;
     font-family:'IBM Plex Mono';font-size:10.5px;color:var(--gold-bright);
@@ -401,6 +402,9 @@
   }
   .add-btn:hover{background:var(--gold);border-color:var(--gold);color:#141008;}
   .add-btn.added{background:var(--gold-bright);border-color:var(--gold-bright);color:#141008;}
+  .add-btn.soldout{color:var(--silver-dim);border-color:var(--line);cursor:not-allowed;}
+  .add-btn.soldout:hover{background:transparent;border-color:var(--line);color:var(--silver-dim);}
+  .prod-card.is-soldout .vial-photo{opacity:.4;filter:grayscale(0.5);}
 
   @media (max-width:1100px){.prod-grid{grid-template-columns:repeat(3,1fr);}}
   /* Mobile: denser, compact cards so the whole catalog is scannable at a glance
@@ -1104,7 +1108,7 @@ const PRODUCTS = [
   {name:"BPC-157", spec:"5mg vial", cat:"Healing", price:40, purity:"99.3%", slug:"bpc157-5mg"},
   {name:"TB-500", spec:"5mg vial", cat:"Healing", price:55, purity:"99.1%", slug:"tb500-5mg"},
   {name:"KPV", spec:"10mg vial", cat:"Healing", price:45, purity:"99.0%", slug:"kpv-10mg"},
-  {name:"GHK-Cu", spec:"50mg vial", cat:"Skin & Aesthetics", price:42, purity:"99.2%", slug:"ghkcu-50mg"},
+  {name:"GHK-Cu", spec:"50mg vial", cat:"Skin & Aesthetics", price:42, purity:"99.2%", slug:"ghkcu-50mg", soldOut:true},
   {name:"GHK-Cu", spec:"100mg vial", cat:"Skin & Aesthetics", price:58, purity:"99.2%", badge:"bestseller", slug:"ghkcu-100mg"},
   {name:"Melanotan II", spec:"10mg vial", cat:"Skin & Aesthetics", price:45, purity:"99.0%", badge:"bestseller", slug:"mt2-10mg"},
   {name:"Semax", spec:"5mg vial", cat:"Cognitive & Longevity", price:40, purity:"99.1%", slug:"semax-5mg"},
@@ -1402,10 +1406,14 @@ function vialSVG(name, spec, purity){
 }
 
 function productCard(p){
-  const badgeHTML = p.badge ? `<span class="badge ${p.badge}">${p.badge === 'bestseller' ? 'Bestseller' : p.badge === 'new' ? 'New' : p.badge}</span>` : '';
+  const badgeHTML = p.soldOut ? `<span class="badge soldout">Sold Out</span>`
+    : (p.badge ? `<span class="badge ${p.badge}">${p.badge === 'bestseller' ? 'Bestseller' : p.badge === 'new' ? 'New' : p.badge}</span>` : '');
   const purityHTML = p.purity ? `<span class="purity-tag">${p.purity}</span>` : '';
+  const btnHTML = p.soldOut
+    ? `<button class="add-btn soldout" disabled aria-disabled="true">Sold Out</button>`
+    : `<button class="add-btn" onclick='cartBtnClick(this,${JSON.stringify(p.name)},${JSON.stringify(p.spec)},${p.price})'>Add to Cart</button>`;
   return `
-  <div class="prod-card" data-cat="${p.cat}" data-slug="${p.slug}">
+  <div class="prod-card${p.soldOut ? ' is-soldout' : ''}" data-cat="${p.cat}" data-slug="${p.slug}">
     <div class="prod-media">
       ${badgeHTML}
       <img class="vial-photo" src="assets/vials/NF-${p.slug}.webp" alt="${p.name} ${p.spec} — NovaFlex Peptides" loading="lazy">
@@ -1417,7 +1425,7 @@ function productCard(p){
       <span class="prod-spec">${p.spec}</span>
       <div class="prod-foot">
         <span class="prod-price">$${p.price.toFixed(2)}</span>
-        <button class="add-btn" onclick='cartBtnClick(this,${JSON.stringify(p.name)},${JSON.stringify(p.spec)},${p.price})'>Add to Cart</button>
+        ${btnHTML}
       </div>
     </div>
   </div>`;
@@ -1451,7 +1459,7 @@ document.getElementById('featuredGrid').innerHTML = featured.slice(0,8).map(prod
         "image":"https://novaflexusa.com/assets/vials/NF-"+p.slug+".webp",
         "brand":{"@type":"Brand","name":"NovaFlex Peptides"},
         "url":"https://novaflexusa.com/#catalog",
-        "offers":{"@type":"Offer","price":p.price.toFixed(2),"priceCurrency":"USD","availability":"https://schema.org/InStock","url":"https://novaflexusa.com/#catalog"}
+        "offers":{"@type":"Offer","price":p.price.toFixed(2),"priceCurrency":"USD","availability":p.soldOut?"https://schema.org/OutOfStock":"https://schema.org/InStock","url":"https://novaflexusa.com/#catalog"}
       }
     };})
   };
