@@ -391,7 +391,9 @@
   }
   .prod-body{padding:18px 18px 20px;display:flex;flex-direction:column;gap:6px;flex:1;}
   .prod-cat{font-size:10.5px;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;font-family:'IBM Plex Mono';}
-  .prod-name{font-size:16px;font-weight:600;color:var(--silver-bright);font-family:'Space Grotesk';}
+  .prod-name{font-size:16px;font-weight:600;color:var(--silver-bright);font-family:'Space Grotesk';cursor:pointer;transition:color .15s ease;}
+  .prod-name:hover{color:var(--gold-bright);}
+  .prod-media-link{display:contents;cursor:pointer;}
   .prod-spec{font-size:12.5px;color:var(--text-muted);font-family:'IBM Plex Mono';}
   .prod-foot{margin-top:auto;padding-top:14px;display:flex;align-items:center;justify-content:space-between;}
   .prod-price{font-family:'IBM Plex Mono';font-size:17px;font-weight:600;color:var(--silver-bright);}
@@ -1130,6 +1132,10 @@ const FEATURED_NAMES = ["Retatrutide","Tesamorelin","GHK-Cu 100mg vial","Glow Bl
 
 // ---------------- Cart state ----------------
 let cart = []; // { name, spec, price, qty }
+const CART_KEY = 'nf_cart';
+function saveCart(){ try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch(e){} }
+function loadCart(){ try { const s = localStorage.getItem(CART_KEY); cart = s ? (JSON.parse(s) || []) : []; } catch(e){ cart = []; } }
+loadCart();
 
 function findCartItem(name, spec){
   return cart.find(i => i.name === name && i.spec === spec);
@@ -1144,6 +1150,7 @@ function addToCart(name, spec, price){
   const existing = findCartItem(name, spec);
   if (existing){ existing.qty += 1; }
   else { cart.push({name, spec, price, qty:1}); }
+  saveCart();
   renderCartCount();
   renderDrawer();
 }
@@ -1153,12 +1160,14 @@ function changeQty(name, spec, delta){
   if (!item) return;
   item.qty += delta;
   if (item.qty <= 0){ cart = cart.filter(i => i !== item); }
+  saveCart();
   renderCartCount();
   renderDrawer();
 }
 
 function removeFromCart(name, spec){
   cart = cart.filter(i => !(i.name === name && i.spec === spec));
+  saveCart();
   renderCartCount();
   renderDrawer();
 }
@@ -1292,6 +1301,11 @@ document.querySelector('.cart-btn').addEventListener('click', (e)=>{ e.preventDe
 document.getElementById('drawerCloseBtn').addEventListener('click', closeDrawer);
 document.getElementById('drawerOverlay').addEventListener('click', closeDrawer);
 
+// Reflect any persisted cart on load, and open the drawer when arriving via #cart.
+renderCartCount();
+renderDrawer();
+if (location.hash === '#cart'){ openDrawer(); }
+
 document.getElementById('checkoutBtn').addEventListener('click', async ()=>{
   const errEl = document.getElementById('checkoutErr');
   errEl.style.display = 'none';
@@ -1316,6 +1330,7 @@ document.getElementById('checkoutBtn').addEventListener('click', async ()=>{
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Checkout failed.');
+    cart = []; saveCart();
     window.location.href = data.redirectUrl;
   } catch (err){
     errEl.textContent = 'Checkout is not connected yet — this needs the backend running (see /backend). ' + err.message;
@@ -1412,16 +1427,17 @@ function productCard(p){
   const btnHTML = p.soldOut
     ? `<button class="add-btn soldout" disabled aria-disabled="true">Sold Out</button>`
     : `<button class="add-btn" onclick='cartBtnClick(this,${JSON.stringify(p.name)},${JSON.stringify(p.spec)},${p.price})'>Add to Cart</button>`;
+  const href = `product.html?slug=${p.slug}`;
   return `
   <div class="prod-card${p.soldOut ? ' is-soldout' : ''}" data-cat="${p.cat}" data-slug="${p.slug}">
     <div class="prod-media">
       ${badgeHTML}
-      <img class="vial-photo" src="assets/vials/NF-${p.slug}.webp" alt="${p.name} ${p.spec} — NovaFlex Peptides" loading="lazy">
+      <a href="${href}" class="prod-media-link" aria-label="View ${p.name} details"><img class="vial-photo" src="assets/vials/NF-${p.slug}.webp" alt="${p.name} ${p.spec} — NovaFlex Peptides" loading="lazy"></a>
       ${purityHTML}
     </div>
     <div class="prod-body">
       <span class="prod-cat">${p.cat}</span>
-      <span class="prod-name">${p.name}</span>
+      <a class="prod-name" href="${href}">${p.name}</a>
       <span class="prod-spec">${p.spec}</span>
       <div class="prod-foot">
         <span class="prod-price">$${p.price.toFixed(2)}</span>
