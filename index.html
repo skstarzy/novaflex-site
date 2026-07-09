@@ -353,6 +353,10 @@
     background:var(--bg-alt);border:1px solid var(--line);border-radius:6px;
     overflow:hidden;transition:border-color .2s ease, transform .2s ease;
     display:flex;flex-direction:column;
+    /* Skip rendering/animating off-screen cards — big main-thread/TBT win
+       with 25 animated vials on the page. */
+    content-visibility:auto;
+    contain-intrinsic-size:300px 380px;
   }
   .prod-card:hover{border-color:var(--gold);transform:translateY(-2px);}
   .prod-media{
@@ -376,6 +380,7 @@
     max-width:94%;
     animation: vialFloat 5.5s ease-in-out infinite;
     transform-origin: 50% 85%;
+    will-change: transform;
   }
   .prod-card:nth-child(4n+1) .vial-photo{ animation-delay: -0.6s; }
   .prod-card:nth-child(4n+2) .vial-photo{ animation-delay: -2.1s; }
