@@ -1247,6 +1247,33 @@ function cartBtnClick(btn, name, spec, price){
 const featured = PRODUCTS.filter(p => FEATURED_NAMES.some(n => (p.name + ' ' + p.spec).includes(n) || p.name === n));
 document.getElementById('featuredGrid').innerHTML = featured.slice(0,8).map(productCard).join('');
 
+// SEO: emit Product structured data (JSON-LD) from the catalog so search
+// engines can show the peptides as rich results (name, price, image).
+// Generated from PRODUCTS so it never drifts out of sync with the catalog.
+(function(){
+  const productLD = {
+    "@context":"https://schema.org",
+    "@type":"ItemList",
+    "name":"NovaFlex Peptides research compound catalog",
+    "itemListElement": PRODUCTS.map(function(p,i){ return {
+      "@type":"ListItem","position":i+1,
+      "item":{
+        "@type":"Product",
+        "name":p.name+" "+p.spec,
+        "category":p.cat,
+        "image":"https://novaflexusa.com/assets/vials/NF-"+p.slug+".webp",
+        "brand":{"@type":"Brand","name":"NovaFlex Peptides"},
+        "url":"https://novaflexusa.com/#catalog",
+        "offers":{"@type":"Offer","price":p.price.toFixed(2),"priceCurrency":"USD","availability":"https://schema.org/InStock","url":"https://novaflexusa.com/#catalog"}
+      }
+    };})
+  };
+  const s=document.createElement('script');
+  s.type='application/ld+json';
+  s.textContent=JSON.stringify(productLD);
+  document.head.appendChild(s);
+})();
+
 // Full catalog + filters
 const CATS = ["All","Weight Loss","Growth & Recovery","Healing","Skin & Aesthetics","Cognitive & Longevity","Stacks & Blends","Supplies"];
 const filterRow = document.getElementById('filterRow');
