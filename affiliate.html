@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Affiliate Dashboard — NovaFlex Peptides</title>
+<meta name="description" content="NovaFlex Peptides affiliate partner dashboard.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#08080a">
+<link rel="icon" href="assets/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"></noscript>
+<style>
+  :root{
+    --bg:#08080a; --bg-alt:#111113; --line:rgba(255,255,255,0.09); --line-strong:rgba(255,255,255,0.16);
+    --silver:#cdd1d8; --silver-bright:#f2f3f5; --silver-dim:#8b8e94;
+    --gold:#c9a44c; --gold-bright:#f0d78c; --gold-deep:#8a6a24; --text:#e7e7ea; --text-muted:#9a9a9f; --maxw:920px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif;margin:0;letter-spacing:-0.01em;}
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;height:auto;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);}
+  :focus-visible{outline:2px solid var(--gold-bright);outline-offset:2px;}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:14px;font-weight:600;padding:12px 22px;border-radius:5px;cursor:pointer;border:1px solid transparent;transition:all .2s ease;font-family:'Inter',sans-serif;}
+  .btn-gold{background:linear-gradient(135deg,var(--gold-bright),var(--gold) 60%,var(--gold-deep));color:#141008;}
+  .btn-gold:hover{filter:brightness(1.08);}
+  .btn-gold:disabled{opacity:.55;cursor:not-allowed;}
+  .btn-ghost{background:transparent;border-color:var(--line-strong);color:var(--silver);}
+  .btn-ghost:hover{border-color:var(--gold);color:var(--gold-bright);}
+
+  .nav{border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(8,8,10,0.92);backdrop-filter:blur(8px);z-index:20;}
+  .nav-inner{max-width:var(--maxw);margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand img{width:auto;height:32px;}
+  .brand-text{font-family:'Space Grotesk';font-weight:700;font-size:18px;color:var(--silver-bright);}
+  .brand-text .flex{color:var(--gold-bright);}
+  .nav-right a{font-size:13px;color:var(--silver-dim);}
+  .nav-right a:hover{color:var(--gold-bright);}
+
+  main{padding:44px 0 70px;min-height:60vh;}
+
+  /* login */
+  .login{max-width:440px;margin:20px auto 0;background:var(--bg-alt);border:1px solid var(--line);border-radius:12px;padding:32px 30px;text-align:center;}
+  .login h1{font-size:24px;color:var(--silver-bright);}
+  .login p{margin-top:12px;font-size:14px;color:var(--text-muted);line-height:1.6;}
+  .login input{width:100%;margin-top:22px;background:var(--bg);border:1px solid var(--line-strong);border-radius:6px;padding:13px 14px;color:var(--silver);font-size:14px;}
+  .login input:focus{outline:none;border-color:var(--gold);}
+  .login .btn-gold{width:100%;margin-top:12px;}
+  .login-msg{margin-top:16px;font-size:13px;line-height:1.5;display:none;}
+  .login-msg.ok{display:block;color:var(--gold-bright);}
+  .login-msg.err{display:block;color:#e08484;}
+
+  /* dashboard */
+  .dash-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  .dash-head h1{font-size:clamp(22px,3vw,30px);color:var(--silver-bright);}
+  .dash-head .eyebrow{display:block;margin-bottom:8px;}
+  .code-box{display:flex;align-items:center;gap:12px;margin-top:20px;flex-wrap:wrap;}
+  .code-pill{display:inline-flex;align-items:center;gap:10px;background:var(--bg-alt);border:1px solid var(--line-strong);border-radius:7px;padding:11px 16px;font-family:'IBM Plex Mono';font-size:18px;font-weight:600;color:var(--gold-bright);letter-spacing:1px;cursor:pointer;}
+  .code-pill:hover{border-color:var(--gold);}
+  .code-note{font-size:13px;color:var(--text-muted);}
+  .code-note b{color:var(--silver-bright);}
+
+  .stat-grid{margin-top:30px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .scard{background:var(--bg-alt);border:1px solid var(--line);border-radius:10px;padding:16px 18px;}
+  .scard.hl{border-color:rgba(201,164,76,0.4);}
+  .scard .k{font-size:10.5px;text-transform:uppercase;letter-spacing:0.09em;color:var(--text-muted);font-family:'IBM Plex Mono';}
+  .scard .v{margin-top:8px;font-size:24px;font-weight:700;font-family:'IBM Plex Mono';color:var(--silver-bright);}
+  .scard.hl .v{color:var(--gold-bright);}
+  .scard.green .v{color:#7fcf9a;}
+  @media(max-width:720px){.stat-grid{grid-template-columns:1fr 1fr;}}
+
+  h2.sec{margin-top:40px;font-size:16px;color:var(--silver-bright);}
+  .otable{margin-top:16px;width:100%;border-collapse:collapse;}
+  .otable th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);font-family:'IBM Plex Mono';padding:0 12px 10px;border-bottom:1px solid var(--line);}
+  .otable th.r,.otable td.r{text-align:right;}
+  .otable td{padding:13px 12px;border-bottom:1px solid var(--line);font-size:13.5px;color:var(--silver);font-variant-numeric:tabular-nums;}
+  .otable .comm{color:#7fcf9a;font-family:'IBM Plex Mono';}
+  .pill{font-family:'IBM Plex Mono';font-size:10.5px;text-transform:uppercase;letter-spacing:0.05em;padding:3px 8px;border-radius:4px;}
+  .pill.paid{background:rgba(46,160,80,0.15);color:#7fcf9a;}
+  .pill.pending{background:rgba(201,164,76,0.15);color:var(--gold-bright);}
+  .pill.cancelled{background:rgba(255,255,255,0.06);color:var(--silver-dim);}
+  .empty{margin-top:16px;background:var(--bg-alt);border:1px solid var(--line);border-radius:10px;padding:30px;text-align:center;color:var(--text-muted);font-size:14px;}
+  .dash-foot{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+  .dash-foot .note{font-size:12px;color:var(--text-muted);}
+  .logout{font-size:13px;color:var(--silver-dim);border:1px solid var(--line-strong);border-radius:5px;padding:8px 14px;cursor:pointer;background:transparent;font-family:'Inter';}
+  .logout:hover{border-color:#e08484;color:#e08484;}
+
+  footer{border-top:1px solid var(--line);padding:26px 0;margin-top:40px;}
+  .foot-inner{max-width:var(--maxw);margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--text-muted);}
+  .foot-inner a{color:var(--silver-dim);}
+  .foot-inner a:hover{color:var(--gold-bright);}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--gold);color:#141008;font-weight:600;font-size:13px;padding:10px 18px;border-radius:6px;opacity:0;pointer-events:none;transition:all .25s ease;z-index:60;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <img src="assets/logo.webp" alt="NovaFlex Peptides">
+      <span class="brand-text">NOVA<span class="flex">FLEX</span></span>
+    </a>
+    <div class="nav-right"><a href="index.html#affiliate">← Back to site</a></div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap" id="root">
+    <div style="text-align:center;color:var(--text-muted);padding:40px 0;font-family:'IBM Plex Mono';font-size:13px;" id="loading">Loading…</div>
+  </div>
+</main>
+
+<footer>
+  <div class="foot-inner">
+    <span>© 2026 NovaFlex Peptides · Affiliate Portal</span>
+    <a href="mailto:support@novaflexusa.com">support@novaflexusa.com</a>
+  </div>
+</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+const API = 'https://api.novaflexusa.com';
+const TKEY = 'nf_aff_token';
+const money = (n) => '$' + Number(n).toFixed(2);
+const pct = (r) => Math.round(Number(r) * 100) + '%';
+const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const root = document.getElementById('root');
+
+let toastTimer;
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),1600); }
+
+// Capture magic-link token from URL, store it, and clean the address bar.
+(function(){
+  const u = new URL(location.href);
+  const t = u.searchParams.get('token');
+  if (t){ try { localStorage.setItem(TKEY, t); } catch(e){} u.searchParams.delete('token'); history.replaceState({}, '', u.pathname); }
+})();
+
+function showLogin(prefillMsg){
+  root.innerHTML =
+    '<div class="login">'+
+      '<span class="eyebrow">Affiliate Portal</span>'+
+      '<h1 style="margin-top:10px;">Your dashboard</h1>'+
+      '<p>Enter the email on your affiliate account and we\'ll send you a secure login link — no password needed.</p>'+
+      '<form id="loginForm">'+
+        '<input type="email" id="loginEmail" placeholder="you@email.com" autocomplete="email" required>'+
+        '<button type="submit" class="btn btn-gold" id="loginBtn">Send me a login link</button>'+
+      '</form>'+
+      '<div class="login-msg" id="loginMsg"></div>'+
+    '</div>';
+  const form = document.getElementById('loginForm');
+  const msg = document.getElementById('loginMsg');
+  if (prefillMsg){ msg.className='login-msg err'; msg.textContent=prefillMsg; }
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('loginBtn');
+    const email = document.getElementById('loginEmail').value.trim();
+    msg.className='login-msg';
+    btn.disabled = true; const orig = btn.textContent; btn.textContent = 'Sending…';
+    try {
+      await fetch(API + '/api/affiliate-portal/request-link', {
+        method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email }),
+      });
+      msg.className='login-msg ok';
+      msg.innerHTML = 'If that email is on an active affiliate account, a login link is on its way. Check your inbox (and spam).';
+      form.style.display='none';
+    } catch(err){
+      msg.className='login-msg err'; msg.textContent='Something went wrong. Please try again.';
+      btn.disabled=false; btn.textContent=orig;
+    }
+  });
+}
+
+async function loadDashboard(){
+  const token = localStorage.getItem(TKEY);
+  if (!token){ showLogin(); return; }
+  try {
+    const res = await fetch(API + '/api/affiliate-portal/me', { headers: { Authorization: 'Bearer ' + token } });
+    if (res.status === 401){ localStorage.removeItem(TKEY); showLogin('Your session expired — enter your email for a fresh link.'); return; }
+    if (!res.ok){ const d = await res.json().catch(()=>({})); showLogin(d.error || 'Could not load your dashboard.'); return; }
+    renderDashboard(await res.json());
+  } catch(err){
+    root.innerHTML = '<div class="empty">Couldn\'t reach the server. Please refresh in a moment.</div>';
+  }
+}
+
+function statusPill(s){
+  const cls = s === 'paid' ? 'paid' : s === 'pending' ? 'pending' : 'cancelled';
+  return '<span class="pill '+cls+'">'+esc(s)+'</span>';
+}
+
+function renderDashboard(d){
+  const st = d.stats || {};
+  const rows = (d.orders || []).map(o =>
+    '<tr>'+
+      '<td>'+new Date(o.date).toLocaleDateString()+'</td>'+
+      '<td class="r">'+money(o.total)+'</td>'+
+      '<td class="r comm">+'+money(o.commission)+(o.commissionPaid?' ✓':'')+'</td>'+
+      '<td class="r">'+statusPill(o.status)+'</td>'+
+    '</tr>').join('');
+
+  const ordersHTML = (d.orders && d.orders.length)
+    ? '<table class="otable"><thead><tr><th>Date</th><th class="r">Order total</th><th class="r">Your commission</th><th class="r">Status</th></tr></thead><tbody>'+rows+'</tbody></table>'
+    : '<div class="empty">No orders with your code yet — share <b style="color:var(--gold-bright)">'+esc(d.code)+'</b> to start earning.</div>';
+
+  root.innerHTML =
+    '<div class="dash-head">'+
+      '<div>'+
+        '<span class="eyebrow">Affiliate Dashboard</span>'+
+        '<h1>Welcome back, '+esc(d.name)+'</h1>'+
+      '</div>'+
+      '<button class="logout" id="logoutBtn">Log out</button>'+
+    '</div>'+
+    '<div class="code-box">'+
+      '<span class="code-pill" id="codePill" title="Copy code">'+esc(d.code)+' <span style="font-size:12px;color:var(--silver-dim)">copy</span></span>'+
+      '<span class="code-note"><b>'+pct(d.discountRate)+'</b> off for your audience · <b>'+pct(d.commissionRate)+'</b> commission to you</span>'+
+    '</div>'+
+    '<div class="stat-grid">'+
+      '<div class="scard"><div class="k">Total sales</div><div class="v">'+money(st.totalSales||0)+'</div></div>'+
+      '<div class="scard hl"><div class="k">Commission owed</div><div class="v">'+money(st.commissionOwed||0)+'</div></div>'+
+      '<div class="scard green"><div class="k">Paid out</div><div class="v">'+money(st.commissionPaidOut||0)+'</div></div>'+
+      '<div class="scard"><div class="k">Pending orders</div><div class="v">'+money(st.commissionPending||0)+'</div></div>'+
+    '</div>'+
+    '<h2 class="sec">Orders with your code</h2>'+
+    ordersHTML+
+    '<div class="dash-foot">'+
+      '<span class="note">Commission is paid on completed orders. Questions? support@novaflexusa.com</span>'+
+      '<a class="btn btn-ghost" href="index.html#catalog">View the catalog →</a>'+
+    '</div>';
+
+  document.getElementById('logoutBtn').addEventListener('click', () => { localStorage.removeItem(TKEY); showLogin(); });
+  document.getElementById('codePill').addEventListener('click', () => {
+    navigator.clipboard && navigator.clipboard.writeText(d.code); toast('Copied '+d.code);
+  });
+}
+
+loadDashboard();
+</script>
+</body>
+</html>
