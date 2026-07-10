@@ -1135,11 +1135,11 @@ const PRODUCTS = [
   {name:"NAD+", spec:"500mg vial", cat:"Cognitive & Longevity", price:60, purity:"99.1%", slug:"nad-500mg"},
   {name:"SS-31", spec:"10mg vial", cat:"Cognitive & Longevity", price:85, purity:"99.2%", slug:"ss31-10mg"},
   {name:"PT-141", spec:"5mg vial", cat:"Cognitive & Longevity", price:50, purity:"99.0%", slug:"pt141-5mg"},
-  {name:"Glow Blend", spec:"70mg vial", cat:"Stacks & Blends", price:130, purity:"99.2%", badge:"bestseller", slug:"glow-70mg"},
-  {name:"Klow Blend", spec:"80mg vial", cat:"Stacks & Blends", price:135, purity:"99.2%", badge:"bestseller", slug:"klow-80mg"},
-  {name:"Wolverine Stack", spec:"10mg vial", cat:"Stacks & Blends", price:75, purity:"99.1%", slug:"wolverine-10mg"},
-  {name:"Wolverine Stack", spec:"20mg vial", cat:"Stacks & Blends", price:115, purity:"99.1%", slug:"wolverine-20mg"},
-  {name:"CJC-1295 + Ipamorelin", spec:"5/5 blend vial", cat:"Stacks & Blends", price:88, purity:"99.2%", slug:"cjc1295-ipa-5-5"},
+  {name:"Glow Blend", spec:"70mg vial", cat:"Stacks & Blends", cats:["Skin & Aesthetics"], price:130, purity:"99.2%", badge:"bestseller", slug:"glow-70mg"},
+  {name:"Klow Blend", spec:"80mg vial", cat:"Stacks & Blends", cats:["Skin & Aesthetics"], price:135, purity:"99.2%", badge:"bestseller", slug:"klow-80mg"},
+  {name:"Wolverine Stack", spec:"10mg vial", cat:"Stacks & Blends", cats:["Healing"], price:75, purity:"99.1%", slug:"wolverine-10mg"},
+  {name:"Wolverine Stack", spec:"20mg vial", cat:"Stacks & Blends", cats:["Healing"], price:115, purity:"99.1%", slug:"wolverine-20mg"},
+  {name:"CJC-1295 + Ipamorelin", spec:"5/5 blend vial", cat:"Stacks & Blends", cats:["Growth & Recovery"], price:88, purity:"99.2%", slug:"cjc1295-ipa-5-5"},
   {name:"Bacteriostatic Water", spec:"3ml vial", cat:"Supplies", price:12, slug:"bacwater-3ml"},
   {name:"Bacteriostatic Water", spec:"10ml vial", cat:"Supplies", price:20, slug:"bacwater-10ml"},
 ];
@@ -1529,10 +1529,20 @@ const filterRow = document.getElementById('filterRow');
 filterRow.innerHTML = CATS.map((c,i) => `<button class="filter-btn ${i===0?'active':''}" data-cat="${c}">${c}</button>`).join('');
 
 function renderCatalog(cat){
-  const list = cat === "All" ? PRODUCTS : PRODUCTS.filter(p => p.cat === cat);
+  const list = cat === "All" ? PRODUCTS : PRODUCTS.filter(p => p.cat === cat || (p.cats && p.cats.includes(cat)));
   document.getElementById('catalogGrid').innerHTML = list.map(productCard).join('');
 }
 renderCatalog("All");
+
+// Keep the category tile counts in sync with the catalog (respects the
+// secondary categories some blends appear under).
+document.querySelectorAll('.cat-tile[data-filter]').forEach((tile) => {
+  const cat = tile.dataset.filter;
+  if (cat === 'All') return;
+  const count = PRODUCTS.filter(p => p.cat === cat || (p.cats && p.cats.includes(cat))).length;
+  const go = tile.querySelector('.go');
+  if (go) go.textContent = count + ' ' + (cat === 'Supplies' ? 'items' : 'compounds') + ' →';
+});
 
 filterRow.addEventListener('click', (e) => {
   const btn = e.target.closest('.filter-btn');
