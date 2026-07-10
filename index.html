@@ -513,7 +513,9 @@
   .coa-name{font-family:'Space Grotesk';font-weight:600;font-size:16px;color:var(--silver-bright);}
   .coa-result{font-family:'IBM Plex Mono';font-size:12.5px;color:var(--gold);margin-top:5px;}
   .coa-batch{font-size:11.5px;color:var(--text-muted);margin-top:5px;font-family:'IBM Plex Mono';}
-  .coa-lab{margin-top:34px;font-size:12.5px;color:var(--text-muted);text-align:center;}
+  .coa-more{margin-top:44px;text-align:center;border-top:1px solid var(--line);padding-top:32px;}
+  .coa-more-lead{font-family:'Space Grotesk';font-size:clamp(19px,2.4vw,24px);font-weight:600;color:var(--gold-bright);margin:0;letter-spacing:-0.01em;}
+  .coa-more-sub{margin:11px auto 0;max-width:560px;font-size:13.5px;color:var(--text-muted);line-height:1.65;}
   .coa-lightbox{position:fixed;inset:0;background:rgba(4,4,6,0.92);z-index:120;display:none;align-items:flex-start;justify-content:center;padding:28px 16px;overflow-y:auto;cursor:zoom-out;}
   .coa-lightbox.open{display:flex;}
   .coa-lightbox img{max-width:620px;width:100%;height:auto;border-radius:8px;box-shadow:0 24px 70px rgba(0,0,0,0.7);}
@@ -919,10 +921,13 @@
       <div class="section-head reveal">
         <span class="eyebrow">Certificates of Analysis</span>
         <h2>Independent <em>third-party lab reports</em></h2>
-        <p class="coa-note">Every batch is independently analyzed by Janoshik using HPLC and mass spectrometry. These are just a few of our lab reports — a full Certificate of Analysis is available for every batch, on request and included with every order.</p>
+        <p class="coa-note">Every batch is independently analyzed by Janoshik using HPLC and mass spectrometry — no fillers, no guesswork, just verified composition.</p>
       </div>
       <div class="coa-grid" id="coaGrid"></div>
-      <div class="coa-lab">Analysis performed by Janoshik Analytical, an independent third-party testing laboratory.</div>
+      <div class="coa-more">
+        <p class="coa-more-lead">These are just a few of our lab reports.</p>
+        <p class="coa-more-sub">A full Certificate of Analysis is available for every batch — on request and included with every order. Independent analysis by Janoshik Analytical.</p>
+      </div>
     </div>
   </section>
 
