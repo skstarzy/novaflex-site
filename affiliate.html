@@ -54,6 +54,10 @@
   .login-msg{margin-top:16px;font-size:13px;line-height:1.5;display:none;}
   .login-msg.ok{display:block;color:var(--gold-bright);}
   .login-msg.err{display:block;color:#e08484;}
+  .login .linkrow{margin-top:18px;font-size:13px;color:var(--text-muted);}
+  .login .linkrow a{color:var(--gold);cursor:pointer;}
+  .login .linkrow a:hover{color:var(--gold-bright);}
+  .login .hint{margin-top:8px;font-size:12px;color:var(--silver-dim);line-height:1.5;}
 
   /* dashboard */
   .dash-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;}
@@ -134,41 +138,132 @@ const root = document.getElementById('root');
 let toastTimer;
 function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),1600); }
 
-// Capture magic-link token from URL, store it, and clean the address bar.
-(function(){
-  const u = new URL(location.href);
-  const t = u.searchParams.get('token');
-  if (t){ try { localStorage.setItem(TKEY, t); } catch(e){} u.searchParams.delete('token'); history.replaceState({}, '', u.pathname); }
-})();
+// --- Email + password auth -------------------------------------------------
+// The email link carries a SETUP token (?setup=): it only lets the affiliate
+// choose a password, then logs them in. Everyday access is email + password,
+// which yields a SESSION token stored in localStorage. A forwarded link alone
+// can't read anyone's data — the password is still required.
 
-function showLogin(prefillMsg){
+function saveSession(token){ try { localStorage.setItem(TKEY, token); } catch(e){} }
+
+// LOGIN — email + password
+function showLogin(prefillMsg, prefillClass){
   root.innerHTML =
     '<div class="login">'+
       '<span class="eyebrow">Affiliate Portal</span>'+
-      '<h1 style="margin-top:10px;">Your dashboard</h1>'+
-      '<p>Enter the email on your affiliate account and we\'ll send you a secure login link — no password needed.</p>'+
+      '<h1 style="margin-top:10px;">Log in</h1>'+
+      '<p>Access your affiliate dashboard.</p>'+
       '<form id="loginForm">'+
         '<input type="email" id="loginEmail" placeholder="you@email.com" autocomplete="email" required>'+
-        '<button type="submit" class="btn btn-gold" id="loginBtn">Send me a login link</button>'+
+        '<input type="password" id="loginPass" placeholder="Password" autocomplete="current-password" required>'+
+        '<button type="submit" class="btn btn-gold" id="loginBtn">Log in</button>'+
       '</form>'+
       '<div class="login-msg" id="loginMsg"></div>'+
+      '<div class="linkrow"><a id="forgotLink">Forgot password?</a></div>'+
     '</div>';
   const form = document.getElementById('loginForm');
   const msg = document.getElementById('loginMsg');
-  if (prefillMsg){ msg.className='login-msg err'; msg.textContent=prefillMsg; }
+  if (prefillMsg){ msg.className='login-msg '+(prefillClass||'err'); msg.innerHTML=prefillMsg; }
+  document.getElementById('forgotLink').addEventListener('click', () => showForgot());
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = document.getElementById('loginBtn');
     const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPass').value;
+    msg.className='login-msg';
+    btn.disabled = true; const orig = btn.textContent; btn.textContent = 'Logging in…';
+    try {
+      const res = await fetch(API + '/api/affiliate-portal/login', {
+        method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email, password }),
+      });
+      const d = await res.json().catch(()=>({}));
+      if (res.ok && d.token){ saveSession(d.token); loadDashboard(); return; }
+      msg.className='login-msg err';
+      msg.innerHTML = d.needsSetup
+        ? 'You haven\'t set a password yet. Check your welcome email for the setup link, or use “Forgot password?” below to get one.'
+        : (d.error || 'Incorrect email or password.');
+      btn.disabled=false; btn.textContent=orig;
+    } catch(err){
+      msg.className='login-msg err'; msg.textContent='Something went wrong. Please try again.';
+      btn.disabled=false; btn.textContent=orig;
+    }
+  });
+}
+
+// FORGOT — request a set/reset-password link by email
+function showForgot(){
+  root.innerHTML =
+    '<div class="login">'+
+      '<span class="eyebrow">Affiliate Portal</span>'+
+      '<h1 style="margin-top:10px;">Reset your password</h1>'+
+      '<p>Enter the email on your affiliate account and we\'ll send you a link to set a new password.</p>'+
+      '<form id="forgotForm">'+
+        '<input type="email" id="forgotEmail" placeholder="you@email.com" autocomplete="email" required>'+
+        '<button type="submit" class="btn btn-gold" id="forgotBtn">Send reset link</button>'+
+      '</form>'+
+      '<div class="login-msg" id="forgotMsg"></div>'+
+      '<div class="linkrow"><a id="backLogin">← Back to log in</a></div>'+
+    '</div>';
+  const form = document.getElementById('forgotForm');
+  const msg = document.getElementById('forgotMsg');
+  document.getElementById('backLogin').addEventListener('click', () => showLogin());
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('forgotBtn');
+    const email = document.getElementById('forgotEmail').value.trim();
     msg.className='login-msg';
     btn.disabled = true; const orig = btn.textContent; btn.textContent = 'Sending…';
     try {
-      await fetch(API + '/api/affiliate-portal/request-link', {
+      await fetch(API + '/api/affiliate-portal/request-reset', {
         method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email }),
       });
       msg.className='login-msg ok';
-      msg.innerHTML = 'If that email is on an active affiliate account, a login link is on its way. Check your inbox (and spam).';
+      msg.innerHTML = 'If that email is on an active affiliate account, a reset link is on its way. Check your inbox (and spam).';
       form.style.display='none';
+    } catch(err){
+      msg.className='login-msg err'; msg.textContent='Something went wrong. Please try again.';
+      btn.disabled=false; btn.textContent=orig;
+    }
+  });
+}
+
+// SET PASSWORD — reached from the emailed setup/reset link (?setup=TOKEN)
+function showSetPassword(setupToken){
+  root.innerHTML =
+    '<div class="login">'+
+      '<span class="eyebrow">Affiliate Portal</span>'+
+      '<h1 style="margin-top:10px;">Set your password</h1>'+
+      '<p>Choose a password to secure your dashboard.</p>'+
+      '<form id="setForm">'+
+        '<input type="password" id="pass1" placeholder="New password (min 8 characters)" autocomplete="new-password" required>'+
+        '<input type="password" id="pass2" placeholder="Confirm password" autocomplete="new-password" required>'+
+        '<button type="submit" class="btn btn-gold" id="setBtn">Save & open dashboard</button>'+
+      '</form>'+
+      '<div class="login-msg" id="setMsg"></div>'+
+    '</div>';
+  const form = document.getElementById('setForm');
+  const msg = document.getElementById('setMsg');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const p1 = document.getElementById('pass1').value;
+    const p2 = document.getElementById('pass2').value;
+    msg.className='login-msg';
+    if (p1.length < 8){ msg.className='login-msg err'; msg.textContent='Password must be at least 8 characters.'; return; }
+    if (p1 !== p2){ msg.className='login-msg err'; msg.textContent='Those passwords don\'t match.'; return; }
+    const btn = document.getElementById('setBtn');
+    btn.disabled = true; const orig = btn.textContent; btn.textContent = 'Saving…';
+    try {
+      const res = await fetch(API + '/api/affiliate-portal/set-password', {
+        method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ token: setupToken, password: p1 }),
+      });
+      const d = await res.json().catch(()=>({}));
+      if (res.ok && d.token){ saveSession(d.token); loadDashboard(); return; }
+      msg.className='login-msg err';
+      msg.innerHTML = (d.error || 'Could not set your password.') +
+        ' <a id="setToLogin" style="color:var(--gold);cursor:pointer">Go to log in</a>';
+      const back = document.getElementById('setToLogin');
+      if (back) back.addEventListener('click', () => showLogin());
+      btn.disabled=false; btn.textContent=orig;
     } catch(err){
       msg.className='login-msg err'; msg.textContent='Something went wrong. Please try again.';
       btn.disabled=false; btn.textContent=orig;
@@ -181,12 +276,24 @@ async function loadDashboard(){
   if (!token){ showLogin(); return; }
   try {
     const res = await fetch(API + '/api/affiliate-portal/me', { headers: { Authorization: 'Bearer ' + token } });
-    if (res.status === 401){ localStorage.removeItem(TKEY); showLogin('Your session expired — enter your email for a fresh link.'); return; }
+    if (res.status === 401){ localStorage.removeItem(TKEY); showLogin('Your session expired — please log in again.'); return; }
     if (!res.ok){ const d = await res.json().catch(()=>({})); showLogin(d.error || 'Could not load your dashboard.'); return; }
     renderDashboard(await res.json());
   } catch(err){
     root.innerHTML = '<div class="empty">Couldn\'t reach the server. Please refresh in a moment.</div>';
   }
+}
+
+// Boot: a setup link takes priority; otherwise show the dashboard/login.
+function boot(){
+  const u = new URL(location.href);
+  const setupToken = u.searchParams.get('setup');
+  if (setupToken){
+    u.searchParams.delete('setup'); history.replaceState({}, '', u.pathname);
+    showSetPassword(setupToken);
+    return;
+  }
+  loadDashboard();
 }
 
 function statusPill(s){
@@ -239,7 +346,7 @@ function renderDashboard(d){
   });
 }
 
-loadDashboard();
+boot();
 </script>
 </body>
 </html>
