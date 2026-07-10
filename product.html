@@ -69,6 +69,8 @@
   .pd-trust{margin-top:24px;display:flex;flex-wrap:wrap;gap:10px;}
   .pd-chip{font-family:'IBM Plex Mono';font-size:11px;color:var(--silver-dim);border:1px solid var(--line);border-radius:20px;padding:6px 12px;display:inline-flex;align-items:center;gap:6px;}
   .pd-chip b{color:var(--gold-bright);font-weight:600;}
+  .pd-ship{margin-top:14px;font-family:'IBM Plex Mono';font-size:12px;letter-spacing:0.04em;color:var(--gold);display:flex;align-items:center;gap:7px;}
+  .pd-ship .star{color:var(--gold-bright);font-size:11px;}
 
   .pd-section{margin-top:56px;max-width:760px;}
   .pd-section h2{font-size:22px;color:var(--silver-bright);}
@@ -318,6 +320,7 @@ function render(){
         '<div class="pd-sub"><span>'+escapeHtml(p.spec)+'</span>'+(p.purity?'<span class="dot">•</span><span>'+p.purity+' purity</span>':'')+'</div>'+
         '<p class="pd-tagline">'+escapeHtml(c.tagline)+'</p>'+
         '<div class="pd-buy"><span class="pd-price">'+money(p.price)+'</span>'+buyHTML+'</div>'+
+        '<div class="pd-ship"><span class="star">✦</span> Free shipping on all orders $199+</div>'+
         '<div class="pd-trust">'+
           '<span class="pd-chip"><b>'+(p.purity||'99%')+'</b> verified purity</span>'+
           '<span class="pd-chip">Third-party tested</span>'+
