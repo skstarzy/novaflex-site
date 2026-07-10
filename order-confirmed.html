@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Confirmation — NovaFlex Peptides</title>
+<meta name="description" content="Your NovaFlex Peptides order confirmation.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#08080a">
+<link rel="icon" href="assets/logo.webp">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"></noscript>
+<style>
+  :root{
+    --bg:#08080a; --bg-alt:#111113; --line:rgba(255,255,255,0.09); --line-strong:rgba(255,255,255,0.16);
+    --silver:#cdd1d8; --silver-bright:#f2f3f5; --silver-dim:#8b8e94;
+    --gold:#c9a44c; --gold-bright:#f0d78c; --gold-deep:#8a6a24; --text:#e7e7ea; --text-muted:#9a9a9f;
+    --green:#7fcf9a; --red:#e08484; --maxw:920px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+  h1,h2{font-family:'Space Grotesk',sans-serif;margin:0;letter-spacing:-0.01em;}
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;height:auto;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);}
+  :focus-visible{outline:2px solid var(--gold-bright);outline-offset:2px;}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:14px;font-weight:600;padding:12px 22px;border-radius:5px;cursor:pointer;border:1px solid transparent;transition:all .2s ease;}
+  .btn-gold{background:linear-gradient(135deg,var(--gold-bright),var(--gold) 60%,var(--gold-deep));color:#141008;}
+  .btn-gold:hover{filter:brightness(1.08);}
+  .btn-ghost{background:transparent;border-color:var(--line-strong);color:var(--silver);}
+  .btn-ghost:hover{border-color:var(--gold);color:var(--gold-bright);}
+
+  .nav{border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(8,8,10,0.92);backdrop-filter:blur(8px);z-index:20;}
+  .nav-inner{max-width:var(--maxw);margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand img{width:auto;height:32px;}
+  .brand-text{font-family:'Space Grotesk';font-weight:700;font-size:18px;color:var(--silver-bright);}
+  .brand-text .flex{color:var(--gold-bright);}
+  .nav-right a{font-size:13px;color:var(--silver-dim);}
+  .nav-right a:hover{color:var(--gold-bright);}
+
+  main{padding:60px 0 80px;min-height:62vh;display:flex;align-items:flex-start;justify-content:center;}
+  .card{max-width:520px;width:calc(100% - 48px);background:var(--bg-alt);border:1px solid var(--line);border-radius:14px;padding:44px 38px;text-align:center;}
+  .icon{width:66px;height:66px;border-radius:50%;margin:0 auto 22px;display:flex;align-items:center;justify-content:center;font-size:30px;}
+  .icon.ok{background:rgba(46,160,80,0.14);color:var(--green);border:1px solid rgba(46,160,80,0.4);}
+  .icon.wait{background:rgba(201,164,76,0.14);color:var(--gold-bright);border:1px solid rgba(201,164,76,0.4);}
+  .icon.err{background:rgba(224,132,132,0.12);color:var(--red);border:1px solid rgba(224,132,132,0.4);}
+  .card h1{font-size:26px;color:var(--silver-bright);}
+  .card p{margin-top:14px;font-size:14.5px;color:var(--text-muted);line-height:1.65;}
+  .order-ref{margin-top:22px;display:inline-block;background:var(--bg);border:1px solid var(--line-strong);border-radius:7px;padding:10px 16px;font-family:'IBM Plex Mono';font-size:13px;color:var(--silver);}
+  .order-ref b{color:var(--gold-bright);}
+  .amt{margin-top:16px;font-family:'IBM Plex Mono';font-size:22px;font-weight:700;color:var(--silver-bright);}
+  .actions{margin-top:30px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+  .spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,0.18);border-top-color:var(--gold-bright);border-radius:50%;display:inline-block;animation:spin .8s linear infinite;vertical-align:middle;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  @media (prefers-reduced-motion: reduce){.spinner{animation:none;}}
+  .foot{border-top:1px solid var(--line);padding:26px 0;margin-top:40px;}
+  .foot-inner{max-width:var(--maxw);margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--text-muted);}
+  .foot-inner a:hover{color:var(--gold-bright);}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <img src="assets/logo.webp" alt="NovaFlex Peptides">
+      <span class="brand-text">NOVA<span class="flex">FLEX</span></span>
+    </a>
+    <div class="nav-right"><a href="index.html">← Back to store</a></div>
+  </div>
+</header>
+
+<main>
+  <div class="card" id="card">
+    <div class="icon wait" id="icon"><span class="spinner"></span></div>
+    <span class="eyebrow" id="eyebrow">Order Status</span>
+    <h1 id="title" style="margin-top:10px;">Confirming your payment…</h1>
+    <p id="msg">Hang tight — we're confirming your payment with our processor. This usually takes just a few seconds.</p>
+    <div id="ref"></div>
+    <div class="amt" id="amt" style="display:none;"></div>
+    <div class="actions" id="actions">
+      <a class="btn btn-ghost" href="index.html">Continue browsing</a>
+    </div>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="foot-inner">
+    <span>© 2026 NovaFlex Peptides · Research use only</span>
+    <a href="mailto:support@novaflexusa.com">support@novaflexusa.com</a>
+  </div>
+</footer>
+
+<script>
+const API = 'https://api.novaflexusa.com';
+const money = (n) => '$' + Number(n).toFixed(2);
+const params = new URLSearchParams(location.search);
+const orderId = params.get('order');
+
+const icon = document.getElementById('icon');
+const eyebrow = document.getElementById('eyebrow');
+const title = document.getElementById('title');
+const msg = document.getElementById('msg');
+const ref = document.getElementById('ref');
+const amtEl = document.getElementById('amt');
+const actions = document.getElementById('actions');
+
+function showRef(){
+  if (orderId){
+    ref.innerHTML = '<div class="order-ref">Order <b>#' + orderId.slice(-8).toUpperCase() + '</b></div>';
+  }
+}
+
+function render(state, total){
+  showRef();
+  if (typeof total === 'number'){ amtEl.style.display='block'; amtEl.textContent = money(total); }
+  if (state === 'paid'){
+    icon.className = 'icon ok'; icon.textContent = '✓';
+    eyebrow.textContent = 'Payment confirmed';
+    title.textContent = 'Thank you — your order is confirmed!';
+    msg.innerHTML = 'Your payment went through and your order is being prepared. A confirmation email is on its way. We\'ll notify you when it ships with tracking.';
+    actions.innerHTML =
+      '<a class="btn btn-gold" href="index.html#catalog">Keep shopping</a>' +
+      '<a class="btn btn-ghost" href="affiliate.html">Affiliate dashboard</a>';
+  } else if (state === 'cancelled'){
+    icon.className = 'icon err'; icon.textContent = '✕';
+    eyebrow.textContent = 'Payment not completed';
+    title.textContent = 'Your payment didn\'t go through';
+    msg.innerHTML = 'No charge was completed. Your cart is still saved — you can head back and try again, or email <a style="color:var(--gold-bright)" href="mailto:support@novaflexusa.com">support@novaflexusa.com</a> if you need a hand.';
+    actions.innerHTML = '<a class="btn btn-gold" href="index.html#cart">Return to cart</a>';
+  } else { // pending / still processing
+    icon.className = 'icon wait'; icon.textContent = '⏳';
+    eyebrow.textContent = 'Payment processing';
+    title.textContent = 'Your payment is still processing';
+    msg.innerHTML = 'This can take a moment on our processor\'s side. We\'ll email your confirmation as soon as it clears — no need to pay again. Questions? <a style="color:var(--gold-bright)" href="mailto:support@novaflexusa.com">support@novaflexusa.com</a>.';
+    actions.innerHTML = '<a class="btn btn-ghost" href="index.html">Continue browsing</a>';
+  }
+}
+
+async function checkStatus(){
+  const res = await fetch(API + '/api/order-status/' + encodeURIComponent(orderId));
+  if (!res.ok) throw new Error('status ' + res.status);
+  return res.json();
+}
+
+// Poll for the webhook-confirmed status. The redirect back from the gateway is
+// not proof of payment on its own — the webhook is authoritative — so we poll
+// for a short window, then fall back to a "still processing" message.
+async function poll(){
+  if (!orderId){
+    render('pending');
+    title.textContent = 'We couldn\'t find your order reference';
+    msg.textContent = 'If you just paid, check your email for a confirmation, or contact support@novaflexusa.com.';
+    return;
+  }
+  const started = Date.now();
+  const MAX_MS = 40000, INTERVAL = 2500;
+  async function tick(){
+    try {
+      const d = await checkStatus();
+      if (d.status === 'paid'){ render('paid', Number(d.total)); return; }
+      if (d.status === 'cancelled'){ render('cancelled'); return; }
+    } catch(e){ /* transient — keep trying */ }
+    if (Date.now() - started < MAX_MS){ setTimeout(tick, INTERVAL); }
+    else { render('pending'); } // still pending after the window
+  }
+  tick();
+}
+
+poll();
+</script>
+</body>
+</html>
