@@ -653,6 +653,17 @@
   .promo-row input:focus{outline:none;border-color:var(--gold);}
   .promo-row button{background:transparent;border:1px solid var(--line-strong);color:var(--silver);border-radius:4px;padding:0 14px;font-size:13px;font-weight:600;cursor:pointer;}
   .promo-row button:hover{border-color:var(--gold);color:var(--gold-bright);}
+  .ship-bar{margin-bottom:18px;}
+  .ship-bar-msg{font-size:12.5px;color:var(--silver);margin-bottom:9px;text-align:center;letter-spacing:0.01em;line-height:1.4;}
+  .ship-bar-msg b{color:var(--gold-bright);font-weight:600;}
+  .ship-bar-track{height:7px;background:var(--bg-alt);border:1px solid var(--line);border-radius:20px;overflow:hidden;}
+  .ship-bar-fill{height:100%;width:0;border-radius:20px;background:linear-gradient(90deg,var(--gold-deep),var(--gold),var(--gold-bright));transition:width .55s cubic-bezier(.34,1.2,.42,1);}
+  .ship-bar.unlocked .ship-bar-msg{color:var(--gold-bright);}
+  .ship-bar.unlocked .ship-bar-fill{background:linear-gradient(90deg,var(--gold),var(--gold-bright),var(--gold));background-size:200% 100%;animation:shipShimmer 1.8s linear infinite;}
+  .ship-bar.celebrate .ship-bar-msg{animation:shipPop .55s ease;}
+  @keyframes shipShimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+  @keyframes shipPop{0%{transform:scale(1);}35%{transform:scale(1.09);}100%{transform:scale(1);}}
+  @media (prefers-reduced-motion:reduce){.ship-bar-fill{transition:none;}.ship-bar.unlocked .ship-bar-fill{animation:none;}.ship-bar.celebrate .ship-bar-msg{animation:none;}}
   .promo-msg{font-size:11.5px;margin-bottom:12px;min-height:14px;}
   .promo-msg.ok{color:var(--gold-bright);}
   .promo-msg.err{color:#e08484;}
@@ -1081,6 +1092,10 @@
   </div>
   <div class="drawer-items" id="drawerItems"></div>
   <div class="drawer-foot">
+    <div class="ship-bar" id="shipBar" style="display:none;">
+      <div class="ship-bar-msg" id="shipMsg"></div>
+      <div class="ship-bar-track"><div class="ship-bar-fill" id="shipFill"></div></div>
+    </div>
     <div class="promo-row">
       <input type="text" id="promoInput" placeholder="Promo / affiliate code" autocomplete="off">
       <button id="promoApply" type="button">Apply</button>
@@ -1248,6 +1263,27 @@ if (affForm){
   });
 }
 
+const FREE_SHIP_THRESHOLD = 199;
+let shipWasUnlocked = false;
+function updateShipBar(subtotal){
+  const bar = document.getElementById('shipBar');
+  const fill = document.getElementById('shipFill');
+  const msg = document.getElementById('shipMsg');
+  if (!bar) return;
+  if (subtotal <= 0){ bar.style.display = 'none'; shipWasUnlocked = false; return; }
+  bar.style.display = 'block';
+  fill.style.width = Math.min(100, (subtotal / FREE_SHIP_THRESHOLD) * 100).toFixed(1) + '%';
+  if (subtotal >= FREE_SHIP_THRESHOLD){
+    msg.innerHTML = '🎉 Congratulations! You\'ve unlocked <b>free shipping</b>';
+    bar.classList.add('unlocked');
+    if (!shipWasUnlocked){ bar.classList.remove('celebrate'); void bar.offsetWidth; bar.classList.add('celebrate'); shipWasUnlocked = true; }
+  } else {
+    msg.innerHTML = 'You\'re <b>$' + (FREE_SHIP_THRESHOLD - subtotal).toFixed(2) + '</b> away from <b>free shipping</b>';
+    bar.classList.remove('unlocked','celebrate');
+    shipWasUnlocked = false;
+  }
+}
+
 function updateDrawerTotals(){
   const subtotal = cartTotal();
   const discount = appliedCode ? subtotal * appliedRate : 0;
@@ -1262,6 +1298,7 @@ function updateDrawerTotals(){
     line.style.display = 'none';
   }
   document.getElementById('drawerTotal').textContent = '$' + total.toFixed(2);
+  updateShipBar(subtotal);
 }
 
 document.getElementById('promoApply').addEventListener('click', async ()=>{
