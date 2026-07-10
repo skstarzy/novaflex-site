@@ -504,7 +504,7 @@
   .coa-note{margin-top:12px;color:var(--text-muted);font-size:15px;line-height:1.6;max-width:640px;}
   .coa-grid{margin-top:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
   @media (max-width:860px){.coa-grid{grid-template-columns:repeat(2,1fr);}}
-  @media (max-width:520px){.coa-grid{grid-template-columns:1fr;}}
+  @media (max-width:520px){.coa-grid{grid-template-columns:1fr;}.coa-card:nth-child(n+4){display:none;}}
   .coa-card{background:var(--bg-alt);border:1px solid var(--line);border-radius:10px;overflow:hidden;transition:border-color .2s ease,transform .2s ease;}
   .coa-card:hover{border-color:var(--gold);transform:translateY(-2px);}
   .coa-thumb{display:block;width:100%;border:0;padding:0;background:#fff;cursor:zoom-in;position:relative;aspect-ratio:4/3;overflow:hidden;}
