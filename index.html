@@ -490,6 +490,15 @@
   .spotlight-price span{font-size:13px;color:var(--text-muted);font-weight:400;margin-left:8px;}
   @media (max-width:900px){.spotlight{grid-template-columns:1fr;padding:32px;}}
 
+  /* ---------- U.S.-Based band ---------- */
+  .us-band{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:linear-gradient(90deg,#100d07,#16130a,#100d07);}
+  .us-band-inner{padding:26px 24px;text-align:center;}
+  .us-eyebrow{font-family:'IBM Plex Mono';font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold-bright);display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;}
+  .us-stars{color:var(--gold);letter-spacing:2px;font-size:10px;opacity:0.85;}
+  .us-line{margin:11px auto 0;max-width:560px;font-size:15px;line-height:1.6;color:var(--text-muted);}
+  .us-line b{color:var(--silver-bright);font-weight:600;}
+  @media (max-width:600px){.us-stars{display:none;}}
+
   /* ---------- Testimonials ---------- */
   .test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
   .test-card{background:var(--bg-alt);border:1px solid var(--line);border-radius:6px;padding:26px;}
@@ -768,6 +777,14 @@
     </div>
   </section>
 
+  <!-- ================= U.S.-BASED BAND ================= -->
+  <section class="us-band">
+    <div class="wrap us-band-inner">
+      <div class="us-eyebrow"><span class="us-stars">★ ★ ★</span> Proudly U.S.-Based <span class="us-stars">★ ★ ★</span></div>
+      <div class="us-line">Every compound is sourced, third-party tested, and shipped from within the <b>United States</b>.</div>
+    </div>
+  </section>
+
   <!-- ================= CATEGORIES ================= -->
   <section id="categories">
     <div class="wrap">
@@ -950,18 +967,18 @@
       <div class="test-grid">
         <div class="test-card reveal">
           <div class="stars">★★★★★</div>
-          <p>"Every vial has come with a matching COA — batch numbers line up exactly. That traceability is rare in this space."</p>
+          <p>"Been ordering here for a few months now and the consistency is what won me over. Every vial shows up with a matching COA — the batch numbers line up exactly. That's rarer than it should be in this space."</p>
           <div class="test-who"><div class="test-avatar">MK</div><div><div class="test-name">Marcus K.</div><div class="test-role">Independent Researcher</div></div></div>
         </div>
         <div class="test-card reveal">
           <div class="stars">★★★★★</div>
-          <p>"Ordered the Wolverine Stack for a recovery protocol — arrived cold-packed and well within spec on the lab report."</p>
+          <p>"Honestly shipped faster than I expected — cold-packed, sealed, lab report right there in the box. I ran my own checks and everything came back within spec. One of the more reliable suppliers I've dealt with."</p>
           <div class="test-who"><div class="test-avatar">SL</div><div><div class="test-name">Sarah L.</div><div class="test-role">PhD Candidate</div></div></div>
         </div>
         <div class="test-card reveal">
-          <div class="stars">★★★★☆</div>
-          <p>"Support answered every question about storage and stability before I ordered. Reordering the GHK-Cu next month."</p>
-          <div class="test-who"><div class="test-avatar">JR</div><div><div class="test-name">James R.</div><div class="test-role">Lab Technician</div></div></div>
+          <div class="stars">★★★★★</div>
+          <p>"Spoke with the NovaFlex team after hearing about them, and they walked me through a complete rundown of every compound and all the purity testing behind the US brand. You rarely get that kind of transparency before you even order — sold me instantly."</p>
+          <div class="test-who"><div class="test-avatar">DM</div><div><div class="test-name">Daniel M.</div><div class="test-role">Research Scientist</div></div></div>
         </div>
       </div>
     </div>
