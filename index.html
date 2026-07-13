@@ -1028,7 +1028,7 @@
         <div class="spotlight-media"><img class="vial-photo" src="assets/vials/NF-glow-70mg.webp" alt="Glow Blend 70mg vial — NovaFlex Peptides"></div>
         <div>
           <span class="badge signature" style="position:static;display:inline-block;margin-bottom:16px;">★ Signature Blend</span>
-          <h2 style="font-size:clamp(24px,3vw,32px);">The GLOW Blend</h2>
+          <h2 style="font-size:clamp(24px,3vw,32px);">GHK-Cu + BPC-157 + TB-500 Blend</h2>
           <p style="margin-top:12px;color:var(--text-muted);font-size:14.5px;line-height:1.7;">A three-peptide reference blend in a single vial — GHK-Cu, BPC-157, and TB-500, pre-combined and verified to spec for in-vitro extracellular-matrix and cell-migration assays.</p>
           <ul>
             <li>GHK-Cu + BPC-157 + TB-500 blend architecture</li>
@@ -1229,7 +1229,7 @@ const PRODUCTS = [
   {name:"Tesamorelin", spec:"10mg vial", cat:"gh-igf", price:115, purity:"99.5%", badge:"bestseller", slug:"tesa-10mg"},
   {name:"MOTS-c", spec:"10mg vial", cat:"gh-igf", price:50, purity:"99.1%", badge:"new", slug:"motsc-10mg"},
   {name:"IGF-1 LR3", spec:"1mg vial", cat:"gh-igf", price:75, purity:"99.0%", slug:"igf1lr3-1mg"},
-  {name:"BPC-157", spec:"5mg vial", cat:"tissue", price:40, purity:"99.3%", slug:"bpc157-5mg"},
+  {name:"BPC-157", display:"BP+", spec:"5mg vial", cat:"tissue", price:40, purity:"99.3%", slug:"bpc157-5mg"},
   {name:"TB-500", spec:"5mg vial", cat:"tissue", price:55, purity:"99.1%", slug:"tb500-5mg"},
   {name:"KPV", spec:"10mg vial", cat:"tissue", price:45, purity:"99.0%", slug:"kpv-10mg"},
   {name:"GHK-Cu", spec:"50mg vial", cat:"dermal", price:42, purity:"99.2%", slug:"ghkcu-50mg", soldOut:true},
@@ -1241,10 +1241,10 @@ const PRODUCTS = [
   {name:"NAD+", spec:"500mg vial", cat:"neuro", price:60, purity:"99.1%", slug:"nad-500mg"},
   {name:"SS-31", spec:"10mg vial", cat:"neuro", price:85, purity:"99.2%", slug:"ss31-10mg"},
   {name:"PT-141", spec:"5mg vial", cat:"neuro", price:50, purity:"99.0%", slug:"pt141-5mg"},
-  {name:"Glow Blend", spec:"70mg vial", cat:"blends", cats:["dermal"], price:130, purity:"99.2%", badge:"bestseller", slug:"glow-70mg"},
-  {name:"Klow Blend", spec:"80mg vial", cat:"blends", cats:["dermal"], price:135, purity:"99.2%", badge:"bestseller", slug:"klow-80mg"},
-  {name:"Wolverine Stack", spec:"10mg vial", cat:"blends", cats:["tissue"], price:75, purity:"99.1%", slug:"wolverine-10mg"},
-  {name:"Wolverine Stack", spec:"20mg vial", cat:"blends", cats:["tissue"], price:115, purity:"99.1%", slug:"wolverine-20mg"},
+  {name:"Glow Blend", display:"GHK-Cu + BPC-157 + TB-500", spec:"70mg vial", cat:"blends", cats:["dermal"], price:130, purity:"99.2%", slug:"glow-70mg"},
+  {name:"Klow Blend", display:"KPV + GHK-Cu + BPC-157 + TB-500", spec:"80mg vial", cat:"blends", cats:["dermal"], price:135, purity:"99.2%", slug:"klow-80mg"},
+  {name:"Wolverine Stack", display:"BPC-157 + TB-500", spec:"10mg vial", cat:"blends", cats:["tissue"], price:75, purity:"99.1%", slug:"wolverine-10mg"},
+  {name:"Wolverine Stack", display:"BPC-157 + TB-500", spec:"20mg vial", cat:"blends", cats:["tissue"], price:115, purity:"99.1%", slug:"wolverine-20mg"},
   {name:"CJC-1295 + Ipamorelin", spec:"5/5 blend vial", cat:"blends", cats:["gh-igf"], price:88, purity:"99.2%", slug:"cjc1295-ipa-5-5"},
 ];
 
@@ -1633,8 +1633,7 @@ function applyPricingGate(){
 })();
 
 function productCard(p){
-  const badgeHTML = p.soldOut ? `<span class="badge soldout">Sold Out</span>`
-    : (p.badge ? `<span class="badge ${p.badge}">${p.badge === 'bestseller' ? 'Bestseller' : p.badge === 'new' ? 'New' : p.badge}</span>` : '');
+  const badgeHTML = p.soldOut ? `<span class="badge soldout">Sold Out</span>` : '';
   const purityHTML = p.purity ? `<span class="purity-tag">${p.purity}</span>` : '';
   const btnHTML = p.soldOut
     ? `<button class="add-btn soldout" disabled aria-disabled="true">Sold Out</button>`
