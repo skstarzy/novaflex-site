@@ -118,6 +118,19 @@
   .gate-card .btn-gold{width:100%;justify-content:center;margin-top:22px;}
   .gate-leave{margin-top:14px;font-size:12px;color:var(--text-muted);}
   .gate-leave a{color:var(--gold);text-decoration:underline;}
+  /* researcher account modal */
+  #authModal{position:fixed;inset:0;z-index:200;background:rgba(4,4,6,0.94);display:none;align-items:center;justify-content:center;padding:24px;overflow-y:auto;}
+  #authModal.open{display:flex;}
+  #authModal .gate-card{position:relative;}
+  .auth-close{position:absolute;top:14px;right:18px;font-size:24px;line-height:1;color:var(--silver-dim);cursor:pointer;background:none;border:none;}
+  .auth-tabs{display:flex;gap:8px;margin-top:22px;}
+  .auth-tab{flex:1;padding:10px;font-size:13px;font-weight:600;border-radius:6px;cursor:pointer;border:1px solid var(--line-strong);background:transparent;color:var(--silver-dim);font-family:'Inter';}
+  .auth-tab.active{background:var(--gold);color:#141008;border-color:var(--gold);}
+  .auth-input{width:100%;margin-top:12px;background:var(--bg);border:1px solid var(--line-strong);border-radius:6px;padding:12px 13px;color:var(--silver);font-size:14px;font-family:'Inter';}
+  .auth-input:focus{outline:none;border-color:var(--gold);}
+  .auth-msg{margin-top:12px;font-size:12.5px;line-height:1.5;display:none;text-align:left;}
+  .auth-msg.err{display:block;color:#e08484;}
+  .pd-price.locked{cursor:pointer;color:var(--gold);font-size:16px;}
 
   @media (max-width:780px){
     .pd-hero{grid-template-columns:1fr;gap:26px;}
@@ -140,6 +153,26 @@
     </div>
     <button class="btn btn-gold" id="gateEnter">Enter Site</button>
     <div class="gate-leave">Not a researcher? <a href="https://www.google.com">Please leave this site.</a></div>
+  </div>
+</div>
+
+<div id="authModal" role="dialog" aria-modal="true">
+  <div class="gate-card">
+    <button class="auth-close" onclick="closeAuthModal()" aria-label="Close">×</button>
+    <img src="assets/logo.webp" alt="NovaFlex Peptides">
+    <h2 id="authTitle">Researcher sign in</h2>
+    <p>Pricing is available to registered researchers. Sign in or create an account to view pricing.</p>
+    <div class="auth-tabs">
+      <button type="button" class="auth-tab active" id="tabLogin" onclick="setAuthMode('login')">Log in</button>
+      <button type="button" class="auth-tab" id="tabRegister" onclick="setAuthMode('register')">Register</button>
+    </div>
+    <form id="authForm" autocomplete="on">
+      <input class="auth-input" type="email" id="authEmail" placeholder="you@lab.com" autocomplete="email" required>
+      <input class="auth-input" type="password" id="authPassword" placeholder="Password (min 8 characters)" autocomplete="current-password" required>
+      <label class="gate-check" id="authRuoRow" style="margin-top:14px;display:none;"><input type="checkbox" id="authRuo"> I am a qualified researcher and accept that all products are for research use only — not for human or veterinary use.</label>
+      <button type="submit" class="btn btn-gold" id="authSubmit" style="width:100%;justify-content:center;margin-top:18px;">Log in</button>
+    </form>
+    <div class="auth-msg" id="authMsg"></div>
   </div>
 </div>
 
@@ -278,6 +311,47 @@ function addCurrentToCart(p){
   showToast('Added to cart ✓');
 }
 
+// ---------- Researcher account gate ----------
+const SHOP_API = 'https://api.novaflexusa.com';
+const SHOP_TKEY = 'nf_shop_token';
+function shopAuthed(){ try { return !!localStorage.getItem(SHOP_TKEY); } catch(e){ return false; } }
+let authMode = 'login';
+function openAuthModal(){ setAuthMode(authMode); document.getElementById('authModal').classList.add('open'); const e=document.getElementById('authEmail'); if(e) e.focus(); }
+function closeAuthModal(){ document.getElementById('authModal').classList.remove('open'); }
+function setAuthMode(mode){
+  authMode = mode;
+  document.getElementById('tabLogin').classList.toggle('active', mode==='login');
+  document.getElementById('tabRegister').classList.toggle('active', mode==='register');
+  document.getElementById('authTitle').textContent = mode==='register' ? 'Create a researcher account' : 'Researcher sign in';
+  document.getElementById('authRuoRow').style.display = mode==='register' ? 'flex' : 'none';
+  document.getElementById('authSubmit').textContent = mode==='register' ? 'Create account' : 'Log in';
+  document.getElementById('authPassword').setAttribute('autocomplete', mode==='register' ? 'new-password' : 'current-password');
+  const m=document.getElementById('authMsg'); if(m) m.className='auth-msg';
+}
+(function(){
+  const form=document.getElementById('authForm');
+  if(form) form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const email=document.getElementById('authEmail').value.trim();
+    const password=document.getElementById('authPassword').value;
+    const msg=document.getElementById('authMsg'); msg.className='auth-msg';
+    const btn=document.getElementById('authSubmit'); const orig=btn.textContent; btn.disabled=true; btn.textContent='Please wait…';
+    try {
+      let path='/api/shop-account/login'; const bodyObj={email,password};
+      if(authMode==='register'){
+        if(!document.getElementById('authRuo').checked){ msg.className='auth-msg err'; msg.textContent='Please accept the research-use-only terms.'; btn.disabled=false; btn.textContent=orig; return; }
+        bodyObj.ruoAccepted=true; path='/api/shop-account/register';
+      }
+      const res=await fetch(SHOP_API+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(bodyObj)});
+      const d=await res.json().catch(()=>({}));
+      if(res.ok && d.token){ try{localStorage.setItem(SHOP_TKEY,d.token);}catch(e){} closeAuthModal(); render(); return; }
+      msg.className='auth-msg err'; msg.textContent=d.error||'Something went wrong.'; btn.disabled=false; btn.textContent=orig;
+    } catch(err){ msg.className='auth-msg err'; msg.textContent='Could not reach the server. Please try again.'; btn.disabled=false; btn.textContent=orig; }
+  });
+  const modal=document.getElementById('authModal');
+  if(modal) modal.addEventListener('click', function(e){ if(e.target===modal) closeAuthModal(); });
+})();
+
 function render(){
   const slug = new URLSearchParams(location.search).get('slug');
   const p = PRODUCTS.find(x => x.slug === slug);
@@ -327,7 +401,7 @@ function render(){
         '<h1 class="pd-name">'+escapeHtml(p.display || p.name)+'</h1>'+
         '<div class="pd-sub"><span>'+escapeHtml(p.spec)+'</span>'+(p.purity?'<span class="dot">•</span><span>'+p.purity+' purity</span>':'')+'</div>'+
         '<p class="pd-tagline">'+escapeHtml(c.tagline)+'</p>'+
-        '<div class="pd-buy"><span class="pd-price">'+money(p.price)+'</span>'+buyHTML+'</div>'+
+        '<div class="pd-buy">'+(shopAuthed()?('<span class="pd-price">'+money(p.price)+'</span>'+buyHTML):'<button class="btn btn-gold" onclick="openAuthModal()">Sign in to view pricing</button>')+'</div>'+
         '<div class="pd-ship"><span class="star">✦</span> Research use only · U.S. domestic fulfillment</div>'+
         '<div class="pd-trust">'+
           '<span class="pd-chip"><b>'+(p.purity||'99%')+'</b> verified purity</span>'+
