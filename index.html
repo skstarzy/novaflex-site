@@ -1189,8 +1189,8 @@ const CHECKOUT_API_URL = 'https://api.novaflexusa.com/api/checkout';
 
 // ---------------- Product data ----------------
 const PRODUCTS = [
-  {name:"Retatrutide", spec:"10mg vial", cat:"metabolic", price:80, purity:"99.4%", badge:"bestseller", slug:"reta-10mg"},
-  {name:"Tirzepatide", spec:"10mg vial", cat:"metabolic", price:65, purity:"99.3%", slug:"tirz-10mg"},
+  {name:"Retatrutide", display:"NV-3RT", spec:"10mg vial", cat:"metabolic", price:80, purity:"99.4%", badge:"bestseller", slug:"reta-10mg"},
+  {name:"Tirzepatide", display:"NV-2TZ", spec:"10mg vial", cat:"metabolic", price:65, purity:"99.3%", slug:"tirz-10mg"},
   {name:"Cagrilintide", spec:"10mg vial", cat:"metabolic", price:110, purity:"99.2%", slug:"cagri-10mg"},
   {name:"Tesamorelin", spec:"10mg vial", cat:"gh-igf", price:115, purity:"99.5%", badge:"bestseller", slug:"tesa-10mg"},
   {name:"MOTS-c", spec:"10mg vial", cat:"gh-igf", price:50, purity:"99.1%", badge:"new", slug:"motsc-10mg"},
@@ -1250,7 +1250,10 @@ function addToCart(name, spec, price){
   }
   const existing = findCartItem(name, spec);
   if (existing){ existing.qty += 1; }
-  else { cart.push({name, spec, price, qty:1}); }
+  else {
+    const prod = PRODUCTS.find(pr => pr.name === name && pr.spec === spec);
+    cart.push({name, spec, price, qty:1, display: (prod && prod.display) || undefined});
+  }
   saveCart();
   renderCartCount();
   renderDrawer();
@@ -1294,7 +1297,7 @@ function renderDrawer(){
       <div class="drawer-item">
         <div class="drawer-item-media"><img src="${imgSrc}" alt="${i.name}" loading="lazy"></div>
         <div class="drawer-item-info">
-          <div class="drawer-item-name">${i.name}</div>
+          <div class="drawer-item-name">${i.display || i.name}</div>
           <div class="drawer-item-spec">${i.spec}</div>
           <div class="drawer-item-controls">
             <button class="qty-btn" onclick="changeQty('${i.name}','${i.spec}',-1)">−</button>
@@ -1560,7 +1563,7 @@ function productCard(p){
     </div>
     <div class="prod-body">
       <span class="prod-cat">${catLabel(p.cat)}</span>
-      <a class="prod-name" href="${href}">${p.name}</a>
+      <a class="prod-name" href="${href}">${p.display || p.name}</a>
       <span class="prod-spec">${p.spec}</span>
       <div class="prod-foot">
         <span class="prod-price">$${p.price.toFixed(2)}</span>

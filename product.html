@@ -184,8 +184,8 @@
 const CHECKOUT_API_URL = 'https://api.novaflexusa.com/api/checkout';
 
 const PRODUCTS = [
-  {slug:"reta-10mg", name:"Retatrutide", spec:"10mg vial", cat:"metabolic", price:80, purity:"99.4%"},
-  {slug:"tirz-10mg", name:"Tirzepatide", spec:"10mg vial", cat:"metabolic", price:65, purity:"99.3%"},
+  {slug:"reta-10mg", name:"Retatrutide", display:"NV-3RT", spec:"10mg vial", cat:"metabolic", price:80, purity:"99.4%"},
+  {slug:"tirz-10mg", name:"Tirzepatide", display:"NV-2TZ", spec:"10mg vial", cat:"metabolic", price:65, purity:"99.3%"},
   {slug:"cagri-10mg", name:"Cagrilintide", spec:"10mg vial", cat:"metabolic", price:110, purity:"99.2%"},
   {slug:"tesa-10mg", name:"Tesamorelin", spec:"10mg vial", cat:"gh-igf", price:115, purity:"99.5%"},
   {slug:"motsc-10mg", name:"MOTS-c", spec:"10mg vial", cat:"gh-igf", price:50, purity:"99.1%"},
@@ -222,8 +222,8 @@ const CAT_LABELS = {
 function catLabel(c){ return CAT_LABELS[c] || c; }
 
 const CONTENT = {
-  "reta-10mg":{tagline:"A GLP-1 / GIP / glucagon triple-receptor agonist for in-vitro assays.",overview:"Retatrutide is a synthetic peptide agonist at the GLP-1, GIP, and glucagon receptors, used as a reference compound in in-vitro receptor-binding and signal-transduction assays. NovaFlex supplies Retatrutide strictly for laboratory and research use only.",benefits:["GLP-1 receptor-binding assays","GIP receptor signaling studies","Glucagon receptor pathway research","Triple-agonist reference compound","Comparative incretin-receptor assays","In-vitro assay standard"],faqs:[{q:"What is Retatrutide used for in research?",a:"As a reference agonist in in-vitro assays of the GLP-1, GIP, and glucagon receptor pathways. For laboratory research use only."},{q:"Is it third-party tested?",a:"Yes. Every batch is verified by HPLC and mass spectrometry."}]},
-  "tirz-10mg":{tagline:"A dual GIP / GLP-1 receptor agonist reference compound.",overview:"Tirzepatide is a dual agonist at the GIP and GLP-1 receptors, used as a reference peptide in in-vitro receptor-binding and signaling assays. NovaFlex supplies Tirzepatide strictly for laboratory and research use only.",benefits:["GIP receptor-binding assays","GLP-1 receptor signaling studies","Dual-incretin reference compound","Receptor selectivity research","Comparative agonist assays","In-vitro assay standard"],faqs:[{q:"What is Tirzepatide used for in research?",a:"As a dual GIP/GLP-1 receptor agonist reference compound in in-vitro signaling assays. For laboratory research use only."},{q:"How is it different from Retatrutide?",a:"Tirzepatide is a dual GIP/GLP-1 agonist; Retatrutide adds a third glucagon-receptor target."}]},
+  "reta-10mg":{tagline:"A GLP-1 / GIP / glucagon triple-receptor agonist for in-vitro assays.",overview:"NV-3RT (Retatrutide) is a synthetic peptide agonist at the GLP-1, GIP, and glucagon receptors, used as a reference compound in in-vitro receptor-binding and signal-transduction assays. NV-3RT is NovaFlex's catalog designation for this compound. Supplied strictly for laboratory and research use only.",benefits:["GLP-1 receptor-binding assays","GIP receptor signaling studies","Glucagon receptor pathway research","Triple-agonist reference compound","Comparative incretin-receptor assays","In-vitro assay standard"],faqs:[{q:"What is Retatrutide used for in research?",a:"As a reference agonist in in-vitro assays of the GLP-1, GIP, and glucagon receptor pathways. For laboratory research use only."},{q:"Is it third-party tested?",a:"Yes. Every batch is verified by HPLC and mass spectrometry."}]},
+  "tirz-10mg":{tagline:"A dual GIP / GLP-1 receptor agonist reference compound.",overview:"NV-2TZ (Tirzepatide) is a dual agonist at the GIP and GLP-1 receptors, used as a reference peptide in in-vitro receptor-binding and signaling assays. NV-2TZ is NovaFlex's catalog designation for this compound. Supplied strictly for laboratory and research use only.",benefits:["GIP receptor-binding assays","GLP-1 receptor signaling studies","Dual-incretin reference compound","Receptor selectivity research","Comparative agonist assays","In-vitro assay standard"],faqs:[{q:"What is Tirzepatide used for in research?",a:"As a dual GIP/GLP-1 receptor agonist reference compound in in-vitro signaling assays. For laboratory research use only."},{q:"How is it different from Retatrutide?",a:"Tirzepatide is a dual GIP/GLP-1 agonist; Retatrutide adds a third glucagon-receptor target."}]},
   "cagri-10mg":{tagline:"A long-acting amylin-receptor analog for in-vitro assays.",overview:"Cagrilintide is a long-acting amylin analog used as a reference compound in in-vitro amylin/calcitonin receptor-binding and signaling studies. NovaFlex supplies Cagrilintide strictly for laboratory and research use only.",benefits:["Amylin receptor-binding assays","Calcitonin-receptor signaling studies","Long-acting analog reference","Receptor pathway research","Comparative analog assays","In-vitro assay standard"],faqs:[{q:"What is Cagrilintide used for in research?",a:"As a long-acting amylin-receptor analog in in-vitro binding and signaling assays. For laboratory research use only."},{q:"Is it third-party tested?",a:"Yes. Every batch is verified by HPLC and mass spectrometry."}]},
   "tesa-10mg":{tagline:"A stabilized GHRH-receptor analog reference compound.",overview:"Tesamorelin is a stabilized analog of growth-hormone-releasing hormone (GHRH), used as a reference compound in in-vitro GHRH-receptor binding and signal-transduction assays. NovaFlex supplies Tesamorelin strictly for laboratory and research use only.",benefits:["GHRH receptor-binding assays","GH-axis signaling studies","Receptor selectivity research","Peptide-stability studies","Comparative analog assays","In-vitro assay standard"],faqs:[{q:"What is Tesamorelin used for in research?",a:"As a GHRH-receptor analog reference compound in in-vitro receptor and signaling assays. For laboratory research use only."},{q:"How should it be stored?",a:"Keep the lyophilized vial cool and dark; store any prepared solution at 2–8°C."}]},
   "motsc-10mg":{tagline:"A mitochondrial-derived peptide for cellular-signaling assays.",overview:"MOTS-c is a mitochondrial-derived peptide used as a reference compound in in-vitro studies of AMPK signaling and cellular metabolic pathways. NovaFlex supplies MOTS-c strictly for laboratory and research use only.",benefits:["AMPK pathway signaling studies","Mitochondrial signaling research","Cellular-metabolism assays","Peptide reference compound","Comparative pathway research","In-vitro assay standard"],faqs:[{q:"What is MOTS-c in research?",a:"A mitochondrial-derived peptide used in in-vitro AMPK and metabolic-pathway signaling assays. For laboratory research use only."},{q:"Is it third-party tested?",a:"Yes. Every batch is verified by HPLC and mass spectrometry."}]},
@@ -273,7 +273,7 @@ function showToast(msg){
 function addCurrentToCart(p){
   loadCart();
   const ex = cart.find(i => i.name === p.name && i.spec === p.spec);
-  if (ex) ex.qty += 1; else cart.push({name:p.name, spec:p.spec, price:p.price, qty:1});
+  if (ex) ex.qty += 1; else cart.push({name:p.name, spec:p.spec, price:p.price, qty:1, display:p.display||undefined});
   saveCart(); renderCount();
   showToast('Added to cart ✓');
 }
@@ -288,7 +288,7 @@ function render(){
     return;
   }
 
-  document.title = p.name + ' ' + p.spec + ' — NovaFlex Peptides';
+  document.title = (p.display || p.name) + ' ' + p.spec + ' — NovaFlex Peptides';
   const metaDesc = document.querySelector('meta[name="description"]');
   if (metaDesc) metaDesc.setAttribute('content', c.overview.slice(0,155));
 
@@ -324,7 +324,7 @@ function render(){
       '<div class="pd-media"><img src="assets/vials/NF-'+p.slug+'.webp" alt="'+escapeHtml(p.name+' '+p.spec)+' — NovaFlex Peptides"></div>'+
       '<div class="pd-info">'+
         '<div class="pd-cat">'+escapeHtml(catLabel(p.cat))+'</div>'+
-        '<h1 class="pd-name">'+escapeHtml(p.name)+'</h1>'+
+        '<h1 class="pd-name">'+escapeHtml(p.display || p.name)+'</h1>'+
         '<div class="pd-sub"><span>'+escapeHtml(p.spec)+'</span>'+(p.purity?'<span class="dot">•</span><span>'+p.purity+' purity</span>':'')+'</div>'+
         '<p class="pd-tagline">'+escapeHtml(c.tagline)+'</p>'+
         '<div class="pd-buy"><span class="pd-price">'+money(p.price)+'</span>'+buyHTML+'</div>'+
