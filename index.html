@@ -238,6 +238,17 @@
     .nav-cta .btn-ghost{display:none;}
   }
 
+  /* Phones: declutter the top bar so the cart doesn't crowd the logo.
+     Brand sits far left, Cart + menu far right (Shop Now is redundant here —
+     it's already in the announce bar and the hamburger menu). */
+  @media (max-width:560px){
+    .nav-inner{padding:13px 18px;gap:12px;}
+    .nav-cta{gap:18px;}
+    .nav-cta .btn-gold{display:none;}
+    .brand img{height:30px;}
+    .brand-text{font-size:16px;}
+  }
+
   /* ---------- Hero ---------- */
   .hero{
     position:relative;
