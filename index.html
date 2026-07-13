@@ -239,7 +239,7 @@
   }
 
   /* Phones: declutter the top bar so the cart doesn't crowd the logo.
-     Brand sits far left, Cart + menu far right (Shop Now is redundant here —
+     Brand sits far left, Cart + menu far right (Browse Catalog is redundant here —
      it's already in the announce bar and the hamburger menu). */
   @media (max-width:560px){
     .nav-inner{padding:13px 18px;gap:12px;}
@@ -728,10 +728,10 @@
   <div class="gate-card">
     <img src="assets/logo.webp" alt="NovaFlex Peptides" width="640" height="745">
     <h2>Before you enter</h2>
-    <p>NovaFlex Peptides sells research compounds strictly for laboratory and research use. Please confirm the following to continue.</p>
+    <p>NovaFlex Peptides supplies compounds strictly for laboratory and research use only (RUO). Access is limited to qualified researchers. Please confirm the following to continue.</p>
     <div class="gate-checks">
       <label class="gate-check"><input type="checkbox" id="gateAge"> I certify that I am at least 21 years of age.</label>
-      <label class="gate-check"><input type="checkbox" id="gateResearch"> I am purchasing for legitimate research purposes only. These products are not for human or animal consumption.</label>
+      <label class="gate-check"><input type="checkbox" id="gateResearch"> I am a qualified researcher, or purchasing on behalf of a research institution, strictly for laboratory research. I understand these compounds are for research use only — not for human or veterinary consumption.</label>
     </div>
     <button class="btn btn-gold" id="gateEnter" disabled style="justify-content:center;">Enter Site</button>
     <div class="gate-exit">Not a researcher? <a href="https://www.google.com">Please leave this site.</a></div>
@@ -739,7 +739,7 @@
 </div>
 
 <div class="announce">
-  <b>Free shipping</b> on all orders $199+ <span class="announce-sep">·</span> <b>10% off</b> your first order with code <span class="mono">NOVA10</span> <a href="#catalog" style="border-bottom:1px solid var(--gold);">Shop →</a>
+  <b>For research use only</b> — not for human or veterinary use <span class="announce-sep">·</span> Third-party tested (HPLC &amp; MS) <span class="announce-sep">·</span> U.S. domestic fulfillment <a href="#catalog" style="border-bottom:1px solid var(--gold);">Browse catalog →</a>
 </div>
 
 <header class="nav">
@@ -749,7 +749,7 @@
       <span class="brand-text">NOVA<span class="flex">FLEX</span></span>
     </a>
     <nav class="nav-links">
-      <a href="#catalog">Shop</a>
+      <a href="#catalog">Catalog</a>
       <a href="#categories">Categories</a>
       <a href="#lab-reports">Lab Reports</a>
       <a href="#faq">FAQ</a>
@@ -757,16 +757,16 @@
       <a href="#affiliate">Affiliate</a>
     </nav>
     <div class="nav-cta">
-      <a href="#" class="cart-btn"><span>Cart</span><span class="cart-count" id="cartCount">0</span></a>
+      <a href="#" class="cart-btn"><span>Order</span><span class="cart-count" id="cartCount">0</span></a>
       <a href="#" class="btn btn-ghost">Login</a>
-      <a href="#catalog" class="btn btn-gold">Shop Now</a>
+      <a href="#catalog" class="btn btn-gold">Browse Catalog</a>
       <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
       </button>
     </div>
   </div>
   <div class="mobile-menu" id="mobileMenu">
-    <a href="#catalog">Shop</a>
+    <a href="#catalog">Catalog</a>
     <a href="#categories">Categories</a>
     <a href="#quality">Lab Reports</a>
     <a href="#faq">FAQ</a>
@@ -800,7 +800,7 @@
         </h1>
         <p class="lead">NovaFlex Peptides supplies third-party verified, research-grade peptides for laboratories and independent researchers — every batch documented, every compound accounted for.</p>
         <div class="hero-ctas">
-          <a href="#catalog" class="btn btn-gold">Shop the Catalog</a>
+          <a href="#catalog" class="btn btn-gold">Browse the Catalog</a>
           <a href="#lab-reports" class="btn btn-ghost">View Lab Reports</a>
         </div>
         <div class="stat-strip">
@@ -832,50 +832,44 @@
       <div class="section-head reveal">
         <span class="eyebrow">Find your protocol</span>
         <h2>Browse by <em>research focus</em></h2>
-        <p>Every category is stocked, verified, and ready to ship — no placeholders, no "coming soon."</p>
+        <p>Every compound is in stock, third-party tested by HPLC and mass spec, and documented with a batch-specific COA.</p>
       </div>
       <div class="cat-grid">
         <div class="cat-tile reveal" data-filter="Weight Loss">
           <div class="tick"></div>
-          <h3>Weight Loss</h3>
-          <p>GLP-1 &amp; GIP-class compounds for metabolic research.</p>
+          <h3>Metabolic</h3>
+          <p>GLP-1 and GIP receptor agonists for in-vitro metabolic assays.</p>
           <span class="go">3 compounds →</span>
         </div>
         <div class="cat-tile reveal" data-filter="Growth & Recovery">
           <div class="tick"></div>
-          <h3>Growth &amp; Recovery</h3>
-          <p>GH-axis and IGF signaling compounds for recovery studies.</p>
+          <h3>GH &amp; IGF Signaling</h3>
+          <p>GH-axis and IGF-1 signaling peptides for receptor and pathway studies.</p>
           <span class="go">3 compounds →</span>
         </div>
         <div class="cat-tile reveal" data-filter="Healing">
           <div class="tick"></div>
-          <h3>Healing</h3>
-          <p>Tissue-repair peptides for injury and inflammation models.</p>
+          <h3>Tissue Repair</h3>
+          <p>Tissue-repair peptides for in-vitro cell-migration and inflammation models.</p>
           <span class="go">3 compounds →</span>
         </div>
         <div class="cat-tile reveal" data-filter="Skin & Aesthetics">
           <div class="tick"></div>
-          <h3>Skin &amp; Aesthetics</h3>
-          <p>Copper peptides and melanocortins for dermal research.</p>
+          <h3>Dermal &amp; Melanocortin</h3>
+          <p>Copper-binding and melanocortin peptides for dermal and pigmentation research.</p>
           <span class="go">3 compounds →</span>
         </div>
         <div class="cat-tile reveal" data-filter="Cognitive & Longevity">
           <div class="tick"></div>
-          <h3>Cognitive &amp; Longevity</h3>
-          <p>Nootropic and mitochondrial-support compounds.</p>
+          <h3>Neuro &amp; Cellular</h3>
+          <p>Neuropeptides and mitochondrial-targeted compounds for cellular research.</p>
           <span class="go">6 compounds →</span>
         </div>
         <div class="cat-tile reveal" data-filter="Stacks & Blends">
           <div class="tick"></div>
-          <h3>Stacks &amp; Blends</h3>
-          <p>Pre-mixed multi-peptide vials — no math, no fuss.</p>
+          <h3>Research Blends</h3>
+          <p>Pre-mixed multi-peptide vials for combination research.</p>
           <span class="go">5 compounds →</span>
-        </div>
-        <div class="cat-tile reveal" data-filter="Supplies">
-          <div class="tick"></div>
-          <h3>Supplies</h3>
-          <p>Bacteriostatic water and reconstitution accessories.</p>
-          <span class="go">2 items →</span>
         </div>
         <div class="cat-tile reveal" data-filter="All" style="background:linear-gradient(135deg,#1c1710,#111113);border-color:var(--gold-deep);">
           <div class="tick" style="width:100%;"></div>
@@ -983,7 +977,7 @@
   <section id="catalog">
     <div class="wrap">
       <div class="section-head reveal">
-        <span class="eyebrow">Shop the Catalog</span>
+        <span class="eyebrow">Browse the Catalog</span>
         <h2>The full <em>compound library</em></h2>
         <p>All 25 compounds. Filter by research focus, or browse everything at once.</p>
       </div>
@@ -1008,7 +1002,7 @@
             <li>One-step reconstitution protocol</li>
           </ul>
           <div class="spotlight-price">$130.00 <span>per vial</span></div>
-          <button class="btn btn-gold" style="margin-top:22px;" onclick="addToCart('Glow Blend')">Add to Cart →</button>
+          <button class="btn btn-gold" style="margin-top:22px;" onclick="addToCart('Glow Blend')">Add to Research Order →</button>
         </div>
       </div>
     </div>
@@ -1130,7 +1124,7 @@
         <p>Third-party verified, research-grade peptides — sourced, tested, and shipped for laboratories and independent researchers.</p>
       </div>
       <div class="footer-col">
-        <h4>Shop</h4>
+        <h4>Catalog</h4>
         <a href="#catalog">Full Catalog</a>
         <a href="#categories">Categories</a>
         <a href="#" data-filter-link="Stacks & Blends">Stacks &amp; Blends</a>
@@ -1165,7 +1159,7 @@
 <div class="drawer-overlay" id="drawerOverlay"></div>
 <div class="cart-drawer" id="cartDrawer">
   <div class="drawer-head">
-    <h3>Your Cart</h3>
+    <h3>Your Research Order</h3>
     <button class="drawer-close" id="drawerCloseBtn" aria-label="Close cart">&times;</button>
   </div>
   <div class="drawer-items" id="drawerItems"></div>
@@ -1182,7 +1176,7 @@
     <div class="drawer-line"><span>Subtotal</span><span id="drawerSubtotal">$0.00</span></div>
     <div class="drawer-line" id="drawerDiscountLine" style="display:none;"><span id="drawerDiscountLabel">Discount</span><span id="drawerDiscount">-$0.00</span></div>
     <div class="drawer-subtotal"><span>Total</span><span class="amt" id="drawerTotal">$0.00</span></div>
-    <button class="btn btn-gold" id="checkoutBtn" style="width:100%;justify-content:center;">Checkout →</button>
+    <button class="btn btn-gold" id="checkoutBtn" style="width:100%;justify-content:center;">Submit Research Order →</button>
     <div class="checkout-err" id="checkoutErr"></div>
     <div class="checkout-note">Secure checkout is handled by our payment processor. NovaFlex never stores your card details.</div>
   </div>
@@ -1218,9 +1212,22 @@ const PRODUCTS = [
   {name:"Wolverine Stack", spec:"10mg vial", cat:"Stacks & Blends", cats:["Healing"], price:75, purity:"99.1%", slug:"wolverine-10mg"},
   {name:"Wolverine Stack", spec:"20mg vial", cat:"Stacks & Blends", cats:["Healing"], price:115, purity:"99.1%", slug:"wolverine-20mg"},
   {name:"CJC-1295 + Ipamorelin", spec:"5/5 blend vial", cat:"Stacks & Blends", cats:["Growth & Recovery"], price:88, purity:"99.2%", slug:"cjc1295-ipa-5-5"},
-  {name:"Bacteriostatic Water", spec:"3ml vial", cat:"Supplies", price:12, slug:"bacwater-3ml"},
-  {name:"Bacteriostatic Water", spec:"10ml vial", cat:"Supplies", price:20, slug:"bacwater-10ml"},
 ];
+
+// RUO-neutral display labels for categories. Internal keys (data-filter, p.cat)
+// stay unchanged so filtering/cross-listing keep working; only the visible
+// label changes — therapeutic navigation ("Weight Loss", "Healing") is treated
+// by the FDA as objective intent for human use (21 CFR §201.128).
+const CAT_LABELS = {
+  "Weight Loss":"Metabolic",
+  "Growth & Recovery":"GH & IGF Signaling",
+  "Healing":"Tissue Repair",
+  "Skin & Aesthetics":"Dermal & Melanocortin",
+  "Cognitive & Longevity":"Neuro & Cellular",
+  "Stacks & Blends":"Research Blends",
+  "All":"All"
+};
+function catLabel(c){ return CAT_LABELS[c] || c; }
 
 const FEATURED_NAMES = ["Retatrutide","Tesamorelin","GHK-Cu 100mg vial","Glow Blend","Melanotan II","Klow Blend","BPC-157","Tirzepatide"];
 
@@ -1278,7 +1285,7 @@ function renderCartCount(){
 function renderDrawer(){
   const wrap = document.getElementById('drawerItems');
   if (cart.length === 0){
-    wrap.innerHTML = `<div class="drawer-empty">Your cart is empty.<br>Browse the catalog to get started.</div>`;
+    wrap.innerHTML = `<div class="drawer-empty">Your research order is empty.<br>Browse the catalog to get started.</div>`;
   } else {
     wrap.innerHTML = cart.map(i => {
       const prod = PRODUCTS.find(p => p.name === i.name && p.spec === i.spec);
@@ -1352,11 +1359,11 @@ function updateShipBar(subtotal){
   bar.style.display = 'block';
   fill.style.width = Math.min(100, (subtotal / FREE_SHIP_THRESHOLD) * 100).toFixed(1) + '%';
   if (subtotal >= FREE_SHIP_THRESHOLD){
-    msg.innerHTML = '🎉 Congratulations! You\'ve unlocked <b>free shipping</b>';
+    msg.innerHTML = 'U.S. shipping included on this order.';
     bar.classList.add('unlocked');
     if (!shipWasUnlocked){ bar.classList.remove('celebrate'); void bar.offsetWidth; bar.classList.add('celebrate'); shipWasUnlocked = true; }
   } else {
-    msg.innerHTML = 'You\'re <b>$' + (FREE_SHIP_THRESHOLD - subtotal).toFixed(2) + '</b> away from <b>free shipping</b>';
+    msg.innerHTML = 'Orders $199+ include U.S. shipping.';
     bar.classList.remove('unlocked','celebrate');
     shipWasUnlocked = false;
   }
@@ -1426,7 +1433,7 @@ document.getElementById('checkoutBtn').addEventListener('click', async ()=>{
   const errEl = document.getElementById('checkoutErr');
   errEl.style.display = 'none';
   if (cart.length === 0){
-    errEl.textContent = 'Your cart is empty.';
+    errEl.textContent = 'Your research order is empty.';
     errEl.style.display = 'block';
     return;
   }
@@ -1451,7 +1458,7 @@ document.getElementById('checkoutBtn').addEventListener('click', async ()=>{
   } catch (err){
     errEl.textContent = 'Checkout is not connected yet — this needs the backend running (see /backend). ' + err.message;
     errEl.style.display = 'block';
-    btn.textContent = 'Checkout →';
+    btn.textContent = 'Submit Research Order →';
     btn.disabled = false;
   }
 });
@@ -1542,7 +1549,7 @@ function productCard(p){
   const purityHTML = p.purity ? `<span class="purity-tag">${p.purity}</span>` : '';
   const btnHTML = p.soldOut
     ? `<button class="add-btn soldout" disabled aria-disabled="true">Sold Out</button>`
-    : `<button class="add-btn" onclick='cartBtnClick(this,${JSON.stringify(p.name)},${JSON.stringify(p.spec)},${p.price})'>Add to Cart</button>`;
+    : `<button class="add-btn" onclick='cartBtnClick(this,${JSON.stringify(p.name)},${JSON.stringify(p.spec)},${p.price})'>Add to Order</button>`;
   const href = `product.html?slug=${p.slug}`;
   return `
   <div class="prod-card${p.soldOut ? ' is-soldout' : ''}" data-cat="${p.cat}" data-slug="${p.slug}">
@@ -1552,7 +1559,7 @@ function productCard(p){
       ${purityHTML}
     </div>
     <div class="prod-body">
-      <span class="prod-cat">${p.cat}</span>
+      <span class="prod-cat">${catLabel(p.cat)}</span>
       <a class="prod-name" href="${href}">${p.name}</a>
       <span class="prod-spec">${p.spec}</span>
       <div class="prod-foot">
@@ -1567,7 +1574,7 @@ function cartBtnClick(btn, name, spec, price){
   addToCart(name, spec, price);
   btn.textContent = 'Added ✓';
   btn.classList.add('added');
-  setTimeout(()=>{btn.textContent='Add to Cart'; btn.classList.remove('added');}, 1400);
+  setTimeout(()=>{btn.textContent='Add to Order'; btn.classList.remove('added');}, 1400);
 }
 
 // Featured grid
@@ -1587,7 +1594,7 @@ document.getElementById('featuredGrid').innerHTML = featured.slice(0,8).map(prod
       "item":{
         "@type":"Product",
         "name":p.name+" "+p.spec,
-        "category":p.cat,
+        "category":catLabel(p.cat),
         "image":"https://novaflexusa.com/assets/vials/NF-"+p.slug+".webp",
         "brand":{"@type":"Brand","name":"NovaFlex Peptides"},
         "url":"https://novaflexusa.com/#catalog",
@@ -1602,9 +1609,9 @@ document.getElementById('featuredGrid').innerHTML = featured.slice(0,8).map(prod
 })();
 
 // Full catalog + filters
-const CATS = ["All","Weight Loss","Growth & Recovery","Healing","Skin & Aesthetics","Cognitive & Longevity","Stacks & Blends","Supplies"];
+const CATS = ["All","Weight Loss","Growth & Recovery","Healing","Skin & Aesthetics","Cognitive & Longevity","Stacks & Blends"];
 const filterRow = document.getElementById('filterRow');
-filterRow.innerHTML = CATS.map((c,i) => `<button class="filter-btn ${i===0?'active':''}" data-cat="${c}">${c}</button>`).join('');
+filterRow.innerHTML = CATS.map((c,i) => `<button class="filter-btn ${i===0?'active':''}" data-cat="${c}">${catLabel(c)}</button>`).join('');
 
 function renderCatalog(cat){
   const list = cat === "All" ? PRODUCTS : PRODUCTS.filter(p => p.cat === cat || (p.cats && p.cats.includes(cat)));

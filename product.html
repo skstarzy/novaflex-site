@@ -133,10 +133,10 @@
   <div class="gate-card">
     <img src="assets/logo.webp" alt="NovaFlex Peptides">
     <h2>Before you enter</h2>
-    <p>NovaFlex Peptides sells research compounds strictly for laboratory and research use. Please confirm the following to continue.</p>
+    <p>NovaFlex Peptides supplies compounds strictly for laboratory and research use only (RUO). Access is limited to qualified researchers. Please confirm the following to continue.</p>
     <div class="gate-checks">
       <label class="gate-check"><input type="checkbox" id="g1"> I certify that I am at least 21 years of age.</label>
-      <label class="gate-check"><input type="checkbox" id="g2"> I am purchasing for legitimate research purposes only. These products are not for human or animal consumption.</label>
+      <label class="gate-check"><input type="checkbox" id="g2"> I am a qualified researcher, or purchasing on behalf of a research institution, strictly for laboratory research. I understand these compounds are for research use only — not for human or veterinary consumption.</label>
     </div>
     <button class="btn btn-gold" id="gateEnter">Enter Site</button>
     <div class="gate-leave">Not a researcher? <a href="https://www.google.com">Please leave this site.</a></div>
@@ -150,13 +150,13 @@
       <span class="brand-text">NOVA<span class="flex">FLEX</span></span>
     </a>
     <nav class="nav-links">
-      <a href="index.html#catalog">Shop</a>
+      <a href="index.html#catalog">Catalog</a>
       <a href="index.html#categories">Categories</a>
       <a href="index.html#lab-reports">Lab Reports</a>
       <a href="index.html#faq">FAQ</a>
       <a href="index.html#affiliate">Affiliate</a>
     </nav>
-    <a href="index.html#cart" class="cart-btn"><span>Cart</span><span class="cart-count" id="cartCount">0</span></a>
+    <a href="index.html#cart" class="cart-btn"><span>Order</span><span class="cart-count" id="cartCount">0</span></a>
   </div>
 </header>
 
@@ -171,7 +171,7 @@
   <div class="foot-inner">
     <p>© 2026 NovaFlex Peptides. For research purposes only. Not for human consumption.</p>
     <div class="foot-links">
-      <a href="index.html#catalog">Shop</a>
+      <a href="index.html#catalog">Catalog</a>
       <a href="index.html#faq">FAQ</a>
       <a href="mailto:support@novaflexusa.com">Contact</a>
     </div>
@@ -207,9 +207,19 @@ const PRODUCTS = [
   {slug:"wolverine-10mg", name:"Wolverine Stack", spec:"10mg vial", cat:"Stacks & Blends", price:75, purity:"99.1%"},
   {slug:"wolverine-20mg", name:"Wolverine Stack", spec:"20mg vial", cat:"Stacks & Blends", price:115, purity:"99.1%"},
   {slug:"cjc1295-ipa-5-5", name:"CJC-1295 + Ipamorelin", spec:"5/5 blend vial", cat:"Stacks & Blends", price:88, purity:"99.2%"},
-  {slug:"bacwater-3ml", name:"Bacteriostatic Water", spec:"3ml vial", cat:"Supplies", price:12},
-  {slug:"bacwater-10ml", name:"Bacteriostatic Water", spec:"10ml vial", cat:"Supplies", price:20},
 ];
+
+// RUO-neutral display labels for categories (see index.html for rationale).
+const CAT_LABELS = {
+  "Weight Loss":"Metabolic",
+  "Growth & Recovery":"GH & IGF Signaling",
+  "Healing":"Tissue Repair",
+  "Skin & Aesthetics":"Dermal & Melanocortin",
+  "Cognitive & Longevity":"Neuro & Cellular",
+  "Stacks & Blends":"Research Blends",
+  "All":"All"
+};
+function catLabel(c){ return CAT_LABELS[c] || c; }
 
 const CONTENT = {
   "reta-10mg":{tagline:"A next-generation triple-agonist at the frontier of metabolic research.",overview:"Retatrutide is a synthetic triple-agonist peptide that acts on the GLP-1, GIP, and glucagon receptor pathways. It is one of the most studied next-generation metabolic peptides and is explored in research on energy balance, appetite signaling, and glucose regulation. Its single-molecule, multi-receptor design makes it a focal point for laboratory investigation into metabolic modeling. NovaFlex supplies Retatrutide strictly for laboratory and research use only.",benefits:["Triple-receptor metabolic research","Appetite signaling studies","Glucose regulation research","Energy balance modeling","Comparative GLP-1 research","Metabolic pathway investigation"],faqs:[{q:"What is Retatrutide studied for?",a:"It is investigated in research on metabolic signaling across the GLP-1, GIP, and glucagon receptor pathways. All use is for laboratory research only."},{q:"Is it third-party tested?",a:"Yes. Every NovaFlex compound is third-party tested by HPLC and mass spectrometry to verify 99%+ purity."}]},
@@ -235,8 +245,6 @@ const CONTENT = {
   "wolverine-10mg":{tagline:"The classic recovery stack — BPC-157 + TB-500.",overview:"The Wolverine Stack is a combination research vial pairing BPC-157 and TB-500. It brings together two of the most studied recovery peptides, one focused on localized tissue repair and the other on cell migration and systemic recovery. The blend is investigated in research on combined healing and recovery pathways. NovaFlex supplies the Wolverine Stack strictly for laboratory and research use only.",benefits:["Combined recovery research","Tissue repair studies","Cell migration research","Muscle and tendon modeling","Anti-inflammatory pathway investigation","Healing science applications"],faqs:[{q:"What is in the Wolverine Stack?",a:"It combines BPC-157 and TB-500, two recovery peptides often researched together for combined healing pathways. All use is for laboratory research only."},{q:"How is the 10mg different from the 20mg?",a:"Both contain the same BPC-157 and TB-500 combination; the 20mg vial is simply double the total peptide content of the 10mg vial."}]},
   "wolverine-20mg":{tagline:"A double-strength recovery stack for extended protocols.",overview:"The Wolverine Stack is a combination research vial pairing BPC-157 and TB-500, offered here at double strength. It brings together two of the most studied recovery peptides, one focused on localized tissue repair and the other on cell migration and systemic recovery. The blend is investigated in research on combined healing and recovery pathways. NovaFlex supplies the Wolverine Stack strictly for laboratory and research use only.",benefits:["Combined recovery research","Tissue repair studies","Cell migration research","Muscle and tendon modeling","Anti-inflammatory pathway investigation","Healing science applications"],faqs:[{q:"What is in the Wolverine Stack?",a:"It combines BPC-157 and TB-500, two recovery peptides often researched together for combined healing pathways. It is intended for laboratory research only."},{q:"How is the 20mg different from the 10mg?",a:"Both use the same BPC-157 and TB-500 combination; the 20mg vial contains double the total peptide of the 10mg vial."}]},
   "cjc1295-ipa-5-5":{tagline:"A growth-hormone secretagogue duo — GHRH + GHRP.",overview:"This blend pairs CJC-1295, a GHRH analog, with Ipamorelin, a selective growth hormone releasing peptide, at a 5mg/5mg ratio. The two are studied together for their complementary action on growth hormone signaling pathways. The combination is investigated in research on growth, recovery, and endocrine modeling. NovaFlex supplies this blend strictly for laboratory and research use only.",benefits:["Growth hormone signaling research","GHRH pathway studies","Selective GHRP research","Recovery pathway modeling","Endocrine signaling investigation","Comparative peptide research"],faqs:[{q:"Why are CJC-1295 and Ipamorelin combined?",a:"They act on complementary parts of the growth hormone pathway, so they are frequently researched together in growth and recovery models. All use is for laboratory research only."},{q:"Is it third-party tested?",a:"Yes. Every NovaFlex compound is verified by HPLC and mass spectrometry at 99%+ purity."}]},
-  "bacwater-3ml":{tagline:"The standard sterile solvent for reconstituting research peptides.",overview:"Bacteriostatic water is a sterile solvent containing 0.9% benzyl alcohol, used to reconstitute lyophilized peptides for research. The benzyl alcohol acts as a bacteriostatic agent, allowing the solution to be accessed multiple times while limiting microbial growth. It is an essential supply for any laboratory working with freeze-dried research compounds. NovaFlex supplies bacteriostatic water strictly for laboratory and research use only.",benefits:["Reconstitutes lyophilized peptides","0.9% benzyl alcohol bacteriostatic","Multi-use sterile solvent","Essential lab supply","Limits microbial growth","Compatible with most peptides"],faqs:[{q:"What is bacteriostatic water?",a:"It is sterile water containing 0.9% benzyl alcohol, a bacteriostatic agent that allows a reconstituted vial to be accessed multiple times while limiting microbial growth."},{q:"How is it stored?",a:"Store bacteriostatic water at room temperature away from direct light, and keep the vial sealed between uses."}]},
-  "bacwater-10ml":{tagline:"The standard sterile solvent — larger 10ml volume.",overview:"Bacteriostatic water is a sterile solvent containing 0.9% benzyl alcohol, used to reconstitute lyophilized peptides for research. The benzyl alcohol acts as a bacteriostatic agent, allowing the solution to be accessed multiple times while limiting microbial growth. This larger 10ml vial is suited to labs reconstituting multiple or higher-volume research compounds. NovaFlex supplies bacteriostatic water strictly for laboratory and research use only.",benefits:["Reconstitutes lyophilized peptides","0.9% benzyl alcohol bacteriostatic","Larger multi-use volume","Essential lab supply","Limits microbial growth","Compatible with most peptides"],faqs:[{q:"What is bacteriostatic water?",a:"It is sterile water containing 0.9% benzyl alcohol, a bacteriostatic agent that allows a reconstituted vial to be accessed multiple times while limiting microbial growth."},{q:"How is it stored?",a:"Store bacteriostatic water at room temperature away from direct light, and keep the vial sealed between uses."}]},
 };
 
 const STORAGE_INTRO = "NovaFlex compounds ship as lyophilized (freeze-dried) powder for maximum stability and shelf life. Store the sealed vial in a cool, dark place away from light. If placed into solution, keep it refrigerated at 2–8°C. Every batch is third-party tested by HPLC and mass spectrometry to verify 99%+ purity before it ships.";
@@ -301,7 +309,7 @@ function render(){
 
   const buyHTML = p.soldOut
     ? '<span class="pd-soldtag">Sold out</span>'
-    : '<button class="btn btn-gold" id="addBtn">Add to Cart →</button>';
+    : '<button class="btn btn-gold" id="addBtn">Add to Research Order →</button>';
 
   const faqHTML = (c.faqs || []).map(f =>
     '<div class="pd-faq-item"><div class="pd-faq-q">'+escapeHtml(f.q)+'</div><div class="pd-faq-a">'+escapeHtml(f.a)+'</div></div>').join('');
@@ -315,12 +323,12 @@ function render(){
     '<div class="pd-hero">'+
       '<div class="pd-media"><img src="assets/vials/NF-'+p.slug+'.webp" alt="'+escapeHtml(p.name+' '+p.spec)+' — NovaFlex Peptides"></div>'+
       '<div class="pd-info">'+
-        '<div class="pd-cat">'+escapeHtml(p.cat)+'</div>'+
+        '<div class="pd-cat">'+escapeHtml(catLabel(p.cat))+'</div>'+
         '<h1 class="pd-name">'+escapeHtml(p.name)+'</h1>'+
         '<div class="pd-sub"><span>'+escapeHtml(p.spec)+'</span>'+(p.purity?'<span class="dot">•</span><span>'+p.purity+' purity</span>':'')+'</div>'+
         '<p class="pd-tagline">'+escapeHtml(c.tagline)+'</p>'+
         '<div class="pd-buy"><span class="pd-price">'+money(p.price)+'</span>'+buyHTML+'</div>'+
-        '<div class="pd-ship"><span class="star">✦</span> Free shipping on all orders $199+</div>'+
+        '<div class="pd-ship"><span class="star">✦</span> Research use only · U.S. domestic fulfillment</div>'+
         '<div class="pd-trust">'+
           '<span class="pd-chip"><b>'+(p.purity||'99%')+'</b> verified purity</span>'+
           '<span class="pd-chip">Third-party tested</span>'+
@@ -340,7 +348,7 @@ function render(){
 
   // structured data for SEO
   try {
-    const ld = {"@context":"https://schema.org","@type":"Product","name":p.name+' '+p.spec,"category":p.cat,
+    const ld = {"@context":"https://schema.org","@type":"Product","name":p.name+' '+p.spec,"category":catLabel(p.cat),
       "image":"https://novaflexusa.com/assets/vials/NF-"+p.slug+".webp","brand":{"@type":"Brand","name":"NovaFlex Peptides"},
       "description":c.overview,
       "offers":{"@type":"Offer","price":p.price.toFixed(2),"priceCurrency":"USD","availability":p.soldOut?"https://schema.org/OutOfStock":"https://schema.org/InStock","url":location.href}};
