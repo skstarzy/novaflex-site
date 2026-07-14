@@ -477,7 +477,7 @@
   .dial-wrap{display:flex;justify-content:center;}
   @media (max-width:900px){.dial-section{grid-template-columns:1fr;}.dial-wrap{order:-1;}}
 
-  /* ---------- Blend spotlight ---------- */
+  /* ---------- Fusion spotlight ---------- */
   .spotlight{
     background:linear-gradient(135deg,#141210,#0c0c0d 60%);
     border:1px solid var(--line-strong);border-radius:8px;
@@ -994,9 +994,9 @@
           <p>Assorted research peptides and cofactor compounds supplied as reference materials.</p>
           <span class="go">6 compounds →</span>
         </div>
-        <div class="cat-tile reveal" data-filter="blends">
+        <div class="cat-tile reveal" data-filter="fusions">
           <div class="tick"></div>
-          <h3>Research Blends</h3>
+          <h3>Research Fusions</h3>
           <p>Pre-mixed multi-peptide vials supplied as combination reference materials.</p>
           <span class="go">5 compounds →</span>
         </div>
@@ -1115,17 +1115,17 @@
     </div>
   </section>
 
-  <!-- ================= SIGNATURE BLEND SPOTLIGHT ================= -->
+  <!-- ================= SIGNATURE FUSION SPOTLIGHT ================= -->
   <section style="padding-top:0;">
     <div class="wrap">
       <div class="spotlight reveal">
-        <div class="spotlight-media"><img class="vial-photo" src="assets/vials/NF-glow-70mg.webp?v=2" alt="GHK-Cu · BP+ · TB-500 blend vial — NovaFlex Peptides"></div>
+        <div class="spotlight-media"><img class="vial-photo" src="assets/vials/NF-glow-70mg.webp?v=2" alt="GHK-Cu · BP+ · TB-500 fusion vial — NovaFlex Peptides"></div>
         <div>
-          <span class="badge signature" style="position:static;display:inline-block;margin-bottom:16px;">★ Signature Blend</span>
-          <h2 style="font-size:clamp(24px,3vw,32px);">GHK-Cu · BP+ · TB-500 Blend</h2>
-          <p style="margin-top:12px;color:var(--text-muted);font-size:14.5px;line-height:1.7;">A three-peptide reference blend in a single vial — GHK-Cu, BP+, and TB-500, pre-combined and verified to spec as a high-purity reference material for in-vitro laboratory studies.</p>
+          <span class="badge signature" style="position:static;display:inline-block;margin-bottom:16px;">★ Signature Fusion</span>
+          <h2 style="font-size:clamp(24px,3vw,32px);">GHK-Cu · BP+ · TB-500 Fusion</h2>
+          <p style="margin-top:12px;color:var(--text-muted);font-size:14.5px;line-height:1.7;">A three-peptide reference fusion in a single vial — GHK-Cu, BP+, and TB-500, pre-combined and verified to spec as a high-purity reference material for in-vitro laboratory studies.</p>
           <ul>
-            <li>GHK-Cu · BP+ · TB-500 blend architecture</li>
+            <li>GHK-Cu · BP+ · TB-500 fusion architecture</li>
             <li>70mg per vial — lyophilized powder</li>
             <li>Verified at 99.2%+ purity</li>
             <li>One-step reconstitution protocol</li>
@@ -1290,11 +1290,11 @@ const PRODUCTS = [
   {name:"NAD+", spec:"500mg vial", cat:"specialty", price:60, purity:"99.1%", slug:"nad-500mg"},
   {name:"SS-31", spec:"10mg vial", cat:"specialty", price:85, purity:"99.2%", slug:"ss31-10mg"},
   {name:"PT-141", spec:"5mg vial", cat:"specialty", price:50, purity:"99.0%", slug:"pt141-5mg"},
-  {name:"Glow Blend", display:"GHK-Cu · BP+ · TB-500", spec:"70mg vial", cat:"blends", cats:["copper-mc"], price:130, purity:"99.2%", slug:"glow-70mg"},
-  {name:"Klow Blend", display:"KPV · GHK-Cu · BP+ · TB-500", spec:"80mg vial", cat:"blends", cats:["copper-mc"], price:135, purity:"99.2%", slug:"klow-80mg"},
-  {name:"Wolverine Stack", display:"BP+ · TB-500", spec:"10mg vial", cat:"blends", cats:["structural"], price:75, purity:"99.1%", slug:"wolverine-10mg"},
-  {name:"Wolverine Stack", display:"BP+ · TB-500", spec:"20mg vial", cat:"blends", cats:["structural"], price:115, purity:"99.1%", slug:"wolverine-20mg"},
-  {name:"CJC-1295 + Ipamorelin", spec:"5/5 blend vial", cat:"blends", cats:["igf"], price:88, purity:"99.2%", slug:"cjc1295-ipa-5-5"},
+  {name:"Glow Blend", display:"GHK-Cu · BP+ · TB-500", spec:"70mg vial", cat:"fusions", cats:["copper-mc"], price:130, purity:"99.2%", slug:"glow-70mg"},
+  {name:"Klow Blend", display:"KPV · GHK-Cu · BP+ · TB-500", spec:"80mg vial", cat:"fusions", cats:["copper-mc"], price:135, purity:"99.2%", slug:"klow-80mg"},
+  {name:"Wolverine Stack", display:"BP+ · TB-500", spec:"10mg vial", cat:"fusions", cats:["structural"], price:75, purity:"99.1%", slug:"wolverine-10mg"},
+  {name:"Wolverine Stack", display:"BP+ · TB-500", spec:"20mg vial", cat:"fusions", cats:["structural"], price:115, purity:"99.1%", slug:"wolverine-20mg"},
+  {name:"CJC-1295 + Ipamorelin", spec:"5/5 fusion vial", cat:"fusions", cats:["igf"], price:88, purity:"99.2%", slug:"cjc1295-ipa-5-5"},
 ];
 
 // Neutral display labels for catalog categories. Internal keys (data-filter,
@@ -1305,12 +1305,12 @@ const CAT_LABELS = {
   "structural":"Structural Peptides",
   "copper-mc":"Copper & Melanocortin",
   "specialty":"Peptides & Cofactors",
-  "blends":"Research Blends",
+  "fusions":"Research Fusions",
   "All":"All"
 };
 function catLabel(c){ return CAT_LABELS[c] || c; }
 
-const FEATURED_NAMES = ["Retatrutide","Tesamorelin","GHK-Cu 100mg vial","Glow Blend","Melanotan II","Klow Blend","BP+","Tirzepatide"];
+const FEATURED_NAMES = ["Retatrutide","Tesamorelin","GHK-Cu 100mg vial","Glow Fusion","Melanotan II","Klow Fusion","BP+","Tirzepatide"];
 
 // ---------------- Cart state ----------------
 let cart = []; // { name, spec, price, qty }
@@ -1324,7 +1324,7 @@ function findCartItem(name, spec){
 }
 
 function addToCart(name, spec, price){
-  // Back-compat: the Glow Blend spotlight button calls addToCart('Glow Blend') with no spec/price
+  // Back-compat: the Glow Fusion spotlight button calls addToCart('Glow Fusion') with no spec/price
   if (spec === undefined){
     const p = PRODUCTS.find(pr => pr.name === name);
     if (p){ spec = p.spec; price = p.price; }
@@ -1615,7 +1615,7 @@ function setAuthMode(mode){
 function updateSpotlightGate(){
   const wrap=document.getElementById('spotlightBuy'); if(!wrap) return;
   wrap.innerHTML = shopAuthed()
-    ? '<div class="spotlight-price">$130.00 <span>per vial</span></div><button class="btn btn-gold" style="margin-top:22px;" onclick="addToCart(\'Glow Blend\')">Add to Research Order →</button>'
+    ? '<div class="spotlight-price">$130.00 <span>per vial</span></div><button class="btn btn-gold" style="margin-top:22px;" onclick="addToCart(\'Glow Fusion\')">Add to Research Order →</button>'
     : '<button class="btn btn-gold" style="margin-top:22px;" onclick="openAuthModal()">Sign in to view pricing</button>';
 }
 function applyPricingGate(){
@@ -1719,18 +1719,31 @@ renderFeatured();
   document.head.appendChild(s);
 })();
 
-// Full catalog + filters
-const CATS = ["All","sizing","igf","structural","copper-mc","specialty","blends"];
+// Full catalog — sort controls (category filtering happens via the tiles above)
+const SORTS = [
+  {key:'plh', label:'Price: Low to High'},
+  {key:'phl', label:'Price: High to Low'},
+  {key:'az',  label:'Sort: A–Z'},
+];
 const filterRow = document.getElementById('filterRow');
-filterRow.innerHTML = CATS.map((c,i) => `<button class="filter-btn ${i===0?'active':''}" data-cat="${c}">${catLabel(c)}</button>`).join('');
+filterRow.innerHTML = SORTS.map((s,i) => `<button class="filter-btn ${i===0?'active':''}" data-sort="${s.key}">${s.label}</button>`).join('');
 
 let currentCatFilter = "All";
-function renderCatalog(cat){
-  currentCatFilter = cat;
-  const list = cat === "All" ? PRODUCTS : PRODUCTS.filter(p => p.cat === cat || (p.cats && p.cats.includes(cat)));
-  document.getElementById('catalogGrid').innerHTML = list.map(productCard).join('');
+let currentSort = "plh";
+function sortProducts(list){
+  const arr = list.slice();
+  if(currentSort==='plh') arr.sort((a,b)=> a.price - b.price);
+  else if(currentSort==='phl') arr.sort((a,b)=> b.price - a.price);
+  else if(currentSort==='az') arr.sort((a,b)=> (a.display||a.name).localeCompare(b.display||b.name));
+  return arr;
 }
-renderCatalog("All");
+function renderCatalog(cat, sort){
+  if(cat!==undefined && cat!==null) currentCatFilter = cat;
+  if(sort!==undefined && sort!==null) currentSort = sort;
+  const base = currentCatFilter === "All" ? PRODUCTS : PRODUCTS.filter(p => p.cat === currentCatFilter || (p.cats && p.cats.includes(currentCatFilter)));
+  document.getElementById('catalogGrid').innerHTML = sortProducts(base).map(productCard).join('');
+}
+renderCatalog("All","plh");
 updateSpotlightGate();
 // If a stored session has expired, drop it so pricing re-locks correctly.
 (async function(){
@@ -1743,7 +1756,7 @@ updateSpotlightGate();
 })();
 
 // Keep the category tile counts in sync with the catalog (respects the
-// secondary categories some blends appear under).
+// secondary categories some fusions appear under).
 document.querySelectorAll('.cat-tile[data-filter]').forEach((tile) => {
   const cat = tile.dataset.filter;
   if (cat === 'All') return;
@@ -1757,8 +1770,7 @@ filterRow.addEventListener('click', (e) => {
   if(!btn) return;
   filterRow.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  renderCatalog(btn.dataset.cat);
-  document.getElementById('catalog').scrollIntoView({behavior:'smooth', block:'start'});
+  renderCatalog(undefined, btn.dataset.sort);
 });
 
 // ---- Lab reports (Certificates of Analysis) ----
@@ -1790,12 +1802,8 @@ function closeCoa(){ document.getElementById('coaLightbox').classList.remove('op
 
 document.querySelectorAll('.cat-tile').forEach(tile=>{
   tile.addEventListener('click', ()=>{
-    const cat = tile.dataset.filter;
+    renderCatalog(tile.dataset.filter);   // filter to this category, keep current sort
     document.getElementById('catalog').scrollIntoView({behavior:'smooth'});
-    setTimeout(()=>{
-      const btn = filterRow.querySelector(`[data-cat="${cat}"]`);
-      if(btn) btn.click();
-    }, 400);
   });
 });
 
