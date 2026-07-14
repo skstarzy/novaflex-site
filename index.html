@@ -1728,15 +1728,15 @@ renderFeatured();
 
 // Full catalog — sort controls (category filtering happens via the tiles above)
 const SORTS = [
-  {key:'plh', label:'Price: Low to High'},
-  {key:'phl', label:'Price: High to Low'},
   {key:'az',  label:'Sort: A–Z'},
+  {key:'phl', label:'Price: High to Low'},
+  {key:'plh', label:'Price: Low to High'},
 ];
 const filterRow = document.getElementById('filterRow');
 filterRow.innerHTML = SORTS.map((s,i) => `<button class="filter-btn ${i===0?'active':''}" data-sort="${s.key}">${s.label}</button>`).join('');
 
 let currentCatFilter = "All";
-let currentSort = "plh";
+let currentSort = "az";
 function sortProducts(list){
   const arr = list.slice();
   if(currentSort==='plh') arr.sort((a,b)=> a.price - b.price);
@@ -1750,7 +1750,7 @@ function renderCatalog(cat, sort){
   const base = currentCatFilter === "All" ? PRODUCTS : PRODUCTS.filter(p => p.cat === currentCatFilter || (p.cats && p.cats.includes(currentCatFilter)));
   document.getElementById('catalogGrid').innerHTML = sortProducts(base).map(productCard).join('');
 }
-renderCatalog("All","plh");
+renderCatalog("All","az");
 updateSpotlightGate();
 // If a stored session has expired, drop it so pricing re-locks correctly.
 (async function(){
