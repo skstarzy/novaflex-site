@@ -574,8 +574,8 @@
   .cta-band h2{font-size:clamp(28px,4vw,44px);margin-top:14px;}
   .cta-band .btn{margin-top:30px;}
 
-  /* ---------- Affiliate program ---------- */
-  #affiliate{background:var(--bg-alt);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  /* ---------- Team / partner program ---------- */
+  #team{background:var(--bg-alt);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
   .aff-grid{display:grid;grid-template-columns:1.05fr 0.95fr;gap:56px;align-items:start;}
   .aff-pitch h2{font-size:clamp(26px,3.4vw,38px);margin-top:12px;color:var(--silver-bright);}
   .aff-pitch h2 em{font-style:normal;background:linear-gradient(120deg,var(--gold-bright),var(--gold) 55%,var(--gold-deep));-webkit-background-clip:text;background-clip:text;color:transparent;}
@@ -688,6 +688,54 @@
   .auth-msg.err{display:block;color:#e08484;}
   .prod-price.locked{cursor:pointer;color:var(--gold);font-size:12.5px;font-weight:600;}
 
+  /* ---------- Enter-the-catalog login gate ---------- */
+  #enterGate{position:fixed;inset:0;z-index:1200;background:var(--bg);display:grid;grid-template-columns:1.05fr 0.95fr;overflow-y:auto;}
+  #enterGate.hidden{display:none;}
+  .eg-hero{position:relative;overflow:hidden;padding:56px 56px;display:flex;flex-direction:column;justify-content:center;
+    background:radial-gradient(130% 120% at 12% 8%, rgba(201,164,76,0.12), transparent 55%), linear-gradient(160deg,#0c0c0e,#050506);}
+  .eg-hero::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(118deg, transparent 38%, rgba(240,215,140,0.07) 40%, transparent 42%),
+               linear-gradient(118deg, transparent 58%, rgba(201,164,76,0.05) 60%, transparent 62%),
+               linear-gradient(118deg, transparent 72%, rgba(240,215,140,0.04) 73%, transparent 75%);}
+  .eg-hero-inner{position:relative;max-width:520px;}
+  .eg-brand{display:flex;align-items:center;gap:12px;margin-bottom:44px;}
+  .eg-brand img{height:40px;width:auto;}
+  .eg-brand span{font-family:'Space Grotesk';font-weight:700;font-size:20px;letter-spacing:0.02em;color:var(--silver-bright);}
+  .eg-brand span b{color:var(--gold-bright);font-weight:700;}
+  .eg-eyebrow{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:0.24em;text-transform:uppercase;color:var(--gold);}
+  .eg-title{font-family:'Space Grotesk';font-weight:700;font-size:clamp(30px,3.8vw,50px);line-height:1.05;letter-spacing:-0.02em;color:var(--silver-bright);margin-top:18px;text-wrap:balance;}
+  .eg-title em{font-style:normal;color:var(--silver-dim);}
+  .eg-sub{margin-top:22px;font-size:15px;line-height:1.7;color:var(--text-muted);max-width:440px;}
+  .eg-chips{margin-top:30px;display:flex;flex-wrap:wrap;gap:10px;}
+  .eg-chips span{font-family:'IBM Plex Mono';font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--silver-dim);border:1px solid var(--line-strong);border-radius:5px;padding:9px 13px;}
+  .eg-panel{display:flex;align-items:center;justify-content:center;padding:40px 44px;border-left:1px solid var(--line);background:var(--bg-alt);}
+  .eg-card{width:100%;max-width:400px;}
+  .eg-access{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);}
+  .eg-h2{font-family:'Space Grotesk';font-weight:700;font-size:clamp(26px,3vw,32px);color:var(--silver-bright);margin-top:10px;letter-spacing:-0.01em;}
+  .eg-p{margin-top:12px;font-size:14px;line-height:1.6;color:var(--text-muted);}
+  .eg-tabs{display:flex;gap:8px;margin-top:26px;}
+  .eg-tab{flex:1;padding:11px;font-size:13px;font-weight:600;border-radius:7px;cursor:pointer;border:1px solid var(--line-strong);background:transparent;color:var(--silver-dim);font-family:'Inter';transition:all .15s ease;}
+  .eg-tab.active{background:var(--gold);color:#141008;border-color:var(--gold);}
+  #egForm{display:flex;flex-direction:column;gap:12px;margin-top:18px;}
+  .eg-input{width:100%;background:var(--bg);border:1px solid var(--line-strong);border-radius:7px;padding:13px 14px;color:var(--silver);font-size:14px;font-family:'Inter';}
+  .eg-input:focus{outline:none;border-color:var(--gold);}
+  .eg-check{display:flex;gap:10px;align-items:flex-start;font-size:12px;color:var(--silver);line-height:1.5;}
+  .eg-check input{margin-top:2px;accent-color:var(--gold);width:15px;height:15px;flex-shrink:0;}
+  .eg-card .btn-gold{width:100%;justify-content:center;margin-top:4px;}
+  .eg-msg{margin-top:14px;font-size:12.5px;line-height:1.5;display:none;}
+  .eg-msg.err{display:block;color:#e08484;}
+  .eg-msg.ok{display:block;color:var(--gold-bright);}
+  .eg-fine{margin-top:22px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;line-height:1.6;color:var(--text-muted);}
+  .eg-fine a{color:var(--silver-dim);text-decoration:underline;text-underline-offset:2px;}
+  .eg-fine a:hover{color:var(--gold-bright);}
+  @media(max-width:860px){
+    #enterGate{grid-template-columns:1fr;}
+    .eg-hero{padding:34px 24px 24px;}
+    .eg-brand{margin-bottom:24px;}
+    .eg-chips{display:none;}
+    .eg-panel{border-left:none;border-top:1px solid var(--line);padding:28px 22px 46px;}
+  }
+
   /* ---------- Cart drawer ---------- */
   .drawer-overlay{
     position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:200;
@@ -749,17 +797,34 @@
 </head>
 <body>
 
-<div id="ageGate">
-  <div class="gate-card">
-    <img src="assets/logo.webp" alt="NovaFlex Peptides" width="640" height="745">
-    <h2>Before you enter</h2>
-    <p>NovaFlex Peptides supplies compounds strictly for laboratory and research use only (RUO). Access is limited to qualified researchers. Please confirm the following to continue.</p>
-    <div class="gate-checks">
-      <label class="gate-check"><input type="checkbox" id="gateAge"> I certify that I am at least 21 years of age.</label>
-      <label class="gate-check"><input type="checkbox" id="gateResearch"> I am a qualified researcher, or purchasing on behalf of a research institution, strictly for laboratory research. I understand these compounds are for research use only — not for human or veterinary consumption.</label>
+<div id="enterGate">
+  <div class="eg-hero">
+    <div class="eg-hero-inner">
+      <div class="eg-brand"><img src="assets/logo.webp" alt="NovaFlex Peptides"><span>NOVA<b>FLEX</b></span></div>
+      <span class="eg-eyebrow">Research-Grade Peptides</span>
+      <h1 class="eg-title">Precision peptides for the <em>qualified lab.</em></h1>
+      <p class="eg-sub">Third-party verified, 99%+ purity, batch-documented. Access is limited to qualified researchers — supplied for in-vitro research use only, not for human or animal consumption.</p>
+      <div class="eg-chips"><span>COA Verified</span><span>HPLC + MS Tested</span><span>Researchers Only</span></div>
     </div>
-    <button class="btn btn-gold" id="gateEnter" disabled style="justify-content:center;">Enter Site</button>
-    <div class="gate-exit">Not a researcher? <a href="https://www.google.com">Please leave this site.</a></div>
+  </div>
+  <div class="eg-panel">
+    <div class="eg-card">
+      <span class="eg-access">Restricted Access</span>
+      <h2 class="eg-h2">Enter the catalog</h2>
+      <p class="eg-p">Sign in to your researcher account — or create one — to unlock pricing, certificates of analysis, and verified ordering.</p>
+      <div class="eg-tabs">
+        <button type="button" class="eg-tab active" id="egTabLogin" onclick="egSetMode('login')">Sign in</button>
+        <button type="button" class="eg-tab" id="egTabRegister" onclick="egSetMode('register')">Create account</button>
+      </div>
+      <form id="egForm" autocomplete="on">
+        <input class="eg-input" type="email" id="egEmail" placeholder="you@lab.com" autocomplete="email" required>
+        <input class="eg-input" type="password" id="egPassword" placeholder="Password (min 8 characters)" autocomplete="current-password" required>
+        <label class="eg-check" id="egRuoRow" style="display:none;"><input type="checkbox" id="egRuo"> I am at least 21 and a qualified researcher (or purchasing for a research institution). I understand all products are for in-vitro research use only — not for human or veterinary use.</label>
+        <button type="submit" class="btn btn-gold" id="egSubmit">Sign in →</button>
+      </form>
+      <div class="eg-msg" id="egMsg"></div>
+      <div class="eg-fine">21+ · Qualified researchers only. By continuing you confirm you are at least 21 years of age and that products are acquired solely for lawful in-vitro research use. See our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.</div>
+    </div>
   </div>
 </div>
 
@@ -799,7 +864,7 @@
       <a href="#lab-reports">Lab Reports</a>
       <a href="#faq">FAQ</a>
       <a href="#contact">Contact</a>
-      <a href="#affiliate">Team</a>
+      <a href="#team">Team</a>
     </nav>
     <div class="nav-cta">
       <a href="#" class="cart-btn"><span>Order</span><span class="cart-count" id="cartCount">0</span></a>
@@ -816,7 +881,7 @@
     <a href="#quality">Lab Reports</a>
     <a href="#faq">FAQ</a>
     <a href="#contact">Contact</a>
-    <a href="#affiliate">Team</a>
+    <a href="#team">Team</a>
   </div>
 </header>
 
@@ -1127,15 +1192,15 @@
     </div>
   </section>
 
-  <!-- ================= AFFILIATE PROGRAM ================= -->
-  <section id="affiliate">
+  <!-- ================= TEAM / PARTNER PROGRAM ================= -->
+  <section id="team">
     <div class="wrap aff-grid">
       <div class="aff-pitch reveal">
         <span class="eyebrow">Team</span>
         <h2>Get paid to share <em>NovaFlex</em></h2>
-        <p>Have an audience of researchers, athletes, or peptide enthusiasts? Join our affiliate program and earn on every order you send our way — while giving your followers a real discount.</p>
+        <p>Have an audience of researchers, lab professionals, or peptide enthusiasts? Join the team and earn on every order you send our way — while giving your followers a real discount.</p>
         <div class="aff-stats">
-          <div class="stat"><div class="num">5–20%</div><div class="lbl">commission on every sale — set per affiliate</div></div>
+          <div class="stat"><div class="num">5–20%</div><div class="lbl">commission on every sale — set per partner</div></div>
           <div class="stat"><div class="num">5–20%</div><div class="lbl">discount for everyone who uses your code</div></div>
           <div class="stat"><div class="num">$0</div><div class="lbl">cost to join — apply in minutes</div></div>
         </div>
@@ -1144,14 +1209,14 @@
           <li><span class="n">2</span><span class="t"><b>Get your code.</b> Once approved, we send you a personal discount code.</span></li>
           <li><span class="n">3</span><span class="t"><b>Earn.</b> Every order placed with your code gives your audience a discount and pays you a commission on every sale.</span></li>
         </ol>
-        <a class="aff-download" href="assets/downloads/novaflex-affiliate-program.pdf" download>↓ Download program overview (PDF)</a>
+        <a class="aff-download" href="assets/downloads/novaflex-team-program.pdf" download>↓ Download program overview (PDF)</a>
       </div>
 
       <div class="aff-card reveal" style="display:flex;flex-direction:column;justify-content:center;text-align:center;">
         <h3>Join the fastest-growing team</h3>
-        <p>Log in to the affiliate portal to join. Once you're approved, the same portal is where you grab your code and track every commission.</p>
-        <a class="btn btn-gold" href="affiliate.html" style="width:100%;justify-content:center;margin-top:6px;">Log in to discover →</a>
-        <a class="aff-login-link" href="affiliate.html" style="margin-top:16px;">Already a partner? Open your dashboard →</a>
+        <p>Log in to the team portal to join. Once you're approved, the same portal is where you grab your code and track every commission.</p>
+        <a class="btn btn-gold" href="team.html" style="width:100%;justify-content:center;margin-top:6px;">Log in to discover →</a>
+        <a class="aff-login-link" href="team.html" style="margin-top:16px;">Already a partner? Open your dashboard →</a>
       </div>
     </div>
   </section>
@@ -1233,7 +1298,7 @@
       <div class="ship-bar-track"><div class="ship-bar-fill" id="shipFill"></div></div>
     </div>
     <div class="promo-row">
-      <input type="text" id="promoInput" placeholder="Promo / affiliate code" autocomplete="off">
+      <input type="text" id="promoInput" placeholder="Promo or partner code" autocomplete="off">
       <button id="promoApply" type="button">Apply</button>
     </div>
     <div class="promo-msg" id="promoMsg"></div>
@@ -1375,12 +1440,12 @@ function renderDrawer(){
   updateDrawerTotals();
 }
 
-// ---- Promo / affiliate code ----
+// ---- Promo / partner code ----
 const API_BASE = CHECKOUT_API_URL.replace(/\/api\/checkout$/, '');
 let appliedCode = null;
 let appliedRate = 0;
 
-// ---- Affiliate application form ----
+// ---- Partner application form ----
 const FREE_SHIP_THRESHOLD = 199;
 let shipWasUnlocked = false;
 function updateShipBar(subtotal){
@@ -1718,7 +1783,7 @@ updateSpotlightGate();
   if(shopAuthed()){
     try{
       const r=await fetch(SHOP_API+'/api/shop-account/me',{headers:{Authorization:'Bearer '+localStorage.getItem(SHOP_TKEY)}});
-      if(r.status===401){ try{localStorage.removeItem(SHOP_TKEY);}catch(e){} applyPricingGate(); }
+      if(r.status===401){ try{localStorage.removeItem(SHOP_TKEY);}catch(e){} applyPricingGate(); if(typeof showEnterGate==='function') showEnterGate(); }
     }catch(e){}
   }
 })();
@@ -1827,28 +1892,45 @@ const observer = new IntersectionObserver((entries)=>{
 }, {threshold:0.12});
 document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
 
-// ---------------- Age / research-use gate ----------------
-const ageGate = document.getElementById('ageGate');
-const gateAge = document.getElementById('gateAge');
-const gateResearch = document.getElementById('gateResearch');
-const gateEnter = document.getElementById('gateEnter');
-
-function updateGateButton(){
-  gateEnter.disabled = !(gateAge.checked && gateResearch.checked);
+// ---------------- Enter-the-catalog login gate ----------------
+// The whole catalog sits behind a researcher sign-in. On first open the gate
+// blocks the site; a valid session (shop token) lets you straight through.
+const enterGate = document.getElementById('enterGate');
+let egMode = 'login';
+function showEnterGate(){ if(enterGate){ enterGate.classList.remove('hidden'); document.body.style.overflow='hidden'; } }
+function hideEnterGate(){ if(enterGate){ enterGate.classList.add('hidden'); document.body.style.overflow=''; } }
+function egSetMode(mode){
+  egMode = mode;
+  document.getElementById('egTabLogin').classList.toggle('active', mode==='login');
+  document.getElementById('egTabRegister').classList.toggle('active', mode==='register');
+  document.getElementById('egRuoRow').style.display = mode==='register' ? 'flex' : 'none';
+  document.getElementById('egSubmit').textContent = mode==='register' ? 'Create account →' : 'Sign in →';
+  document.getElementById('egPassword').setAttribute('autocomplete', mode==='register' ? 'new-password' : 'current-password');
+  const m=document.getElementById('egMsg'); if(m) m.className='eg-msg';
 }
-gateAge.addEventListener('change', updateGateButton);
-gateResearch.addEventListener('change', updateGateButton);
-
-gateEnter.addEventListener('click', ()=>{
-  if (gateEnter.disabled) return;
-  try { localStorage.setItem('nf_gate_ok', '1'); } catch(e) {}
-  ageGate.classList.add('hidden');
-});
-
-// Skip the gate on repeat visits in the same browser
-try {
-  if (localStorage.getItem('nf_gate_ok') === '1'){ ageGate.classList.add('hidden'); }
-} catch(e) {}
+(function(){
+  const form=document.getElementById('egForm'); if(!form) return;
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const email=document.getElementById('egEmail').value.trim();
+    const password=document.getElementById('egPassword').value;
+    const msg=document.getElementById('egMsg'); msg.className='eg-msg';
+    const btn=document.getElementById('egSubmit'); const orig=btn.textContent; btn.disabled=true; btn.textContent='Please wait…';
+    try {
+      let path='/api/shop-account/login'; const bodyObj={email,password};
+      if(egMode==='register'){
+        if(!document.getElementById('egRuo').checked){ msg.className='eg-msg err'; msg.textContent='Please confirm the research-use terms to continue.'; btn.disabled=false; btn.textContent=orig; return; }
+        bodyObj.ruoAccepted=true; path='/api/shop-account/register';
+      }
+      const res=await fetch(SHOP_API+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(bodyObj)});
+      const d=await res.json().catch(()=>({}));
+      if(res.ok && d.token){ try{localStorage.setItem(SHOP_TKEY,d.token);}catch(e){} hideEnterGate(); applyPricingGate(); return; }
+      msg.className='eg-msg err'; msg.textContent=d.error||'Something went wrong. Please try again.'; btn.disabled=false; btn.textContent=orig;
+    } catch(err){ msg.className='eg-msg err'; msg.textContent='Could not reach the server. Please try again.'; btn.disabled=false; btn.textContent=orig; }
+  });
+})();
+// First open: show the gate unless a session is already stored.
+if(shopAuthed()){ hideEnterGate(); } else { showEnterGate(); }
 </script>
 </body>
 </html>

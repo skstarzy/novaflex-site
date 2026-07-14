@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Affiliate Dashboard — NovaFlex Peptides</title>
-<meta name="description" content="NovaFlex Peptides affiliate partner dashboard.">
+<title>Team Dashboard — NovaFlex Peptides</title>
+<meta name="description" content="NovaFlex Peptides team partner dashboard.">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#08080a">
 <link rel="icon" href="assets/logo.webp">
@@ -112,7 +112,7 @@
       <img src="assets/logo.webp" alt="NovaFlex Peptides">
       <span class="brand-text">NOVA<span class="flex">FLEX</span></span>
     </a>
-    <div class="nav-right"><a href="index.html#affiliate">← Back to site</a></div>
+    <div class="nav-right"><a href="index.html#team">← Back to site</a></div>
   </div>
 </header>
 
@@ -124,7 +124,7 @@
 
 <footer>
   <div class="foot-inner">
-    <span>© 2026 NovaFlex Peptides · Affiliate Portal</span>
+    <span>© 2026 NovaFlex Peptides · Team Portal</span>
     <a href="mailto:support@novaflexusa.com">support@novaflexusa.com</a>
   </div>
 </footer>
@@ -142,7 +142,7 @@ let toastTimer;
 function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),1600); }
 
 // --- Email + password auth -------------------------------------------------
-// The email link carries a SETUP token (?setup=): it only lets the affiliate
+// The email link carries a SETUP token (?setup=): it only lets the team
 // choose a password, then logs them in. Everyday access is email + password,
 // which yields a SESSION token stored in localStorage. A forwarded link alone
 // can't read anyone's data — the password is still required.
@@ -153,9 +153,9 @@ function saveSession(token){ try { localStorage.setItem(TKEY, token); } catch(e)
 function showLogin(prefillMsg, prefillClass){
   root.innerHTML =
     '<div class="login">'+
-      '<span class="eyebrow">Affiliate Portal</span>'+
+      '<span class="eyebrow">Team Portal</span>'+
       '<h1 style="margin-top:10px;">Log in</h1>'+
-      '<p>Access your affiliate dashboard.</p>'+
+      '<p>Access your team dashboard.</p>'+
       '<form id="loginForm">'+
         '<input type="email" id="loginEmail" placeholder="you@email.com" autocomplete="email" required>'+
         '<input type="password" id="loginPass" placeholder="Password" autocomplete="current-password" required>'+
@@ -199,9 +199,9 @@ function showLogin(prefillMsg, prefillClass){
 function showForgot(){
   root.innerHTML =
     '<div class="login">'+
-      '<span class="eyebrow">Affiliate Portal</span>'+
+      '<span class="eyebrow">Team Portal</span>'+
       '<h1 style="margin-top:10px;">Reset your password</h1>'+
-      '<p>Enter the email on your affiliate account and we\'ll send you a link to set a new password.</p>'+
+      '<p>Enter the email on your team account and we\'ll send you a link to set a new password.</p>'+
       '<form id="forgotForm">'+
         '<input type="email" id="forgotEmail" placeholder="you@email.com" autocomplete="email" required>'+
         '<button type="submit" class="btn btn-gold" id="forgotBtn">Send reset link</button>'+
@@ -223,7 +223,7 @@ function showForgot(){
         method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email }),
       });
       msg.className='login-msg ok';
-      msg.innerHTML = 'If that email is on an active affiliate account, a reset link is on its way. Check your inbox (and spam).';
+      msg.innerHTML = 'If that email is on an active team account, a reset link is on its way. Check your inbox (and spam).';
       form.style.display='none';
     } catch(err){
       msg.className='login-msg err'; msg.textContent='Something went wrong. Please try again.';
@@ -237,7 +237,7 @@ function showForgot(){
 function showApply(){
   root.innerHTML =
     '<div class="login">'+
-      '<span class="eyebrow">Affiliate Program</span>'+
+      '<span class="eyebrow">Team Program</span>'+
       '<h1 style="margin-top:10px;">Join the fastest-growing team</h1>'+
       '<p>Tell us about your audience. We review every application personally and reply by email.</p>'+
       '<form id="applyForm" style="text-align:left;">'+
@@ -275,7 +275,7 @@ function showApply(){
       if (!res.ok) throw new Error(d.error || 'Something went wrong. Please try again.');
       root.innerHTML =
         '<div class="login">'+
-          '<span class="eyebrow">Affiliate Program</span>'+
+          '<span class="eyebrow">Team Program</span>'+
           '<h1 style="margin-top:10px;">Application received</h1>'+
           '<p>Thanks for applying! We\'ll review your details and get back to you by email soon.</p>'+
           '<div class="linkrow" style="margin-top:18px;"><a id="doneBack">← Back to log in</a></div>'+
@@ -291,7 +291,7 @@ function showApply(){
 function showSetPassword(setupToken){
   root.innerHTML =
     '<div class="login">'+
-      '<span class="eyebrow">Affiliate Portal</span>'+
+      '<span class="eyebrow">Team Portal</span>'+
       '<h1 style="margin-top:10px;">Set your password</h1>'+
       '<p>Choose a password to secure your dashboard.</p>'+
       '<form id="setForm">'+
@@ -378,7 +378,7 @@ function renderDashboard(d){
   root.innerHTML =
     '<div class="dash-head">'+
       '<div>'+
-        '<span class="eyebrow">Affiliate Dashboard</span>'+
+        '<span class="eyebrow">Team Dashboard</span>'+
         '<h1>Welcome back, '+esc(d.name)+'</h1>'+
       '</div>'+
       '<button class="logout" id="logoutBtn">Log out</button>'+
