@@ -1495,9 +1495,14 @@ document.getElementById('checkoutBtn').addEventListener('click', async ()=>{
   btn.textContent = 'Redirecting…';
   btn.disabled = true;
   try {
+    // Send the signed-in researcher account token so the backend attaches this
+    // order to the buyer's single CRM customer record (and their account portal).
+    let shopTok = null; try { shopTok = localStorage.getItem('nf_shop_token'); } catch(e){}
     const res = await fetch(CHECKOUT_API_URL, {
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers: shopTok
+        ? {'Content-Type':'application/json','Authorization':'Bearer '+shopTok}
+        : {'Content-Type':'application/json'},
       body: JSON.stringify({
         items: cart,
         certifiedResearchUse: true, // already confirmed at the age gate
