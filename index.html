@@ -1025,7 +1025,7 @@
   <section style="padding-top:0;">
     <div class="wrap">
       <div class="spotlight reveal">
-        <div class="spotlight-media"><img class="vial-photo" src="assets/vials/NF-glow-70mg.webp" alt="Glow Blend 70mg vial — NovaFlex Peptides"></div>
+        <div class="spotlight-media"><img class="vial-photo" src="assets/vials/NF-glow-70mg.webp?v=2" alt="GHK-Cu + BPC-157 + TB-500 blend vial — NovaFlex Peptides"></div>
         <div>
           <span class="badge signature" style="position:static;display:inline-block;margin-bottom:16px;">★ Signature Blend</span>
           <h2 style="font-size:clamp(24px,3vw,32px);">GHK-Cu + BPC-157 + TB-500 Blend</h2>
@@ -1326,7 +1326,7 @@ function renderDrawer(){
   } else {
     wrap.innerHTML = cart.map(i => {
       const prod = PRODUCTS.find(p => p.name === i.name && p.spec === i.spec);
-      const imgSrc = prod ? `assets/vials/NF-${prod.slug}.webp` : '';
+      const imgSrc = prod ? `assets/vials/NF-${prod.slug}.webp?v=2` : '';
       return `
       <div class="drawer-item">
         <div class="drawer-item-media"><img src="${imgSrc}" alt="${i.name}" loading="lazy"></div>
@@ -1648,7 +1648,7 @@ function productCard(p){
   <div class="prod-card${p.soldOut ? ' is-soldout' : ''}" data-cat="${p.cat}" data-slug="${p.slug}">
     <div class="prod-media">
       ${badgeHTML}
-      <a href="${href}" class="prod-media-link" aria-label="View ${p.name} details"><img class="vial-photo" src="assets/vials/NF-${p.slug}.webp" alt="${p.name} ${p.spec} — NovaFlex Peptides" loading="lazy"></a>
+      <a href="${href}" class="prod-media-link" aria-label="View ${p.name} details"><img class="vial-photo" src="assets/vials/NF-${p.slug}.webp?v=2" alt="${p.name} ${p.spec} — NovaFlex Peptides" loading="lazy"></a>
       ${purityHTML}
     </div>
     <div class="prod-body">
