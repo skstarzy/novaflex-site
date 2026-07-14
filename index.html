@@ -729,7 +729,9 @@
   .eg-fine a{color:var(--silver-dim);text-decoration:underline;text-underline-offset:2px;}
   .eg-fine a:hover{color:var(--gold-bright);}
   @media(max-width:860px){
-    .eg-dial{right:-38%;top:-4%;transform:none;width:520px;height:520px;opacity:0.32;}
+    /* Center the gold glow + dial so the top composition is symmetric and the logo reads centered */
+    #enterGate{background:radial-gradient(120% 80% at 50% -6%, rgba(201,164,76,0.13), transparent 55%), linear-gradient(160deg,#0b0b0d,#050506);}
+    .eg-dial{left:50%;right:auto;top:1%;transform:translateX(-50%);width:560px;height:560px;opacity:0.26;}
     .eg-content{grid-template-columns:1fr;gap:28px;padding:38px 22px 56px;align-content:start;justify-items:center;text-align:center;}
     .eg-brandcol{max-width:none;display:flex;flex-direction:column;align-items:center;width:100%;}
     .eg-logo-card{margin:0 auto 22px;max-width:172px;}
