@@ -1140,46 +1140,18 @@
           <div class="stat"><div class="num">$0</div><div class="lbl">cost to join — apply in minutes</div></div>
         </div>
         <ol class="aff-steps">
-          <li><span class="n">1</span><span class="t"><b>Apply below.</b> Tell us where you'll promote and how big your audience is.</span></li>
+          <li><span class="n">1</span><span class="t"><b>Log in to the portal.</b> Apply from inside — tell us where you'll promote and how big your audience is.</span></li>
           <li><span class="n">2</span><span class="t"><b>Get your code.</b> Once approved, we send you a personal discount code.</span></li>
           <li><span class="n">3</span><span class="t"><b>Earn.</b> Every order placed with your code gives your audience a discount and pays you a commission on every sale.</span></li>
         </ol>
         <a class="aff-download" href="assets/downloads/novaflex-affiliate-program.pdf" download>↓ Download program overview (PDF)</a>
-        <a class="aff-login-link" href="affiliate.html">Already a partner? Log in to your dashboard →</a>
       </div>
 
-      <div class="aff-card reveal">
-        <form id="affForm" novalidate>
-          <h3>Apply to become an affiliate</h3>
-          <p>We review every application personally and reply by email.</p>
-          <div class="aff-field">
-            <label for="affName">Name</label>
-            <input type="text" id="affName" name="name" autocomplete="name" maxlength="120" required>
-          </div>
-          <div class="aff-field">
-            <label for="affEmail">Email</label>
-            <input type="email" id="affEmail" name="email" autocomplete="email" maxlength="200" required>
-          </div>
-          <div class="aff-field">
-            <label for="affPlatform">Where will you promote? (platform &amp; handle)</label>
-            <input type="text" id="affPlatform" name="platform" placeholder="e.g. Instagram @yourhandle" maxlength="200">
-          </div>
-          <div class="aff-field">
-            <label for="affAudience">Audience size</label>
-            <input type="text" id="affAudience" name="audience" placeholder="e.g. 25,000 followers" maxlength="120">
-          </div>
-          <div class="aff-field">
-            <label for="affMessage">Anything else? (optional)</label>
-            <textarea id="affMessage" name="message" maxlength="2000" placeholder="Tell us a little about your audience and how you'd promote NovaFlex."></textarea>
-          </div>
-          <button type="submit" class="btn btn-gold" id="affSubmit">Submit Application</button>
-          <div class="aff-msg" id="affMsg"></div>
-        </form>
-        <div class="aff-success" id="affSuccess">
-          <div class="tick">✓</div>
-          <h3>Application received</h3>
-          <p>Thanks for applying! We'll review your details and get back to you by email soon.</p>
-        </div>
+      <div class="aff-card reveal" style="display:flex;flex-direction:column;justify-content:center;text-align:center;">
+        <h3>Become an affiliate</h3>
+        <p>Log in to the affiliate portal to apply. Once you're approved, the same portal is where you grab your code and track every commission.</p>
+        <a class="btn btn-gold" href="affiliate.html" style="width:100%;justify-content:center;margin-top:6px;">Log in to discover →</a>
+        <a class="aff-login-link" href="affiliate.html" style="margin-top:16px;">Already a partner? Open your dashboard →</a>
       </div>
     </div>
   </section>
@@ -1409,38 +1381,6 @@ let appliedCode = null;
 let appliedRate = 0;
 
 // ---- Affiliate application form ----
-const affForm = document.getElementById('affForm');
-if (affForm){
-  affForm.addEventListener('submit', async (e)=>{
-    e.preventDefault();
-    const msg = document.getElementById('affMsg');
-    const btn = document.getElementById('affSubmit');
-    const payload = {
-      name: affForm.name.value.trim(),
-      email: affForm.email.value.trim(),
-      platform: affForm.platform.value.trim(),
-      audience: affForm.audience.value.trim(),
-      message: affForm.message.value.trim(),
-    };
-    msg.className = 'aff-msg';
-    if (!payload.name){ msg.className='aff-msg err'; msg.textContent='Please enter your name.'; return; }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)){ msg.className='aff-msg err'; msg.textContent='Please enter a valid email address.'; return; }
-    btn.disabled = true; const orig = btn.textContent; btn.textContent = 'Submitting…';
-    try {
-      const res = await fetch(`${API_BASE}/api/affiliate-apply`, {
-        method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload),
-      });
-      const data = await res.json().catch(()=>({}));
-      if (!res.ok) throw new Error(data.error || 'Something went wrong. Please try again.');
-      affForm.style.display = 'none';
-      document.getElementById('affSuccess').style.display = 'block';
-    } catch (err){
-      msg.className = 'aff-msg err'; msg.textContent = err.message;
-      btn.disabled = false; btn.textContent = orig;
-    }
-  });
-}
-
 const FREE_SHIP_THRESHOLD = 199;
 let shipWasUnlocked = false;
 function updateShipBar(subtotal){

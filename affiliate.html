@@ -58,6 +58,9 @@
   .login .linkrow a{color:var(--gold);cursor:pointer;}
   .login .linkrow a:hover{color:var(--gold-bright);}
   .login .hint{margin-top:8px;font-size:12px;color:var(--silver-dim);line-height:1.5;}
+  .login textarea{width:100%;margin-top:12px;background:var(--bg);border:1px solid var(--line-strong);border-radius:6px;padding:13px 14px;color:var(--silver);font-size:14px;font-family:'Inter',sans-serif;resize:vertical;}
+  .login textarea:focus{outline:none;border-color:var(--gold);}
+  #applyForm input,#applyForm textarea{margin-top:12px;}
 
   /* dashboard */
   .dash-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;}
@@ -160,11 +163,13 @@ function showLogin(prefillMsg, prefillClass){
       '</form>'+
       '<div class="login-msg" id="loginMsg"></div>'+
       '<div class="linkrow"><a id="forgotLink">Forgot password?</a></div>'+
+      '<div class="linkrow" style="margin-top:10px;">New to NovaFlex? <a id="applyLink">Apply to become an affiliate →</a></div>'+
     '</div>';
   const form = document.getElementById('loginForm');
   const msg = document.getElementById('loginMsg');
   if (prefillMsg){ msg.className='login-msg '+(prefillClass||'err'); msg.innerHTML=prefillMsg; }
   document.getElementById('forgotLink').addEventListener('click', () => showForgot());
+  document.getElementById('applyLink').addEventListener('click', () => showApply());
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = document.getElementById('loginBtn');
@@ -223,6 +228,61 @@ function showForgot(){
     } catch(err){
       msg.className='login-msg err'; msg.textContent='Something went wrong. Please try again.';
       btn.disabled=false; btn.textContent=orig;
+    }
+  });
+}
+
+// APPLY — new applicants submit here (public); posts to /api/affiliate-apply.
+// Approval + welcome email happen from the CRM; approved partners then log in above.
+function showApply(){
+  root.innerHTML =
+    '<div class="login">'+
+      '<span class="eyebrow">Affiliate Program</span>'+
+      '<h1 style="margin-top:10px;">Apply to become an affiliate</h1>'+
+      '<p>Tell us about your audience. We review every application personally and reply by email.</p>'+
+      '<form id="applyForm" style="text-align:left;">'+
+        '<input type="text" id="apName" placeholder="Your name" autocomplete="name" maxlength="120" required>'+
+        '<input type="email" id="apEmail" placeholder="you@email.com" autocomplete="email" maxlength="200" required>'+
+        '<input type="text" id="apPlatform" placeholder="Where you\'ll promote (e.g. Instagram @handle)" maxlength="200">'+
+        '<input type="text" id="apAudience" placeholder="Audience size (e.g. 25,000 followers)" maxlength="120">'+
+        '<textarea id="apMessage" rows="3" placeholder="Anything else? (optional)" maxlength="2000"></textarea>'+
+        '<button type="submit" class="btn btn-gold" id="applyBtn" style="width:100%;margin-top:14px;">Submit application</button>'+
+      '</form>'+
+      '<div class="login-msg" id="applyMsg"></div>'+
+      '<div class="linkrow"><a id="applyBack">← Back to log in</a></div>'+
+    '</div>';
+  document.getElementById('applyBack').addEventListener('click', () => showLogin());
+  const form = document.getElementById('applyForm');
+  const msg = document.getElementById('applyMsg');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const payload = {
+      name: document.getElementById('apName').value.trim(),
+      email: document.getElementById('apEmail').value.trim(),
+      platform: document.getElementById('apPlatform').value.trim(),
+      audience: document.getElementById('apAudience').value.trim(),
+      message: document.getElementById('apMessage').value.trim(),
+    };
+    msg.className='login-msg';
+    if (!payload.name){ msg.className='login-msg err'; msg.textContent='Please enter your name.'; return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)){ msg.className='login-msg err'; msg.textContent='Please enter a valid email address.'; return; }
+    const btn = document.getElementById('applyBtn'); btn.disabled=true; const orig=btn.textContent; btn.textContent='Submitting…';
+    try {
+      const res = await fetch(API + '/api/affiliate-apply', {
+        method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload),
+      });
+      const d = await res.json().catch(()=>({}));
+      if (!res.ok) throw new Error(d.error || 'Something went wrong. Please try again.');
+      root.innerHTML =
+        '<div class="login">'+
+          '<span class="eyebrow">Affiliate Program</span>'+
+          '<h1 style="margin-top:10px;">Application received</h1>'+
+          '<p>Thanks for applying! We\'ll review your details and get back to you by email soon.</p>'+
+          '<div class="linkrow" style="margin-top:18px;"><a id="doneBack">← Back to log in</a></div>'+
+        '</div>';
+      const b=document.getElementById('doneBack'); if(b) b.addEventListener('click',()=>showLogin());
+    } catch(err){
+      msg.className='login-msg err'; msg.textContent=err.message; btn.disabled=false; btn.textContent=orig;
     }
   });
 }
