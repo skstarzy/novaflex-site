@@ -834,35 +834,42 @@
   .po-unit b{display:block;font-family:'IBM Plex Mono',monospace;font-size:27px;font-weight:700;color:var(--gold-bright);font-variant-numeric:tabular-nums;line-height:1;}
   .po-unit small{display:block;margin-top:5px;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);}
   .po-live{position:relative;z-index:1;font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--gold-bright);font-size:17px;text-align:center;}
-  @media(max-width:640px){.preorder{padding:20px 18px;}.po-count{width:100%;justify-content:space-between;gap:7px;}.po-unit{min-width:0;flex:1;padding:9px 4px;}.po-unit b{font-size:21px;}}
+  .po-countwrap{position:relative;z-index:1;}
+  .po-clabel{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-bright);margin-bottom:9px;text-align:right;}
+  @media(max-width:640px){.preorder{padding:20px 18px;}.po-countwrap{width:100%;}.po-count{justify-content:space-between;gap:7px;}.po-clabel{text-align:center;}.po-unit{min-width:0;flex:1;padding:9px 4px;}.po-unit b{font-size:21px;}}
   </style>
   <div class="preorder-wrap">
     <div class="preorder">
       <div class="po-left">
         <span class="po-eyebrow">Pre-order launch event</span>
         <h2 class="po-title">Save <span>15%</span> on your first order</h2>
-        <p class="po-sub">Fri Jul 17 – Sun Jul 19 · apply code <b>PRE15</b> at checkout. Order now, ships as soon as your batch lands.</p>
+        <p class="po-sub">Pre-orders open <strong style="color:var(--gold-bright)">Friday, Jul 17</strong> and run through Sunday night. 15% off with code <b>PRE15</b> · ships as soon as your batch lands.</p>
         <a href="#catalog" class="po-cta">Reserve yours — browse the catalog →</a>
       </div>
-      <div class="po-count" id="poCount" aria-label="Countdown to launch">
-        <div class="po-unit"><b id="poD">00</b><small>days</small></div>
-        <div class="po-unit"><b id="poH">00</b><small>hrs</small></div>
-        <div class="po-unit"><b id="poM">00</b><small>min</small></div>
-        <div class="po-unit"><b id="poS">00</b><small>sec</small></div>
+      <div class="po-countwrap">
+        <div class="po-clabel" id="poLabel">Pre-orders start Friday — opens in</div>
+        <div class="po-count" id="poCount" aria-label="Countdown">
+          <div class="po-unit"><b id="poD">00</b><small>days</small></div>
+          <div class="po-unit"><b id="poH">00</b><small>hrs</small></div>
+          <div class="po-unit"><b id="poM">00</b><small>min</small></div>
+          <div class="po-unit"><b id="poS">00</b><small>sec</small></div>
+        </div>
       </div>
     </div>
   </div>
   <script>
   (function(){
-    var target=new Date('2026-07-17T00:00:00').getTime();
-    var wrap=document.getElementById('poCount');
+    var start=new Date('2026-07-17T00:00:00').getTime();   // Friday — pre-orders open
+    var end=new Date('2026-07-20T00:00:00').getTime();      // end of Sunday night
+    var label=document.getElementById('poLabel');
     var D=document.getElementById('poD'),H=document.getElementById('poH'),M=document.getElementById('poM'),S=document.getElementById('poS');
     function p(n){return String(n).padStart(2,'0');}
+    function set(t){ D.textContent=p(Math.floor(t/864e5)); H.textContent=p(Math.floor(t%864e5/36e5)); M.textContent=p(Math.floor(t%36e5/6e4)); S.textContent=p(Math.floor(t%6e4/1e3)); }
     function tick(){
-      var t=target-Date.now();
-      if(t<=0){ wrap.innerHTML='<div class="po-live">The sale is live — 15% off with code PRE15</div>'; return; }
-      D.textContent=p(Math.floor(t/864e5)); H.textContent=p(Math.floor(t%864e5/36e5));
-      M.textContent=p(Math.floor(t%36e5/6e4)); S.textContent=p(Math.floor(t%6e4/1e3));
+      var now=Date.now();
+      if(now<start){ label.textContent='Pre-orders start Friday — opens in'; set(start-now); }
+      else if(now<end){ label.textContent='Pre-order sale is live — ends Sunday night in'; set(end-now); }
+      else { document.querySelector('.po-countwrap').innerHTML='<div class="po-live">The pre-order event has ended — thank you!</div>'; return; }
     }
     tick(); setInterval(tick,1000);
   })();
