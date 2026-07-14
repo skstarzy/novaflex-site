@@ -959,7 +959,7 @@
         <div class="cat-tile reveal" data-filter="structural">
           <div class="tick"></div>
           <h3>Structural Peptides</h3>
-          <p>BPC, TB, and KPV-class peptides supplied as in-vitro reference materials.</p>
+          <p>BP+, TB, and KPV-class peptides supplied as in-vitro reference materials.</p>
           <span class="go">3 compounds →</span>
         </div>
         <div class="cat-tile reveal" data-filter="copper-mc">
@@ -1099,13 +1099,13 @@
   <section style="padding-top:0;">
     <div class="wrap">
       <div class="spotlight reveal">
-        <div class="spotlight-media"><img class="vial-photo" src="assets/vials/NF-glow-70mg.webp?v=2" alt="GHK-Cu + BPC-157 + TB-500 blend vial — NovaFlex Peptides"></div>
+        <div class="spotlight-media"><img class="vial-photo" src="assets/vials/NF-glow-70mg.webp?v=2" alt="GHK-Cu · BP+ · TB-500 blend vial — NovaFlex Peptides"></div>
         <div>
           <span class="badge signature" style="position:static;display:inline-block;margin-bottom:16px;">★ Signature Blend</span>
-          <h2 style="font-size:clamp(24px,3vw,32px);">GHK-Cu + BPC-157 + TB-500 Blend</h2>
-          <p style="margin-top:12px;color:var(--text-muted);font-size:14.5px;line-height:1.7;">A three-peptide reference blend in a single vial — GHK-Cu, BPC-157, and TB-500, pre-combined and verified to spec as a high-purity reference material for in-vitro laboratory studies.</p>
+          <h2 style="font-size:clamp(24px,3vw,32px);">GHK-Cu · BP+ · TB-500 Blend</h2>
+          <p style="margin-top:12px;color:var(--text-muted);font-size:14.5px;line-height:1.7;">A three-peptide reference blend in a single vial — GHK-Cu, BP+, and TB-500, pre-combined and verified to spec as a high-purity reference material for in-vitro laboratory studies.</p>
           <ul>
-            <li>GHK-Cu + BPC-157 + TB-500 blend architecture</li>
+            <li>GHK-Cu · BP+ · TB-500 blend architecture</li>
             <li>70mg per vial — lyophilized powder</li>
             <li>Verified at 99.2%+ purity</li>
             <li>One-step reconstitution protocol</li>
@@ -1259,7 +1259,7 @@ const PRODUCTS = [
   {name:"Tesamorelin", spec:"10mg vial", cat:"igf", price:115, purity:"99.5%", badge:"bestseller", slug:"tesa-10mg"},
   {name:"MOTS-C", spec:"10mg vial", cat:"igf", price:50, purity:"99.1%", badge:"new", slug:"motsc-10mg"},
   {name:"IGF-1 LR3", spec:"1mg vial", cat:"igf", price:75, purity:"99.0%", slug:"igf1lr3-1mg"},
-  {name:"BPC-157", display:"BP+", spec:"5mg vial", cat:"structural", price:40, purity:"99.3%", slug:"bpc157-5mg"},
+  {name:"BP+", display:"BP+", spec:"5mg vial", cat:"structural", price:40, purity:"99.3%", slug:"bpc157-5mg"},
   {name:"TB-500", spec:"5mg vial", cat:"structural", price:55, purity:"99.1%", slug:"tb500-5mg"},
   {name:"KPV", spec:"10mg vial", cat:"structural", price:45, purity:"99.0%", slug:"kpv-10mg"},
   {name:"GHK-Cu", spec:"50mg vial", cat:"copper-mc", price:42, purity:"99.2%", slug:"ghkcu-50mg", soldOut:true},
@@ -1271,10 +1271,10 @@ const PRODUCTS = [
   {name:"NAD+", spec:"500mg vial", cat:"specialty", price:60, purity:"99.1%", slug:"nad-500mg"},
   {name:"SS-31", spec:"10mg vial", cat:"specialty", price:85, purity:"99.2%", slug:"ss31-10mg"},
   {name:"PT-141", spec:"5mg vial", cat:"specialty", price:50, purity:"99.0%", slug:"pt141-5mg"},
-  {name:"Glow Blend", display:"GHK-Cu + BPC-157 + TB-500", spec:"70mg vial", cat:"blends", cats:["copper-mc"], price:130, purity:"99.2%", slug:"glow-70mg"},
-  {name:"Klow Blend", display:"KPV + GHK-Cu + BPC-157 + TB-500", spec:"80mg vial", cat:"blends", cats:["copper-mc"], price:135, purity:"99.2%", slug:"klow-80mg"},
-  {name:"Wolverine Stack", display:"BPC-157 + TB-500", spec:"10mg vial", cat:"blends", cats:["structural"], price:75, purity:"99.1%", slug:"wolverine-10mg"},
-  {name:"Wolverine Stack", display:"BPC-157 + TB-500", spec:"20mg vial", cat:"blends", cats:["structural"], price:115, purity:"99.1%", slug:"wolverine-20mg"},
+  {name:"Glow Blend", display:"GHK-Cu · BP+ · TB-500", spec:"70mg vial", cat:"blends", cats:["copper-mc"], price:130, purity:"99.2%", slug:"glow-70mg"},
+  {name:"Klow Blend", display:"KPV · GHK-Cu · BP+ · TB-500", spec:"80mg vial", cat:"blends", cats:["copper-mc"], price:135, purity:"99.2%", slug:"klow-80mg"},
+  {name:"Wolverine Stack", display:"BP+ · TB-500", spec:"10mg vial", cat:"blends", cats:["structural"], price:75, purity:"99.1%", slug:"wolverine-10mg"},
+  {name:"Wolverine Stack", display:"BP+ · TB-500", spec:"20mg vial", cat:"blends", cats:["structural"], price:115, purity:"99.1%", slug:"wolverine-20mg"},
   {name:"CJC-1295 + Ipamorelin", spec:"5/5 blend vial", cat:"blends", cats:["igf"], price:88, purity:"99.2%", slug:"cjc1295-ipa-5-5"},
 ];
 
@@ -1291,7 +1291,7 @@ const CAT_LABELS = {
 };
 function catLabel(c){ return CAT_LABELS[c] || c; }
 
-const FEATURED_NAMES = ["Retatrutide","Tesamorelin","GHK-Cu 100mg vial","Glow Blend","Melanotan II","Klow Blend","BPC-157","Tirzepatide"];
+const FEATURED_NAMES = ["Retatrutide","Tesamorelin","GHK-Cu 100mg vial","Glow Blend","Melanotan II","Klow Blend","BP+","Tirzepatide"];
 
 // ---------------- Cart state ----------------
 let cart = []; // { name, spec, price, qty }
@@ -1745,10 +1745,10 @@ filterRow.addEventListener('click', (e) => {
 // ---- Lab reports (Certificates of Analysis) ----
 const COAS = [
   {img:'retatrutide', name:'Retatrutide', result:'99.93% purity', batch:'WY20260008'},
-  {img:'bpc157', name:'BPC-157', result:'99.86% purity', batch:'WY20260009'},
+  {img:'bpc157', name:'BP+', result:'99.86% purity', batch:'WY20260009'},
   {img:'tb500', name:'TB-500', result:'99.75% purity', batch:'WY20260019'},
   {img:'ghkcu', name:'GHK-Cu', result:'99.80% purity', batch:'WY20260007'},
-  {img:'wolverine', name:'Wolverine Stack', result:'BPC-157 + TB-500 verified', batch:'WY20260018'},
+  {img:'wolverine', name:'Wolverine Stack', result:'BP+ · TB-500 verified', batch:'WY20260018'},
   {img:'nad', name:'NAD+', result:'Content verified', batch:'WY20260014'},
 ];
 const coaGrid = document.getElementById('coaGrid');
