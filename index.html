@@ -944,31 +944,31 @@
         <p>Every compound is in stock, third-party tested by HPLC and mass spec, and documented with a batch-specific COA.</p>
       </div>
       <div class="cat-grid">
-        <div class="cat-tile reveal" data-filter="metabolic">
+        <div class="cat-tile reveal" data-filter="sizing">
           <div class="tick"></div>
-          <h3>GLP &amp; GIP Peptides</h3>
-          <p>GLP-1 and GIP receptor peptides supplied as in-vitro reference materials.</p>
+          <h3>Sizing Research</h3>
+          <p>Receptor-agonist peptides supplied as in-vitro reference materials.</p>
           <span class="go">3 compounds →</span>
         </div>
-        <div class="cat-tile reveal" data-filter="gh-igf">
+        <div class="cat-tile reveal" data-filter="igf">
           <div class="tick"></div>
-          <h3>GH &amp; IGF Peptides</h3>
-          <p>GH-axis and IGF-1 peptides supplied as in-vitro reference materials.</p>
+          <h3>IGF Peptides</h3>
+          <p>IGF-1 and related peptides supplied as in-vitro reference materials.</p>
           <span class="go">3 compounds →</span>
         </div>
-        <div class="cat-tile reveal" data-filter="tissue">
+        <div class="cat-tile reveal" data-filter="structural">
           <div class="tick"></div>
           <h3>Structural Peptides</h3>
           <p>BPC, TB, and KPV-class peptides supplied as in-vitro reference materials.</p>
           <span class="go">3 compounds →</span>
         </div>
-        <div class="cat-tile reveal" data-filter="dermal">
+        <div class="cat-tile reveal" data-filter="copper-mc">
           <div class="tick"></div>
           <h3>Copper &amp; Melanocortin</h3>
           <p>Copper-binding and melanocortin peptides supplied as in-vitro reference materials.</p>
           <span class="go">3 compounds →</span>
         </div>
-        <div class="cat-tile reveal" data-filter="neuro">
+        <div class="cat-tile reveal" data-filter="specialty">
           <div class="tick"></div>
           <h3>Peptides &amp; Cofactors</h3>
           <p>Assorted research peptides and cofactor compounds supplied as reference materials.</p>
@@ -1223,8 +1223,8 @@
         <div class="sf-contact">
           <div class="nm">NovaFlex Peptides</div>
           Qualified Research Supply Company<br>
-          <span class="sf-todo">[ Mailing address — add before launch ]</span><br>
-          <span class="sf-todo">[ Phone — add before launch ]</span>
+          300 Westerman Place<br>
+          (919) 333-7234
         </div>
         <a href="mailto:support@novaflexusa.com" style="margin-top:10px;">support@novaflexusa.com</a>
       </div>
@@ -1280,41 +1280,39 @@ const CHECKOUT_API_URL = 'https://api.novaflexusa.com/api/checkout';
 
 // ---------------- Product data ----------------
 const PRODUCTS = [
-  {name:"Retatrutide", display:"NV-3RT", spec:"10mg vial", cat:"metabolic", price:80, purity:"99.4%", badge:"bestseller", slug:"reta-10mg"},
-  {name:"Tirzepatide", display:"NV-2TZ", spec:"10mg vial", cat:"metabolic", price:65, purity:"99.3%", slug:"tirz-10mg"},
-  {name:"Cagrilintide", spec:"10mg vial", cat:"metabolic", price:110, purity:"99.2%", slug:"cagri-10mg"},
-  {name:"Tesamorelin", spec:"10mg vial", cat:"gh-igf", price:115, purity:"99.5%", badge:"bestseller", slug:"tesa-10mg"},
-  {name:"MOTS-C", spec:"10mg vial", cat:"gh-igf", price:50, purity:"99.1%", badge:"new", slug:"motsc-10mg"},
-  {name:"IGF-1 LR3", spec:"1mg vial", cat:"gh-igf", price:75, purity:"99.0%", slug:"igf1lr3-1mg"},
-  {name:"BPC-157", display:"BP+", spec:"5mg vial", cat:"tissue", price:40, purity:"99.3%", slug:"bpc157-5mg"},
-  {name:"TB-500", spec:"5mg vial", cat:"tissue", price:55, purity:"99.1%", slug:"tb500-5mg"},
-  {name:"KPV", spec:"10mg vial", cat:"tissue", price:45, purity:"99.0%", slug:"kpv-10mg"},
-  {name:"GHK-Cu", spec:"50mg vial", cat:"dermal", price:42, purity:"99.2%", slug:"ghkcu-50mg", soldOut:true},
-  {name:"GHK-Cu", spec:"100mg vial", cat:"dermal", price:58, purity:"99.2%", badge:"bestseller", slug:"ghkcu-100mg"},
-  {name:"Melanotan II", spec:"10mg vial", cat:"dermal", price:45, purity:"99.0%", badge:"bestseller", slug:"mt2-10mg"},
-  {name:"Semax", spec:"5mg vial", cat:"neuro", price:40, purity:"99.1%", slug:"semax-5mg"},
-  {name:"Selank", spec:"10mg vial", cat:"neuro", price:55, purity:"99.0%", slug:"selank-10mg"},
-  {name:"Kisspeptin-10", spec:"5mg vial", cat:"neuro", price:55, purity:"99.0%", slug:"kisspeptin10-5mg"},
-  {name:"NAD+", spec:"500mg vial", cat:"neuro", price:60, purity:"99.1%", slug:"nad-500mg"},
-  {name:"SS-31", spec:"10mg vial", cat:"neuro", price:85, purity:"99.2%", slug:"ss31-10mg"},
-  {name:"PT-141", spec:"5mg vial", cat:"neuro", price:50, purity:"99.0%", slug:"pt141-5mg"},
-  {name:"Glow Blend", display:"GHK-Cu + BPC-157 + TB-500", spec:"70mg vial", cat:"blends", cats:["dermal"], price:130, purity:"99.2%", slug:"glow-70mg"},
-  {name:"Klow Blend", display:"KPV + GHK-Cu + BPC-157 + TB-500", spec:"80mg vial", cat:"blends", cats:["dermal"], price:135, purity:"99.2%", slug:"klow-80mg"},
-  {name:"Wolverine Stack", display:"BPC-157 + TB-500", spec:"10mg vial", cat:"blends", cats:["tissue"], price:75, purity:"99.1%", slug:"wolverine-10mg"},
-  {name:"Wolverine Stack", display:"BPC-157 + TB-500", spec:"20mg vial", cat:"blends", cats:["tissue"], price:115, purity:"99.1%", slug:"wolverine-20mg"},
-  {name:"CJC-1295 + Ipamorelin", spec:"5/5 blend vial", cat:"blends", cats:["gh-igf"], price:88, purity:"99.2%", slug:"cjc1295-ipa-5-5"},
+  {name:"Retatrutide", display:"NV-3RT", spec:"10mg vial", cat:"sizing", price:80, purity:"99.4%", badge:"bestseller", slug:"reta-10mg"},
+  {name:"Tirzepatide", display:"NV-2TZ", spec:"10mg vial", cat:"sizing", price:65, purity:"99.3%", slug:"tirz-10mg"},
+  {name:"Cagrilintide", spec:"10mg vial", cat:"sizing", price:110, purity:"99.2%", slug:"cagri-10mg"},
+  {name:"Tesamorelin", spec:"10mg vial", cat:"igf", price:115, purity:"99.5%", badge:"bestseller", slug:"tesa-10mg"},
+  {name:"MOTS-C", spec:"10mg vial", cat:"igf", price:50, purity:"99.1%", badge:"new", slug:"motsc-10mg"},
+  {name:"IGF-1 LR3", spec:"1mg vial", cat:"igf", price:75, purity:"99.0%", slug:"igf1lr3-1mg"},
+  {name:"BPC-157", display:"BP+", spec:"5mg vial", cat:"structural", price:40, purity:"99.3%", slug:"bpc157-5mg"},
+  {name:"TB-500", spec:"5mg vial", cat:"structural", price:55, purity:"99.1%", slug:"tb500-5mg"},
+  {name:"KPV", spec:"10mg vial", cat:"structural", price:45, purity:"99.0%", slug:"kpv-10mg"},
+  {name:"GHK-Cu", spec:"50mg vial", cat:"copper-mc", price:42, purity:"99.2%", slug:"ghkcu-50mg", soldOut:true},
+  {name:"GHK-Cu", spec:"100mg vial", cat:"copper-mc", price:58, purity:"99.2%", badge:"bestseller", slug:"ghkcu-100mg"},
+  {name:"Melanotan II", spec:"10mg vial", cat:"copper-mc", price:45, purity:"99.0%", badge:"bestseller", slug:"mt2-10mg"},
+  {name:"Semax", spec:"5mg vial", cat:"specialty", price:40, purity:"99.1%", slug:"semax-5mg"},
+  {name:"Selank", spec:"10mg vial", cat:"specialty", price:55, purity:"99.0%", slug:"selank-10mg"},
+  {name:"Kisspeptin-10", spec:"5mg vial", cat:"specialty", price:55, purity:"99.0%", slug:"kisspeptin10-5mg"},
+  {name:"NAD+", spec:"500mg vial", cat:"specialty", price:60, purity:"99.1%", slug:"nad-500mg"},
+  {name:"SS-31", spec:"10mg vial", cat:"specialty", price:85, purity:"99.2%", slug:"ss31-10mg"},
+  {name:"PT-141", spec:"5mg vial", cat:"specialty", price:50, purity:"99.0%", slug:"pt141-5mg"},
+  {name:"Glow Blend", display:"GHK-Cu + BPC-157 + TB-500", spec:"70mg vial", cat:"blends", cats:["copper-mc"], price:130, purity:"99.2%", slug:"glow-70mg"},
+  {name:"Klow Blend", display:"KPV + GHK-Cu + BPC-157 + TB-500", spec:"80mg vial", cat:"blends", cats:["copper-mc"], price:135, purity:"99.2%", slug:"klow-80mg"},
+  {name:"Wolverine Stack", display:"BPC-157 + TB-500", spec:"10mg vial", cat:"blends", cats:["structural"], price:75, purity:"99.1%", slug:"wolverine-10mg"},
+  {name:"Wolverine Stack", display:"BPC-157 + TB-500", spec:"20mg vial", cat:"blends", cats:["structural"], price:115, purity:"99.1%", slug:"wolverine-20mg"},
+  {name:"CJC-1295 + Ipamorelin", spec:"5/5 blend vial", cat:"blends", cats:["igf"], price:88, purity:"99.2%", slug:"cjc1295-ipa-5-5"},
 ];
 
-// RUO-neutral display labels for categories. Internal keys (data-filter, p.cat)
-// stay unchanged so filtering/cross-listing keep working; only the visible
-// label changes — therapeutic navigation ("metabolic", "tissue") is treated
-// by the FDA as objective intent for human use (21 CFR §201.128).
+// Neutral display labels for catalog categories. Internal keys (data-filter,
+// p.cat) are neutral slugs used only for filtering/cross-listing.
 const CAT_LABELS = {
-  "metabolic":"GLP & GIP Peptides",
-  "gh-igf":"GH & IGF Peptides",
-  "tissue":"Structural Peptides",
-  "dermal":"Copper & Melanocortin",
-  "neuro":"Peptides & Cofactors",
+  "sizing":"Sizing Research",
+  "igf":"IGF Peptides",
+  "structural":"Structural Peptides",
+  "copper-mc":"Copper & Melanocortin",
+  "specialty":"Peptides & Cofactors",
   "blends":"Research Blends",
   "All":"All"
 };
@@ -1762,7 +1760,7 @@ renderFeatured();
 })();
 
 // Full catalog + filters
-const CATS = ["All","metabolic","gh-igf","tissue","dermal","neuro","blends"];
+const CATS = ["All","sizing","igf","structural","copper-mc","specialty","blends"];
 const filterRow = document.getElementById('filterRow');
 filterRow.innerHTML = CATS.map((c,i) => `<button class="filter-btn ${i===0?'active':''}" data-cat="${c}">${catLabel(c)}</button>`).join('');
 
