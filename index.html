@@ -568,6 +568,29 @@
   .faq-a p{padding-bottom:22px;font-size:14px;color:var(--text-muted);line-height:1.65;max-width:680px;}
 
   /* ---------- CTA band ---------- */
+  /* ---------- Research Stack (subscription) ---------- */
+  .rstack{position:relative;overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    background:linear-gradient(160deg,#100d07,#0a0a0b 62%);}
+  .rstack::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 86% -12%,rgba(240,215,140,0.13),transparent 55%);pointer-events:none;}
+  .rstack-inner{position:relative;z-index:1;max-width:760px;margin:0 auto;text-align:center;}
+  .rstack .eyebrow{justify-content:center;display:flex;}
+  .rstack h2{font-size:clamp(28px,3.6vw,40px);color:var(--silver-bright);margin-top:12px;letter-spacing:-0.01em;}
+  .rstack h2 em{font-style:normal;background:linear-gradient(120deg,var(--gold-bright),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .rstack-lead{margin:18px auto 0;max-width:600px;font-size:15.5px;line-height:1.7;color:var(--text-muted);}
+  .rstack-lead strong{color:var(--gold-bright);font-weight:600;}
+  .rstack-compare{margin:32px auto 0;display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:600px;text-align:left;}
+  .rstack-card{background:var(--bg-alt);border:1px solid var(--line-strong);border-radius:12px;padding:22px;}
+  .rstack-card.featured{border-color:var(--gold-deep);box-shadow:0 0 34px rgba(201,164,76,0.14);background:linear-gradient(160deg,#17120a,#0e0e10);}
+  .rstack-tag{font-family:'IBM Plex Mono';font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--silver-dim);}
+  .rstack-tag.gold{color:var(--gold-bright);}
+  .rstack-code{font-family:'IBM Plex Mono';font-size:19px;font-weight:700;color:var(--silver-bright);margin:10px 0 8px;letter-spacing:0.5px;}
+  .rstack-card.featured .rstack-code{color:var(--gold-bright);}
+  .rstack-card p{font-size:13.5px;line-height:1.6;color:var(--text-muted);margin:0;}
+  .rstack-card p b{color:var(--silver);}
+  .rstack-cta{margin-top:32px;}
+  .rstack-fine{margin:22px auto 0;font-size:11.5px;color:var(--silver-dim);line-height:1.6;max-width:520px;}
+  @media(max-width:600px){.rstack-compare{grid-template-columns:1fr;}}
+
   .cta-band{
     text-align:center;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
     padding:80px 0;
@@ -1050,6 +1073,31 @@
         <p>The compounds our researchers reorder most, based on internal order-volume data.</p>
       </div>
       <div class="prod-grid" id="featuredGrid"></div>
+    </div>
+  </section>
+
+  <!-- ================= RESEARCH STACK (SUBSCRIPTION) ================= -->
+  <section class="rstack" id="research-stack">
+    <div class="wrap">
+      <div class="rstack-inner reveal">
+        <span class="eyebrow">Research Stack · Monthly</span>
+        <h2>Save <em>10%</em> on every stack order.</h2>
+        <p class="rstack-lead">Assemble a custom lab research stack — <strong>2 to 4 compounds</strong> of your choosing — and lock in an extra <strong>10% off every stack order, every month</strong>. Adjust your compounds anytime from your account; your stack renews and ships on the 5th.</p>
+        <div class="rstack-compare">
+          <div class="rstack-card">
+            <span class="rstack-tag">Standard order</span>
+            <div class="rstack-code">NOVA10</div>
+            <p>10% off your <b>first order</b> — one time only.</p>
+          </div>
+          <div class="rstack-card featured">
+            <span class="rstack-tag gold">Research Stack</span>
+            <div class="rstack-code">10% · every month</div>
+            <p>10% off <b>every stack order</b>, every month it renews.</p>
+          </div>
+        </div>
+        <a href="account.html" class="btn btn-gold rstack-cta">Build your stack →</a>
+        <p class="rstack-fine">Custom lab research stacks are supplied for in-vitro research use only. Compound selection, monthly renewal, and edits are managed from your researcher account.</p>
+      </div>
     </div>
   </section>
 
