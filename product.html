@@ -450,7 +450,7 @@ function render(){
         '<div class="pd-sub"><span>'+escapeHtml(p.spec)+'</span>'+(p.purity?'<span class="dot">•</span><span>'+p.purity+' purity</span>':'')+'</div>'+
         '<p class="pd-tagline">'+escapeHtml(c.tagline)+'</p>'+
         '<div class="pd-buy">'+(shopAuthed()?('<span class="pd-price">'+money(p.price)+'</span>'+buyHTML):'<button class="btn btn-gold" onclick="openAuthModal()">Sign in to view pricing</button>')+'</div>'+
-        '<div class="pd-ship"><span class="star">✦</span> Research use only · U.S. domestic fulfillment</div>'+
+        '<div class="pd-ship"><span class="star">✦</span> Research use only · $0 U.S. shipping on orders $199+</div>'+
         '<div class="pd-trust">'+
           '<span class="pd-chip"><b>'+(p.purity||'99%')+'</b> verified purity</span>'+
           '<span class="pd-chip">Third-party tested</span>'+
