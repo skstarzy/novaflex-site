@@ -107,6 +107,17 @@
   .panel input{width:100%;background:var(--bg);border:1px solid var(--line-strong);border-radius:7px;padding:11px 13px;color:var(--silver);font-size:13.5px;}
   .panel input:focus{outline:none;border-color:var(--gold);}
   .panel .btn-ghost{margin-top:2px;}
+  .stack-picks{margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .stack-pick{display:flex;align-items:flex-start;gap:9px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:11px 12px;font-size:13px;color:var(--silver);cursor:pointer;line-height:1.35;}
+  .stack-pick input{margin-top:2px;accent-color:var(--gold);width:15px;height:15px;flex-shrink:0;}
+  .stack-pick small{display:block;color:var(--silver-dim);font-family:'IBM Plex Mono';font-size:11px;margin-top:2px;}
+  .stack-pick input:checked ~ span{color:var(--gold-bright);}
+  .stack-est{margin-top:14px;}
+  .stack-addr{margin-top:12px;display:flex;flex-direction:column;gap:8px;}
+  .stack-addr input,.stack-addr select{width:100%;background:var(--bg);border:1px solid var(--line-strong);border-radius:7px;padding:11px 13px;color:var(--silver);font-size:13.5px;font-family:'Inter';}
+  .stack-addr input:focus,.stack-addr select:focus{outline:none;border-color:var(--gold);}
+  .panel h3{font-size:14px;color:var(--silver-bright);}
+  @media(max-width:560px){.stack-picks{grid-template-columns:1fr;}}
   @media(max-width:640px){.acct-grid{grid-template-columns:1fr;}}
 
   .partner-cta{margin-top:34px;border:1px dashed var(--line-strong);border-radius:12px;padding:20px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
@@ -236,7 +247,7 @@ function renderDashboard(d){
     return '<tr>'+
       '<td>'+new Date(o.date).toLocaleDateString()+'<div class="items">'+items+'</div></td>'+
       '<td class="r">'+money(o.total)+'</td>'+
-      '<td class="r">'+statusPill(o.status)+'</td>'+
+      '<td class="r">'+statusPill(o.status)+(o.status==='pending'?'<a href="pay.html?order='+o.id+'" style="color:var(--gold-bright);font-size:10.5px;text-decoration:underline;display:block;margin-top:4px;">Complete payment →</a>':'')+'</td>'+
     '</tr>';
   }).join('');
   const ordersHTML = (d.orders&&d.orders.length)
@@ -261,6 +272,7 @@ function renderDashboard(d){
       '<div class="scard"><div class="k">Total spent</div><div class="v">'+money(st.totalSpent||0)+'</div></div>'+
       '<div class="scard"><div class="k">Member since</div><div class="v" style="font-size:15px;padding-top:5px;">'+since+'</div></div>'+
     '</div>'+
+    '<div id="stackSection"></div>'+
     '<h2 class="sec">Your orders</h2>'+
     ordersHTML+
     '<h2 class="sec">Account settings</h2>'+
@@ -288,7 +300,144 @@ function renderDashboard(d){
 
   document.getElementById('logoutBtn').addEventListener('click',()=>{ clearToken(); showLogin(); });
   document.getElementById('pwForm').addEventListener('submit', changePassword);
+  renderStack();
 }
+
+// ---------------- Research Stack ----------------
+const STACK_PRODUCTS = [
+  {name:"Retatrutide",display:"NV-3RT",spec:"10mg vial",price:80},
+  {name:"Tirzepatide",display:"NV-2TZ",spec:"10mg vial",price:65},
+  {name:"Cagrilintide",display:"Cagrilintide",spec:"10mg vial",price:110},
+  {name:"Tesamorelin",display:"Tesamorelin",spec:"10mg vial",price:115},
+  {name:"MOTS-C",display:"MOTS-C",spec:"10mg vial",price:50},
+  {name:"IGF-1 LR3",display:"IGF-1 LR3",spec:"1mg vial",price:75},
+  {name:"BP+",display:"BP+",spec:"5mg vial",price:40},
+  {name:"TB-500",display:"TB-500",spec:"5mg vial",price:55},
+  {name:"KPV",display:"KPV",spec:"10mg vial",price:45},
+  {name:"GHK-Cu",display:"GHK-Cu",spec:"100mg vial",price:58},
+  {name:"Melanotan II",display:"Melanotan II",spec:"10mg vial",price:45},
+  {name:"Semax",display:"Semax",spec:"5mg vial",price:40},
+  {name:"Selank",display:"Selank",spec:"10mg vial",price:55},
+  {name:"Kisspeptin-10",display:"Kisspeptin-10",spec:"5mg vial",price:55},
+  {name:"NAD+",display:"NAD+",spec:"500mg vial",price:60},
+  {name:"SS-31",display:"SS-31",spec:"10mg vial",price:85},
+  {name:"PT-141",display:"PT-141",spec:"5mg vial",price:50},
+  {name:"Glow Blend",display:"GHK-Cu · BP+ · TB-500",spec:"70mg vial",price:130},
+  {name:"Klow Blend",display:"KPV · GHK-Cu · BP+ · TB-500",spec:"80mg vial",price:135},
+  {name:"Wolverine Stack",display:"BP+ · TB-500",spec:"10mg vial",price:75},
+  {name:"CJC-1295 + Ipamorelin",display:"CJC-1295 + Ipamorelin",spec:"5/5 blend vial",price:88},
+];
+const US_STATES = ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY','DC'];
+const prodKey = (p) => p.name + '||' + p.spec;
+let stackSel = [];  // array of prodKey while building
+
+async function renderStack(){
+  const el = document.getElementById('stackSection'); if(!el) return;
+  el.innerHTML = '<h2 class="sec">Research Stack</h2><div class="empty">Loading your stack…</div>';
+  let d;
+  try { const r = await fetch(API+'/api/shop-account/stack',{headers:{Authorization:'Bearer '+token()}}); d = await r.json(); if(!r.ok) throw 0; }
+  catch(e){ el.innerHTML = '<h2 class="sec">Research Stack</h2><div class="empty">Could not load your stack.</div>'; return; }
+  if(d.status==='active'||d.status==='paused'){ renderStackActive(d); }
+  else { renderStackBuilder(); }
+}
+
+function renderStackActive(d){
+  const el = document.getElementById('stackSection');
+  const items = (d.items||[]).map(i=>{
+    const p = STACK_PRODUCTS.find(x=>x.name===i.name&&x.spec===i.spec);
+    return '<li>'+esc((p&&p.display)||i.name)+' <span style="color:var(--silver-dim)">'+esc(i.spec)+'</span></li>';
+  }).join('');
+  const est = d.estimate||{};
+  const paused = d.status==='paused';
+  el.innerHTML =
+    '<h2 class="sec">Research Stack '+(paused?'<span class="pill pending" style="margin-left:6px;">Paused</span>':'<span class="pill paid" style="margin-left:6px;">Active</span>')+'</h2>'+
+    '<div class="panel" style="margin-top:8px;">'+
+      '<p style="margin:0 0 12px;font-size:13.5px;color:var(--text-muted);">Your custom stack renews on the <b style="color:var(--silver)">5th of each month</b> at 10% off. We\'ll email a one-click pay link when it\'s ready. '+(paused?'Billing is paused.':'')+'</p>'+
+      '<ul style="margin:0 0 14px;padding-left:18px;font-size:14px;color:var(--silver);line-height:1.8;">'+items+'</ul>'+
+      '<div class="krow"><span class="k">Subtotal</span><span class="v">'+money(est.subtotal||0)+'</span></div>'+
+      '<div class="krow"><span class="k">Stack discount (10%)</span><span class="v" style="color:var(--gold-bright)">−'+money(est.discount||0)+'</span></div>'+
+      '<div class="krow"><span class="k">Per month (before shipping/tax)</span><span class="v">'+money(est.afterDiscount||0)+'</span></div>'+
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">'+
+        '<button class="btn btn-ghost" id="stackEdit">Edit stack</button>'+
+        (paused
+          ? '<button class="btn btn-ghost" id="stackResume">Resume</button>'
+          : '<button class="btn btn-ghost" id="stackPause">Pause</button>')+
+        '<button class="btn btn-ghost" id="stackCancel" style="border-color:rgba(224,132,132,.4);color:#e08484;">Cancel stack</button>'+
+      '</div>'+
+      '<div class="msg" id="stackMsg"></div>'+
+    '</div>';
+  document.getElementById('stackEdit').addEventListener('click',()=>{ stackSel = (d.items||[]).map(prodKey); renderStackBuilder(d.ship); });
+  const pauseBtn=document.getElementById('stackPause'); if(pauseBtn) pauseBtn.addEventListener('click',()=>setStackStatus('paused'));
+  const resumeBtn=document.getElementById('stackResume'); if(resumeBtn) resumeBtn.addEventListener('click',()=>setStackStatus('active'));
+  document.getElementById('stackCancel').addEventListener('click',()=>{ if(confirm('Cancel your Research Stack? This stops monthly billing and clears your stack.')) setStackStatus('cancelled'); });
+}
+
+async function setStackStatus(status){
+  const msg=document.getElementById('stackMsg');
+  try{
+    const r=await fetch(API+'/api/shop-account/stack/status',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token()},body:JSON.stringify({status})});
+    const d=await r.json(); if(!r.ok) throw new Error(d.error||'Failed.');
+    toast('Stack updated'); renderStack();
+  }catch(e){ if(msg){msg.className='msg err';msg.textContent=e.message;} }
+}
+
+function renderStackBuilder(existingShip){
+  const el = document.getElementById('stackSection');
+  const s = existingShip||{};
+  const prodRows = STACK_PRODUCTS.map(p=>{
+    const k = prodKey(p);
+    const checked = stackSel.includes(k) ? 'checked' : '';
+    return '<label class="stack-pick"><input type="checkbox" data-key="'+esc(k)+'" '+checked+'> <span>'+esc(p.display)+' <small>'+esc(p.spec)+' · '+money(p.price)+'</small></span></label>';
+  }).join('');
+  const stateOpts = '<option value="" disabled '+(s.state?'':'selected')+'>State</option>'+US_STATES.map(x=>'<option '+(s.state===x?'selected':'')+'>'+x+'</option>').join('');
+  el.innerHTML =
+    '<h2 class="sec">Build your Research Stack</h2>'+
+    '<div class="panel" style="margin-top:8px;">'+
+      '<p style="margin:0 0 4px;font-size:13.5px;color:var(--text-muted);">Pick <b style="color:var(--silver)">2 to 4 compounds</b>. Your stack renews on the 5th each month at <b style="color:var(--gold-bright)">10% off</b>.</p>'+
+      '<div class="stack-picks" id="stackPicks">'+prodRows+'</div>'+
+      '<div id="stackEst" class="stack-est"></div>'+
+      '<h3 style="margin-top:22px;">Shipping address</h3>'+
+      '<div class="stack-addr">'+
+        '<input id="stName" placeholder="Full name" value="'+esc(s.name||'')+'">'+
+        '<input id="stLine1" placeholder="Street address" value="'+esc(s.line1||'')+'">'+
+        '<input id="stLine2" placeholder="Apt, suite (optional)" value="'+esc(s.line2||'')+'">'+
+        '<input id="stCity" placeholder="City" value="'+esc(s.city||'')+'">'+
+        '<div style="display:flex;gap:8px;"><select id="stState" style="flex:1;">'+stateOpts+'</select><input id="stPostal" placeholder="ZIP" inputmode="numeric" style="flex:1;" value="'+esc(s.postal||'')+'"></div>'+
+      '</div>'+
+      '<label class="check" style="margin-top:16px;"><input type="checkbox" id="stConsent"> I authorize NovaFlex to prepare and bill this stack order automatically on the 5th of each month (via a one-click pay link) until I pause or cancel it.</label>'+
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;"><button class="btn btn-gold" id="stackSave">Start my stack</button>'+(stackSel.length?'<button class="btn btn-ghost" id="stackBack">Back</button>':'')+'</div>'+
+      '<div class="msg" id="stackMsg"></div>'+
+    '</div>';
+  const picks = document.getElementById('stackPicks');
+  function refresh(){
+    stackSel = [...picks.querySelectorAll('input:checked')].map(c=>c.dataset.key);
+    picks.querySelectorAll('input').forEach(c=>{ c.disabled = !c.checked && stackSel.length>=4; });
+    const sel = stackSel.map(k=>STACK_PRODUCTS.find(p=>prodKey(p)===k)).filter(Boolean);
+    const sub = sel.reduce((a,p)=>a+p.price,0);
+    const disc = Math.round(sub*0.10*100)/100;
+    document.getElementById('stackEst').innerHTML = sel.length? '<div class="krow"><span class="k">'+sel.length+' compound'+(sel.length>1?'s':'')+' · subtotal</span><span class="v">'+money(sub)+'</span></div><div class="krow"><span class="k">Stack discount (10%)</span><span class="v" style="color:var(--gold-bright)">−'+money(disc)+'</span></div><div class="krow"><span class="k">Per month (before shipping/tax)</span><span class="v">'+money(sub-disc)+'</span></div>' : '<p style="font-size:12.5px;color:var(--silver-dim);margin-top:8px;">Select 2–4 compounds to see your monthly price.</p>';
+  }
+  picks.addEventListener('change', refresh); refresh();
+  const stateSel=document.getElementById('stState'); if(s.state) stateSel.value=s.state;
+  document.getElementById('stackSave').addEventListener('click', saveStack);
+  const back=document.getElementById('stackBack'); if(back) back.addEventListener('click',renderStack);
+}
+
+async function saveStack(){
+  const msg=document.getElementById('stackMsg'); msg.className='msg';
+  const sel = stackSel.map(k=>{ const p=STACK_PRODUCTS.find(x=>prodKey(x)===k); return p?{name:p.name,spec:p.spec}:null; }).filter(Boolean);
+  if(sel.length<2||sel.length>4){ msg.className='msg err'; msg.textContent='Choose 2 to 4 compounds.'; return; }
+  const ship = { name:val('stName'), line1:val('stLine1'), line2:val('stLine2'), city:val('stCity'), state:document.getElementById('stState').value, postal:val('stPostal'), country:'US' };
+  if(!ship.name||!ship.line1||!ship.city||!ship.state||!ship.postal){ msg.className='msg err'; msg.textContent='Please complete the shipping address.'; return; }
+  if(!document.getElementById('stConsent').checked){ msg.className='msg err'; msg.textContent='Please authorize the monthly billing to start your stack.'; return; }
+  const btn=document.getElementById('stackSave'); btn.disabled=true; const o=btn.textContent; btn.textContent='Saving…';
+  try{
+    const r=await fetch(API+'/api/shop-account/stack',{method:'PUT',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token()},body:JSON.stringify({items:sel,ship,consent:true})});
+    const d=await r.json(); if(!r.ok) throw new Error(d.error||'Could not save.');
+    toast('Research Stack saved'); renderStack();
+  }catch(e){ msg.className='msg err'; msg.textContent=e.message; btn.disabled=false; btn.textContent=o; }
+}
+function val(id){ return (document.getElementById(id).value||'').trim(); }
 
 async function changePassword(e){
   e.preventDefault();

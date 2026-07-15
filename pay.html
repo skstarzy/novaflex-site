@@ -89,6 +89,7 @@
 const API = 'https://api.novaflexusa.com';
 const params = new URLSearchParams(location.search);
 const orderId = params.get('order');
+const payToken = params.get('t'); // secure token from an emailed stack pay link
 const money = (n) => '$' + Number(n).toFixed(2);
 const errEl = document.getElementById('err');
 const payBtn = document.getElementById('pay-btn');
@@ -156,7 +157,7 @@ function mountPayment(publishableKey, clientSecret, breakdown){
     const tok = shopToken();
     const [cfg, pay] = await Promise.all([
       fetch(API + '/api/payment-config').then(r => r.json()),
-      fetch(API + '/api/order-payment/' + encodeURIComponent(orderId), { headers: tok ? { Authorization: 'Bearer ' + tok } : {} })
+      fetch(API + '/api/order-payment/' + encodeURIComponent(orderId) + (payToken ? '?t=' + encodeURIComponent(payToken) : ''), { headers: tok ? { Authorization: 'Bearer ' + tok } : {} })
         .then(async r => ({ ok: r.ok, body: await r.json() })),
     ]);
     if(!cfg.publishableKey){ showErr('Payments are not fully configured yet. Please contact support@novaflexusa.com.'); return; }
