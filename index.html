@@ -30,6 +30,8 @@
 <link rel="icon" href="assets/logo.webp?v=4">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://api.novaflexusa.com">
+<link rel="dns-prefetch" href="https://js.stripe.com">
 <link rel="preload" as="image" href="assets/logo.webp?v=4">
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap" media="print" onload="this.media='all'">
@@ -1514,6 +1516,11 @@ document.getElementById('checkoutBtn').addEventListener('click', async ()=>{
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Checkout failed.');
     cart = []; saveCart();
+    // Hand the payment session to the pay page so it renders Stripe Elements
+    // instantly — no extra round-trips on the next page.
+    if (data.orderId && data.clientSecret && data.publishableKey){
+      try { sessionStorage.setItem('nf_pay_' + data.orderId, JSON.stringify({ clientSecret: data.clientSecret, publishableKey: data.publishableKey, total: data.total })); } catch(e){}
+    }
     window.location.href = data.redirectUrl;
   } catch (err){
     errEl.textContent = 'Checkout is not connected yet — this needs the backend running (see /backend). ' + err.message;

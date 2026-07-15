@@ -7,6 +7,8 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#08080a">
 <link rel="icon" href="assets/logo.webp?v=4">
+<link rel="preconnect" href="https://api.novaflexusa.com">
+<link rel="preconnect" href="https://js.stripe.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"></noscript>
 <style>
@@ -87,46 +89,61 @@ const payBtn = document.getElementById('pay-btn');
 function showErr(m){ errEl.textContent = m; errEl.classList.add('show'); }
 function shopToken(){ try{ return localStorage.getItem('nf_shop_token'); }catch(e){ return null; } }
 
+function mountPayment(publishableKey, clientSecret, total){
+  if (typeof total === 'number'){ document.getElementById('total').textContent = money(total); }
+  const stripe = Stripe(publishableKey);
+  const elements = stripe.elements({
+    clientSecret,
+    appearance: {
+      theme: 'night',
+      variables: { colorPrimary: '#c9a44c', colorBackground: '#08080a', colorText: '#e7e7ea', borderRadius: '8px', fontFamily: 'Inter, sans-serif' },
+    },
+  });
+  const paymentElement = elements.create('payment');
+  document.getElementById('payment-element').innerHTML = '';
+  paymentElement.mount('#payment-element');
+  payBtn.disabled = false;
+
+  document.getElementById('pay-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    payBtn.disabled = true; errEl.classList.remove('show');
+    const orig = payBtn.textContent; payBtn.textContent = 'Processing…';
+    const { error } = await stripe.confirmPayment({
+      elements,
+      confirmParams: { return_url: location.origin + '/order-confirmed.html?order=' + encodeURIComponent(orderId) },
+    });
+    // If confirmPayment returns, there was an immediate error (otherwise it redirects).
+    if (error){ showErr(error.message || 'Payment could not be completed.'); payBtn.disabled = false; payBtn.textContent = orig; }
+  });
+}
+
 (async function init(){
   if(!orderId){ showErr('Missing order reference. Please return to your cart and try again.'); return; }
+
+  // Fast path: the checkout page handed us the payment session — render instantly.
   try {
-    const cfgRes = await fetch(API + '/api/payment-config');
-    const cfg = await cfgRes.json();
-    if(!cfg.publishableKey){ showErr('Payments are not fully configured yet. Please contact support@novaflexusa.com.'); return; }
+    const s = sessionStorage.getItem('nf_pay_' + orderId);
+    if (s){
+      const d = JSON.parse(s);
+      if (d && d.clientSecret && d.publishableKey){
+        sessionStorage.removeItem('nf_pay_' + orderId);
+        mountPayment(d.publishableKey, d.clientSecret, d.total);
+        return;
+      }
+    }
+  } catch(e){}
 
+  // Fallback (page refresh / direct link): fetch config + session in parallel.
+  try {
     const tok = shopToken();
-    const payRes = await fetch(API + '/api/order-payment/' + encodeURIComponent(orderId), {
-      headers: tok ? { Authorization: 'Bearer ' + tok } : {},
-    });
-    const pay = await payRes.json();
-    if(!payRes.ok || !pay.clientSecret){ showErr(pay.error || 'Could not load your payment session.'); return; }
-
-    document.getElementById('total').textContent = money(pay.total);
-
-    const stripe = Stripe(cfg.publishableKey);
-    const elements = stripe.elements({
-      clientSecret: pay.clientSecret,
-      appearance: {
-        theme: 'night',
-        variables: { colorPrimary: '#c9a44c', colorBackground: '#08080a', colorText: '#e7e7ea', borderRadius: '8px', fontFamily: 'Inter, sans-serif' },
-      },
-    });
-    const paymentElement = elements.create('payment');
-    document.getElementById('payment-element').innerHTML = '';
-    paymentElement.mount('#payment-element');
-    payBtn.disabled = false;
-
-    document.getElementById('pay-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      payBtn.disabled = true; errEl.classList.remove('show');
-      const orig = payBtn.textContent; payBtn.textContent = 'Processing…';
-      const { error } = await stripe.confirmPayment({
-        elements,
-        confirmParams: { return_url: location.origin + '/order-confirmed.html?order=' + encodeURIComponent(orderId) },
-      });
-      // If confirmPayment returns, there was an immediate error (otherwise it redirects).
-      if (error){ showErr(error.message || 'Payment could not be completed.'); payBtn.disabled = false; payBtn.textContent = orig; }
-    });
+    const [cfg, pay] = await Promise.all([
+      fetch(API + '/api/payment-config').then(r => r.json()),
+      fetch(API + '/api/order-payment/' + encodeURIComponent(orderId), { headers: tok ? { Authorization: 'Bearer ' + tok } : {} })
+        .then(async r => ({ ok: r.ok, body: await r.json() })),
+    ]);
+    if(!cfg.publishableKey){ showErr('Payments are not fully configured yet. Please contact support@novaflexusa.com.'); return; }
+    if(!pay.ok || !pay.body.clientSecret){ showErr(pay.body.error || 'Could not load your payment session.'); return; }
+    mountPayment(cfg.publishableKey, pay.body.clientSecret, pay.body.total);
   } catch (err) {
     showErr('Could not reach the payment service. Please try again or contact support@novaflexusa.com.');
   }
