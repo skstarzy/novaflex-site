@@ -36,9 +36,13 @@
   .card{max-width:460px;width:calc(100% - 44px);background:var(--bg-alt);border:1px solid var(--line);border-radius:14px;padding:32px 30px;}
   .card h1{font-size:24px;color:var(--silver-bright);margin-top:8px;}
   .sub{margin-top:10px;font-size:13.5px;color:var(--text-muted);line-height:1.6;}
-  .total-row{margin-top:20px;display:flex;align-items:baseline;justify-content:space-between;padding:14px 16px;border:1px solid var(--line-strong);border-radius:9px;background:var(--bg);}
-  .total-row .l{font-size:13px;color:var(--text-muted);font-family:'IBM Plex Mono';text-transform:uppercase;letter-spacing:0.08em;}
-  .total-row .v{font-family:'IBM Plex Mono';font-size:24px;font-weight:700;color:var(--silver-bright);}
+  .summary{margin-top:20px;padding:14px 16px;border:1px solid var(--line-strong);border-radius:9px;background:var(--bg);}
+  .summary .row{display:flex;align-items:baseline;justify-content:space-between;font-size:13.5px;color:var(--text-muted);padding:3px 0;}
+  .summary .row .v{font-family:'IBM Plex Mono';color:var(--silver);}
+  .summary .row.free .v{color:var(--gold-bright);}
+  .summary .grand{margin-top:8px;padding-top:10px;border-top:1px solid var(--line);}
+  .summary .grand .l{font-size:13px;color:var(--text-muted);font-family:'IBM Plex Mono';text-transform:uppercase;letter-spacing:0.08em;}
+  .summary .grand .v{font-family:'IBM Plex Mono';font-size:22px;font-weight:700;color:var(--silver-bright);}
   #payment-element{margin-top:22px;min-height:40px;}
   #pay-btn{width:100%;margin-top:22px;display:inline-flex;align-items:center;justify-content:center;gap:9px;font-size:15px;font-weight:600;padding:15px;border-radius:8px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold-bright),var(--gold) 60%,var(--gold-deep));color:#141008;font-family:'Inter';}
   #pay-btn:disabled{opacity:.55;cursor:not-allowed;}
@@ -68,7 +72,9 @@
     <span class="eyebrow">Secure checkout</span>
     <h1>Complete your payment</h1>
     <p class="sub">Enter your card details to finish your research order. Payments are processed securely — NovaFlex never sees or stores your card number.</p>
-    <div class="total-row"><span class="l">Order total</span><span class="v" id="total">—</span></div>
+    <div class="summary" id="summary">
+      <div class="grand"><div class="row"><span class="l">Order total</span><span class="v" id="total">—</span></div></div>
+    </div>
     <form id="pay-form">
       <div id="payment-element"><div class="loading"><span class="spinner"></span>Loading secure payment form…</div></div>
       <div id="err"></div>
@@ -89,8 +95,20 @@ const payBtn = document.getElementById('pay-btn');
 function showErr(m){ errEl.textContent = m; errEl.classList.add('show'); }
 function shopToken(){ try{ return localStorage.getItem('nf_shop_token'); }catch(e){ return null; } }
 
-function mountPayment(publishableKey, clientSecret, total){
-  if (typeof total === 'number'){ document.getElementById('total').textContent = money(total); }
+function renderSummary(b){
+  const rows = [];
+  if (b && typeof b.subtotal === 'number'){
+    rows.push('<div class="row"><span>Subtotal</span><span class="v">'+money(b.subtotal)+'</span></div>');
+    if (b.discountAmount > 0) rows.push('<div class="row"><span>Discount</span><span class="v">−'+money(b.discountAmount)+'</span></div>');
+    rows.push('<div class="row'+(b.shippingFee > 0 ? '' : ' free')+'"><span>Shipping</span><span class="v">'+(b.shippingFee > 0 ? money(b.shippingFee) : 'FREE')+'</span></div>');
+    if (b.taxAmount > 0) rows.push('<div class="row"><span>Sales tax</span><span class="v">'+money(b.taxAmount)+'</span></div>');
+  }
+  const total = b && typeof b.total === 'number' ? money(b.total) : '—';
+  rows.push('<div class="grand"><div class="row"><span class="l">Order total</span><span class="v">'+total+'</span></div></div>');
+  document.getElementById('summary').innerHTML = rows.join('');
+}
+function mountPayment(publishableKey, clientSecret, breakdown){
+  renderSummary(breakdown);
   const stripe = Stripe(publishableKey);
   const elements = stripe.elements({
     clientSecret,
@@ -127,7 +145,7 @@ function mountPayment(publishableKey, clientSecret, total){
       const d = JSON.parse(s);
       if (d && d.clientSecret && d.publishableKey){
         sessionStorage.removeItem('nf_pay_' + orderId);
-        mountPayment(d.publishableKey, d.clientSecret, d.total);
+        mountPayment(d.publishableKey, d.clientSecret, d);
         return;
       }
     }
@@ -143,7 +161,7 @@ function mountPayment(publishableKey, clientSecret, total){
     ]);
     if(!cfg.publishableKey){ showErr('Payments are not fully configured yet. Please contact support@novaflexusa.com.'); return; }
     if(!pay.ok || !pay.body.clientSecret){ showErr(pay.body.error || 'Could not load your payment session.'); return; }
-    mountPayment(cfg.publishableKey, pay.body.clientSecret, pay.body.total);
+    mountPayment(cfg.publishableKey, pay.body.clientSecret, pay.body);
   } catch (err) {
     showErr('Could not reach the payment service. Please try again or contact support@novaflexusa.com.');
   }

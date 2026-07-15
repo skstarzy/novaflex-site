@@ -676,8 +676,13 @@
   .gate-exit a{color:var(--gold);border-bottom:1px solid var(--gold);}
 
   /* ---------- Researcher account modal ---------- */
-  #authModal{position:fixed;inset:0;z-index:1100;background:rgba(6,6,7,0.92);display:none;align-items:center;justify-content:center;padding:24px;overflow-y:auto;}
-  #authModal.open{display:flex;}
+  #authModal,#addrModal{position:fixed;inset:0;z-index:1100;background:rgba(6,6,7,0.92);display:none;align-items:center;justify-content:center;padding:24px;overflow-y:auto;}
+  #authModal.open,#addrModal.open{display:flex;}
+  #addrModal .gate-card{position:relative;margin:auto;}
+  #addrModal .auth-input{margin-top:0;}
+  #addrModal select.auth-input{appearance:none;-webkit-appearance:none;cursor:pointer;background-image:linear-gradient(45deg,transparent 50%,var(--silver-dim) 50%),linear-gradient(135deg,var(--silver-dim) 50%,transparent 50%);background-position:calc(100% - 16px) center,calc(100% - 11px) center;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:30px;}
+  #addrModal h2{font-size:20px;color:var(--silver-bright);}
+  #addrModal > .gate-card > p{margin-top:10px;font-size:13px;color:var(--text-muted);line-height:1.55;}
   #authModal .gate-card{position:relative;}
   .auth-close{position:absolute;top:14px;right:18px;font-size:24px;line-height:1;color:var(--silver-dim);cursor:pointer;background:none;border:none;}
   .auth-close:hover{color:var(--gold-bright);}
@@ -864,6 +869,26 @@
       <button type="submit" class="btn btn-gold" id="authSubmit" style="width:100%;margin-top:18px;">Log in</button>
     </form>
     <div class="auth-msg" id="authMsg"></div>
+  </div>
+</div>
+
+<div id="addrModal" role="dialog" aria-modal="true">
+  <div class="gate-card" style="text-align:left;max-width:460px;">
+    <button class="auth-close" onclick="closeAddrModal()" aria-label="Close">×</button>
+    <h2 style="text-align:center;">Shipping address</h2>
+    <p style="text-align:center;">Where should we ship your research order? U.S. addresses only. Shipping &amp; any applicable tax are shown on the next step.</p>
+    <form id="addrForm" autocomplete="on" style="margin-top:18px;">
+      <input class="auth-input" id="adName" placeholder="Full name" autocomplete="name" maxlength="120" required>
+      <input class="auth-input" id="adLine1" placeholder="Street address" autocomplete="address-line1" maxlength="160" required style="margin-top:10px;">
+      <input class="auth-input" id="adLine2" placeholder="Apt, suite, unit (optional)" autocomplete="address-line2" maxlength="80" style="margin-top:10px;">
+      <input class="auth-input" id="adCity" placeholder="City" autocomplete="address-level2" maxlength="80" required style="margin-top:10px;">
+      <div style="display:flex;gap:10px;margin-top:10px;">
+        <select class="auth-input" id="adState" required style="flex:1;"><option value="" disabled selected>State</option></select>
+        <input class="auth-input" id="adPostal" placeholder="ZIP code" autocomplete="postal-code" inputmode="numeric" maxlength="10" required style="flex:1;">
+      </div>
+      <button type="submit" class="btn btn-gold" id="adSubmit" style="width:100%;margin-top:18px;">Continue to payment →</button>
+    </form>
+    <div class="auth-msg" id="adMsg"></div>
   </div>
 </div>
 
@@ -1486,7 +1511,8 @@ renderCartCount();
 renderDrawer();
 if (location.hash === '#cart'){ openDrawer(); }
 
-document.getElementById('checkoutBtn').addEventListener('click', async ()=>{
+// Checkout → collect the shipping address → submit → pay page.
+document.getElementById('checkoutBtn').addEventListener('click', ()=>{
   const errEl = document.getElementById('checkoutErr');
   errEl.style.display = 'none';
   if (cart.length === 0){
@@ -1494,41 +1520,74 @@ document.getElementById('checkoutBtn').addEventListener('click', async ()=>{
     errEl.style.display = 'block';
     return;
   }
-  const btn = document.getElementById('checkoutBtn');
-  btn.textContent = 'Redirecting…';
-  btn.disabled = true;
+  openAddrModal();
+});
+
+const US_STATES = ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY','DC'];
+function openAddrModal(){
+  const sel = document.getElementById('adState');
+  if (sel && sel.options.length <= 1){
+    sel.innerHTML = '<option value="" disabled selected>State</option>' + US_STATES.map(s=>`<option value="${s}">${s}</option>`).join('');
+  }
+  const m = document.getElementById('adMsg'); if(m) m.className='auth-msg';
+  document.getElementById('addrModal').classList.add('open');
+  const n = document.getElementById('adName'); if(n) n.focus();
+}
+function closeAddrModal(){ document.getElementById('addrModal').classList.remove('open'); }
+
+let checkoutInFlight = false;
+async function submitOrder(shipping){
+  if (checkoutInFlight) return;
+  checkoutInFlight = true;
+  const adMsg = document.getElementById('adMsg');
+  const adBtn = document.getElementById('adSubmit');
+  adMsg.className = 'auth-msg';
+  adBtn.disabled = true; const orig = adBtn.textContent; adBtn.textContent = 'Processing…';
   try {
-    // Send the signed-in researcher account token so the backend attaches this
-    // order to the buyer's single CRM customer record (and their account portal).
     let shopTok = null; try { shopTok = localStorage.getItem('nf_shop_token'); } catch(e){}
     const res = await fetch(CHECKOUT_API_URL, {
       method:'POST',
-      headers: shopTok
-        ? {'Content-Type':'application/json','Authorization':'Bearer '+shopTok}
-        : {'Content-Type':'application/json'},
+      headers: shopTok ? {'Content-Type':'application/json','Authorization':'Bearer '+shopTok} : {'Content-Type':'application/json'},
       body: JSON.stringify({
-        items: cart,
-        certifiedResearchUse: true, // already confirmed at the age gate
-        certifiedAge: true,
-        code: appliedCode || undefined,
+        items: cart, certifiedResearchUse: true, certifiedAge: true,
+        code: appliedCode || undefined, shipping, customerName: shipping.name,
       }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Checkout failed.');
     cart = []; saveCart();
-    // Hand the payment session to the pay page so it renders Stripe Elements
-    // instantly — no extra round-trips on the next page.
     if (data.orderId && data.clientSecret && data.publishableKey){
-      try { sessionStorage.setItem('nf_pay_' + data.orderId, JSON.stringify({ clientSecret: data.clientSecret, publishableKey: data.publishableKey, total: data.total })); } catch(e){}
+      try { sessionStorage.setItem('nf_pay_' + data.orderId, JSON.stringify({ clientSecret: data.clientSecret, publishableKey: data.publishableKey, total: data.total, subtotal: data.subtotal, shippingFee: data.shippingFee, taxAmount: data.taxAmount, discountAmount: data.discountAmount })); } catch(e){}
     }
     window.location.href = data.redirectUrl;
   } catch (err){
-    errEl.textContent = 'Checkout is not connected yet — this needs the backend running (see /backend). ' + err.message;
-    errEl.style.display = 'block';
-    btn.textContent = 'Submit Research Order →';
-    btn.disabled = false;
+    adMsg.className = 'auth-msg err'; adMsg.textContent = err.message;
+    adBtn.disabled = false; adBtn.textContent = orig;
+    checkoutInFlight = false;
   }
-});
+}
+
+(function(){
+  const f = document.getElementById('addrForm');
+  if (f) f.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const shipping = {
+      name: document.getElementById('adName').value.trim(),
+      line1: document.getElementById('adLine1').value.trim(),
+      line2: document.getElementById('adLine2').value.trim(),
+      city: document.getElementById('adCity').value.trim(),
+      state: document.getElementById('adState').value,
+      postal: document.getElementById('adPostal').value.trim(),
+      country: 'US',
+    };
+    if (!shipping.name || !shipping.line1 || !shipping.city || !shipping.state || !shipping.postal){
+      const m = document.getElementById('adMsg'); m.className='auth-msg err'; m.textContent='Please complete all required fields.'; return;
+    }
+    submitOrder(shipping);
+  });
+  const modal = document.getElementById('addrModal');
+  if (modal) modal.addEventListener('click', (e)=>{ if(e.target===modal) closeAddrModal(); });
+})();
 
 function escapeXML(s){
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
