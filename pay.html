@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Complete Payment — NovaFlex Peptides</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#08080a">
+<link rel="icon" href="assets/logo.webp?v=4">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"></noscript>
+<style>
+  :root{
+    --bg:#08080a; --bg-alt:#111113; --line:rgba(255,255,255,0.09); --line-strong:rgba(255,255,255,0.16);
+    --silver:#cdd1d8; --silver-bright:#f2f3f5; --silver-dim:#8b8e94;
+    --gold:#c9a44c; --gold-bright:#f0d78c; --gold-deep:#8a6a24; --text:#e7e7ea; --text-muted:#9a9a9f; --red:#e08484; --maxw:920px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+  h1{font-family:'Space Grotesk',sans-serif;margin:0;letter-spacing:-0.01em;}
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;height:auto;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);}
+  :focus-visible{outline:2px solid var(--gold-bright);outline-offset:2px;}
+  .nav{border-bottom:1px solid var(--line);background:rgba(8,8,10,0.92);}
+  .nav-inner{max-width:var(--maxw);margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand img{width:auto;height:32px;}
+  .brand-text{font-family:'Space Grotesk';font-weight:700;font-size:18px;color:var(--silver-bright);}
+  .brand-text .flex{color:var(--gold-bright);}
+  .nav-right a{font-size:13px;color:var(--silver-dim);}
+  .nav-right a:hover{color:var(--gold-bright);}
+  main{padding:52px 0 80px;min-height:62vh;display:flex;justify-content:center;}
+  .card{max-width:460px;width:calc(100% - 44px);background:var(--bg-alt);border:1px solid var(--line);border-radius:14px;padding:32px 30px;}
+  .card h1{font-size:24px;color:var(--silver-bright);margin-top:8px;}
+  .sub{margin-top:10px;font-size:13.5px;color:var(--text-muted);line-height:1.6;}
+  .total-row{margin-top:20px;display:flex;align-items:baseline;justify-content:space-between;padding:14px 16px;border:1px solid var(--line-strong);border-radius:9px;background:var(--bg);}
+  .total-row .l{font-size:13px;color:var(--text-muted);font-family:'IBM Plex Mono';text-transform:uppercase;letter-spacing:0.08em;}
+  .total-row .v{font-family:'IBM Plex Mono';font-size:24px;font-weight:700;color:var(--silver-bright);}
+  #payment-element{margin-top:22px;min-height:40px;}
+  #pay-btn{width:100%;margin-top:22px;display:inline-flex;align-items:center;justify-content:center;gap:9px;font-size:15px;font-weight:600;padding:15px;border-radius:8px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold-bright),var(--gold) 60%,var(--gold-deep));color:#141008;font-family:'Inter';}
+  #pay-btn:disabled{opacity:.55;cursor:not-allowed;}
+  #err{margin-top:14px;font-size:13px;color:var(--red);line-height:1.5;display:none;}
+  #err.show{display:block;}
+  .secure{margin-top:18px;font-size:11.5px;color:var(--silver-dim);text-align:center;line-height:1.6;}
+  .secure b{color:var(--silver);}
+  .loading{text-align:center;color:var(--text-muted);font-family:'IBM Plex Mono';font-size:13px;padding:20px 0;}
+  .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,0.18);border-top-color:var(--gold-bright);border-radius:50%;display:inline-block;animation:spin .8s linear infinite;vertical-align:middle;margin-right:8px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  @media (prefers-reduced-motion: reduce){.spinner{animation:none;}}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <img src="assets/logo.webp?v=4" alt="NovaFlex Peptides">
+      <span class="brand-text">NOVA<span class="flex">FLEX</span></span>
+    </a>
+    <div class="nav-right"><a href="index.html#cart">← Back to cart</a></div>
+  </div>
+</header>
+
+<main>
+  <div class="card" id="card">
+    <span class="eyebrow">Secure checkout</span>
+    <h1>Complete your payment</h1>
+    <p class="sub">Enter your card details to finish your research order. Payments are processed securely — NovaFlex never sees or stores your card number.</p>
+    <div class="total-row"><span class="l">Order total</span><span class="v" id="total">—</span></div>
+    <form id="pay-form">
+      <div id="payment-element"><div class="loading"><span class="spinner"></span>Loading secure payment form…</div></div>
+      <div id="err"></div>
+      <button id="pay-btn" type="submit" disabled>Pay now</button>
+    </form>
+    <div class="secure"><b>SSL-encrypted.</b> Powered by Stripe. For research-use-only laboratory materials.</div>
+  </div>
+</main>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+const API = 'https://api.novaflexusa.com';
+const params = new URLSearchParams(location.search);
+const orderId = params.get('order');
+const money = (n) => '$' + Number(n).toFixed(2);
+const errEl = document.getElementById('err');
+const payBtn = document.getElementById('pay-btn');
+function showErr(m){ errEl.textContent = m; errEl.classList.add('show'); }
+function shopToken(){ try{ return localStorage.getItem('nf_shop_token'); }catch(e){ return null; } }
+
+(async function init(){
+  if(!orderId){ showErr('Missing order reference. Please return to your cart and try again.'); return; }
+  try {
+    const cfgRes = await fetch(API + '/api/payment-config');
+    const cfg = await cfgRes.json();
+    if(!cfg.publishableKey){ showErr('Payments are not fully configured yet. Please contact support@novaflexusa.com.'); return; }
+
+    const tok = shopToken();
+    const payRes = await fetch(API + '/api/order-payment/' + encodeURIComponent(orderId), {
+      headers: tok ? { Authorization: 'Bearer ' + tok } : {},
+    });
+    const pay = await payRes.json();
+    if(!payRes.ok || !pay.clientSecret){ showErr(pay.error || 'Could not load your payment session.'); return; }
+
+    document.getElementById('total').textContent = money(pay.total);
+
+    const stripe = Stripe(cfg.publishableKey);
+    const elements = stripe.elements({
+      clientSecret: pay.clientSecret,
+      appearance: {
+        theme: 'night',
+        variables: { colorPrimary: '#c9a44c', colorBackground: '#08080a', colorText: '#e7e7ea', borderRadius: '8px', fontFamily: 'Inter, sans-serif' },
+      },
+    });
+    const paymentElement = elements.create('payment');
+    document.getElementById('payment-element').innerHTML = '';
+    paymentElement.mount('#payment-element');
+    payBtn.disabled = false;
+
+    document.getElementById('pay-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      payBtn.disabled = true; errEl.classList.remove('show');
+      const orig = payBtn.textContent; payBtn.textContent = 'Processing…';
+      const { error } = await stripe.confirmPayment({
+        elements,
+        confirmParams: { return_url: location.origin + '/order-confirmed.html?order=' + encodeURIComponent(orderId) },
+      });
+      // If confirmPayment returns, there was an immediate error (otherwise it redirects).
+      if (error){ showErr(error.message || 'Payment could not be completed.'); payBtn.disabled = false; payBtn.textContent = orig; }
+    });
+  } catch (err) {
+    showErr('Could not reach the payment service. Please try again or contact support@novaflexusa.com.');
+  }
+})();
+</script>
+</body>
+</html>

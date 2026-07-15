@@ -153,6 +153,15 @@ async function poll(){
     msg.textContent = 'If you just paid, check your email for a confirmation, or contact support@novaflexusa.com.';
     return;
   }
+  // Ask the backend to verify the payment with the processor (SolRUO). This is
+  // the authoritative completion step; it flips the order to paid/cancelled,
+  // then the status poll below reflects the result.
+  try {
+    await fetch(API + '/api/verify-payment', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ orderId }),
+    });
+  } catch (e){ /* fall back to polling */ }
   const started = Date.now();
   const MAX_MS = 40000, INTERVAL = 2500;
   async function tick(){
