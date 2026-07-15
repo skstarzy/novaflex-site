@@ -1413,11 +1413,12 @@ function updateShipBar(subtotal){
   bar.style.display = 'block';
   fill.style.width = Math.min(100, (subtotal / FREE_SHIP_THRESHOLD) * 100).toFixed(1) + '%';
   if (subtotal >= FREE_SHIP_THRESHOLD){
-    msg.innerHTML = 'U.S. shipping included on this order.';
+    msg.innerHTML = 'You’ve unlocked <b>$0 shipping</b> on this order.';
     bar.classList.add('unlocked');
     if (!shipWasUnlocked){ bar.classList.remove('celebrate'); void bar.offsetWidth; bar.classList.add('celebrate'); shipWasUnlocked = true; }
   } else {
-    msg.innerHTML = 'Orders $199+ include U.S. shipping.';
+    const remaining = (FREE_SHIP_THRESHOLD - subtotal).toFixed(2);
+    msg.innerHTML = '<b>$0 shipping</b> on all orders $199+ — add <b>$' + remaining + '</b> to unlock.';
     bar.classList.remove('unlocked','celebrate');
     shipWasUnlocked = false;
   }
