@@ -147,9 +147,12 @@ User-agent: Operator
 Disallow: /
 
 # ---------------------------------------------------------------------------
-# Everyone else — search engines, payment & brand-protection / compliance bots
+# Everyone else — search engines, payment & brand-protection / compliance bots.
+# Content-Signal declares: search is allowed, AI training is not (reserves rights
+# under Article 4 of EU Directive 2019/790). Claude is exempted above.
 # ---------------------------------------------------------------------------
 User-agent: *
+Content-Signal: search=yes, ai-train=no
 Allow: /
 
 Sitemap: https://novaflexusa.com/sitemap.xml
