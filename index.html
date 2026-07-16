@@ -801,6 +801,13 @@
   .drawer-item-remove{font-size:11px;color:var(--text-muted);text-decoration:underline;cursor:pointer;margin-left:6px;}
   .drawer-item-remove:hover{color:var(--gold-bright);}
   .drawer-item-price{font-family:'IBM Plex Mono';font-size:13.5px;color:var(--silver-bright);white-space:nowrap;}
+  .cart-nudge{display:flex;gap:12px;align-items:center;margin-top:4px;padding:12px;border:1px solid var(--gold-deep);border-radius:8px;background:linear-gradient(135deg,rgba(26,22,12,0.55),rgba(17,17,19,0.4));}
+  .cart-nudge img{width:34px;height:60px;flex-shrink:0;object-fit:contain;}
+  .cart-nudge-info{flex:1;min-width:0;}
+  .cart-nudge-title{font-size:12.5px;font-weight:600;color:var(--gold-bright);}
+  .cart-nudge-sub{font-size:10.5px;color:var(--text-muted);line-height:1.4;margin-top:2px;}
+  .cart-nudge-add{flex-shrink:0;background:transparent;border:1px solid var(--gold);color:var(--gold-bright);border-radius:5px;padding:7px 10px;font-size:11px;font-weight:600;font-family:'IBM Plex Mono';cursor:pointer;white-space:nowrap;transition:all .15s;}
+  .cart-nudge-add:hover{background:rgba(201,164,76,0.14);}
   .drawer-foot{padding:20px 24px 24px;border-top:1px solid var(--line);}
   .drawer-subtotal{display:flex;justify-content:space-between;font-size:14px;color:var(--silver-bright);margin-bottom:16px;}
   .drawer-subtotal .amt{font-family:'IBM Plex Mono';font-weight:600;font-size:17px;}
@@ -1521,12 +1528,12 @@ function renderDrawer(){
   if (cart.length === 0){
     wrap.innerHTML = `<div class="drawer-empty">Your research order is empty.<br>Browse the catalog to get started.</div>`;
   } else {
-    wrap.innerHTML = cart.map(i => {
+    const itemsHTML = cart.map(i => {
       const prod = PRODUCTS.find(p => p.name === i.name && p.spec === i.spec);
       const imgSrc = prod ? `assets/vials/NF-${prod.slug}.webp?v=2` : '';
       return `
       <div class="drawer-item">
-        <div class="drawer-item-media"><img src="${imgSrc}" alt="${i.name}" loading="lazy"></div>
+        <div class="drawer-item-media"><img src="${imgSrc}" alt="${i.display || i.name}" loading="lazy"></div>
         <div class="drawer-item-info">
           <div class="drawer-item-name">${i.display || i.name}</div>
           <div class="drawer-item-spec">${i.spec}</div>
@@ -1540,9 +1547,24 @@ function renderDrawer(){
         <div class="drawer-item-price">$${(i.price*i.qty).toFixed(2)}</div>
       </div>`;
     }).join('');
+    // Add-on nudge: offer BAC Water (reconstitution solvent) unless it's already in the order.
+    const hasSolvent = cart.some(i => i.name === 'Bacteriostatic Water');
+    const nudge = hasSolvent ? '' : `
+      <div class="cart-nudge">
+        <img src="assets/vials/NF-solvent-3ml.webp?v=2" alt="BAC Water" loading="lazy">
+        <div class="cart-nudge-info">
+          <div class="cart-nudge-title">Add BAC Water?</div>
+          <div class="cart-nudge-sub">Sterile reconstitution solvent — pairs with lyophilized reference materials. Lab use only.</div>
+        </div>
+        <button class="cart-nudge-add" onclick="addSolvent()">+ 3ml · $10</button>
+      </div>`;
+    wrap.innerHTML = itemsHTML + nudge;
   }
   updateDrawerTotals();
 }
+
+// Cart add-on: BAC Water 3ml (internal name matches the DB product for checkout).
+function addSolvent(){ addToCart('Bacteriostatic Water', '3ml vial', 10); }
 
 // ---- Promo / partner code ----
 const API_BASE = CHECKOUT_API_URL.replace(/\/api\/checkout$/, '');
