@@ -1116,10 +1116,16 @@
           <p>Pre-mixed multi-peptide vials supplied as combination reference materials.</p>
           <span class="go">5 compounds →</span>
         </div>
+        <div class="cat-tile reveal" data-filter="solvents">
+          <div class="tick"></div>
+          <h3>Laboratory Solvents</h3>
+          <p>Sterile reconstitution solvents supplied for laboratory professionals only.</p>
+          <span class="go">2 items →</span>
+        </div>
         <div class="cat-tile reveal" data-filter="All" style="background:linear-gradient(135deg,#1c1710,#111113);border-color:var(--gold-deep);">
           <div class="tick" style="width:100%;"></div>
           <h3 style="color:var(--gold-bright);">Full Catalog</h3>
-          <p>All 25 compounds, one place, always in stock.</p>
+          <p>Every compound plus lab solvents — always in stock.</p>
           <span class="go">View all →</span>
         </div>
       </div>
@@ -1436,6 +1442,8 @@ const PRODUCTS = [
   {name:"Wolverine Stack", display:"BP+ · TB-500", spec:"10mg vial", cat:"fusions", cats:["structural"], price:75, purity:"99.1%", slug:"wolverine-10mg"},
   {name:"Wolverine Stack", display:"BP+ · TB-500", spec:"20mg vial", cat:"fusions", cats:["structural"], price:115, purity:"99.1%", slug:"wolverine-20mg"},
   {name:"CJC-1295 + Ipamorelin", spec:"5/5 fusion vial", cat:"fusions", cats:["igf"], price:88, purity:"99.2%", slug:"cjc1295-ipa-5-5"},
+  {name:"Bacteriostatic Water", display:"BAC Water", seoName:"BAC Water", spec:"3ml vial", cat:"solvents", price:10, slug:"solvent-3ml"},
+  {name:"Bacteriostatic Water", display:"BAC Water", seoName:"BAC Water", spec:"10ml vial", cat:"solvents", price:20, slug:"solvent-10ml"},
 ];
 
 // Neutral display labels for catalog categories. Internal keys (data-filter,
@@ -1447,6 +1455,7 @@ const CAT_LABELS = {
   "copper-mc":"Copper & Melanocortin",
   "specialty":"Peptides & Cofactors",
   "fusions":"Research Fusions",
+  "solvents":"Laboratory Solvents",
   "All":"All"
 };
 function catLabel(c){ return CAT_LABELS[c] || c; }
@@ -1849,7 +1858,7 @@ function productCard(p){
   <div class="prod-card${p.soldOut ? ' is-soldout' : ''}" data-cat="${p.cat}" data-slug="${p.slug}">
     <div class="prod-media">
       ${badgeHTML}
-      <a href="${href}" class="prod-media-link" aria-label="View ${p.name} details"><img class="vial-photo" src="assets/vials/NF-${p.slug}.webp?v=2" alt="${p.name} ${p.spec} — NovaFlex Peptides" loading="lazy"></a>
+      <a href="${href}" class="prod-media-link" aria-label="View ${p.display||p.name} details"><img class="vial-photo" src="assets/vials/NF-${p.slug}.webp?v=2" alt="${p.display||p.name} ${p.spec} — NovaFlex Peptides" loading="lazy"></a>
       ${purityHTML}
     </div>
     <div class="prod-body">
@@ -1890,7 +1899,7 @@ renderFeatured();
       "@type":"ListItem","position":i+1,
       "item":{
         "@type":"Product",
-        "name":p.name+" "+p.spec,
+        "name":(p.seoName||p.name)+" "+p.spec,
         "category":catLabel(p.cat),
         "image":"https://novaflexusa.com/assets/vials/NF-"+p.slug+".webp",
         "brand":{"@type":"Brand","name":"NovaFlex Peptides"},
