@@ -1502,10 +1502,12 @@ function findCartItem(name, spec){
 }
 
 function addToCart(name, spec, price){
-  // Back-compat: the Glow Fusion spotlight button calls addToCart('Glow Fusion') with no spec/price
+  // Safety net: if called with just a name, resolve spec/price from PRODUCTS so
+  // an item can never land in the cart missing them (which would make it unremovable).
   if (spec === undefined){
     const p = PRODUCTS.find(pr => pr.name === name);
     if (p){ spec = p.spec; price = p.price; }
+    else { return; } // unknown product name — refuse rather than add a broken item
   }
   const existing = findCartItem(name, spec);
   if (existing){ existing.qty += 1; }
