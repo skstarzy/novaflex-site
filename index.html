@@ -809,6 +809,8 @@
   .cart-nudge-add{flex-shrink:0;background:transparent;border:1px solid var(--gold);color:var(--gold-bright);border-radius:5px;padding:7px 10px;font-size:11px;font-weight:600;font-family:'IBM Plex Mono';cursor:pointer;white-space:nowrap;transition:all .15s;}
   .cart-nudge-add:hover{background:rgba(201,164,76,0.14);}
   .drawer-foot{padding:20px 24px 24px;border-top:1px solid var(--line);}
+  .clear-cart-btn{display:none;width:100%;margin-top:10px;background:transparent;border:none;color:var(--text-muted);font-size:12.5px;font-family:'IBM Plex Mono';letter-spacing:0.03em;cursor:pointer;padding:6px 0;text-decoration:underline;text-underline-offset:2px;}
+  .clear-cart-btn:hover{color:var(--red,#e08484);}
   .drawer-subtotal{display:flex;justify-content:space-between;font-size:14px;color:var(--silver-bright);margin-bottom:16px;}
   .drawer-subtotal .amt{font-family:'IBM Plex Mono';font-weight:600;font-size:17px;}
   .promo-row{display:flex;gap:8px;margin-bottom:8px;}
@@ -1414,6 +1416,7 @@
     <div class="drawer-line" id="drawerDiscountLine" style="display:none;"><span id="drawerDiscountLabel">Discount</span><span id="drawerDiscount">-$0.00</span></div>
     <div class="drawer-subtotal"><span>Total</span><span class="amt" id="drawerTotal">$0.00</span></div>
     <button class="btn btn-gold" id="checkoutBtn" style="width:100%;justify-content:center;">Submit Research Order →</button>
+    <button class="clear-cart-btn" id="clearCartBtn" type="button">Clear cart</button>
     <div class="checkout-err" id="checkoutErr"></div>
     <div class="checkout-note">Secure checkout is handled by our payment processor. NovaFlex never stores your card details.</div>
   </div>
@@ -1566,6 +1569,17 @@ function renderDrawer(){
 // Cart add-on: BAC Water 3ml (internal name matches the DB product for checkout).
 function addSolvent(){ addToCart('Bacteriostatic Water', '3ml vial', 10); }
 
+// Force-empty the entire cart.
+function clearCart(){
+  cart = [];
+  appliedCode = null; appliedRate = 0;
+  const pm = document.getElementById('promoMsg'); if (pm){ pm.textContent = ''; pm.className = 'promo-msg'; }
+  const pi = document.getElementById('promoInput'); if (pi) pi.value = '';
+  saveCart();
+  renderCartCount();
+  renderDrawer();
+}
+
 // ---- Promo / partner code ----
 const API_BASE = CHECKOUT_API_URL.replace(/\/api\/checkout$/, '');
 let appliedCode = null;
@@ -1608,6 +1622,8 @@ function updateDrawerTotals(){
     line.style.display = 'none';
   }
   document.getElementById('drawerTotal').textContent = '$' + total.toFixed(2);
+  const clearBtn = document.getElementById('clearCartBtn');
+  if (clearBtn) clearBtn.style.display = cart.length ? 'block' : 'none';
   updateShipBar(subtotal);
 }
 
@@ -1648,6 +1664,7 @@ function closeDrawer(){
 document.querySelector('.cart-btn').addEventListener('click', (e)=>{ e.preventDefault(); openDrawer(); });
 document.getElementById('drawerCloseBtn').addEventListener('click', closeDrawer);
 document.getElementById('drawerOverlay').addEventListener('click', closeDrawer);
+document.getElementById('clearCartBtn').addEventListener('click', clearCart);
 
 // Reflect any persisted cart on load, and open the drawer when arriving via #cart.
 renderCartCount();
