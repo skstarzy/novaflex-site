@@ -1476,7 +1476,25 @@ const FEATURED_NAMES = ["Retatrutide","Tesamorelin","GHK-Cu 100mg vial","Melanot
 let cart = []; // { name, spec, price, qty }
 const CART_KEY = 'nf_cart';
 function saveCart(){ try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch(e){} }
-function loadCart(){ try { const s = localStorage.getItem(CART_KEY); cart = s ? (JSON.parse(s) || []) : []; } catch(e){ cart = []; } }
+// Drop any cart item that can't be sold: bad/legacy items whose name+spec no
+// longer match a real product, or that have a missing/NaN price or qty. This
+// self-heals carts that got a broken item stuck in them (e.g. a legacy
+// "Glow Fusion" with no spec/price that couldn't be removed or checked out).
+function sanitizeCart(items){
+  if (!Array.isArray(items)) return [];
+  return items.filter(i =>
+    i && typeof i.name === 'string' &&
+    Number.isFinite(Number(i.price)) && Number(i.price) >= 0 &&
+    Number.isFinite(Number(i.qty)) && Number(i.qty) > 0 &&
+    (typeof PRODUCTS === 'undefined' || PRODUCTS.some(p => p.name === i.name && p.spec === i.spec))
+  );
+}
+function loadCart(){
+  let raw = [];
+  try { const s = localStorage.getItem(CART_KEY); raw = s ? (JSON.parse(s) || []) : []; } catch(e){ raw = []; }
+  cart = sanitizeCart(raw);
+  if (cart.length !== (Array.isArray(raw) ? raw.length : 0)) saveCart(); // purge broken items for good
+}
 loadCart();
 
 function findCartItem(name, spec){
@@ -1849,7 +1867,7 @@ function setAuthMode(mode){
 function updateSpotlightGate(){
   const wrap=document.getElementById('spotlightBuy'); if(!wrap) return;
   wrap.innerHTML = shopAuthed()
-    ? '<div class="spotlight-price">$130.00 <span>per vial</span></div><button class="btn btn-gold" style="margin-top:22px;" onclick="addToCart(\'Glow Fusion\')">Add to Research Order →</button>'
+    ? '<div class="spotlight-price">$130.00 <span>per vial</span></div><button class="btn btn-gold" style="margin-top:22px;" onclick="addToCart(\'Glow Blend\',\'70mg vial\',130)">Add to Research Order →</button>'
     : '<button class="btn btn-gold" style="margin-top:22px;" onclick="openAuthModal()">Sign in to view pricing</button>';
 }
 function applyPricingGate(){
