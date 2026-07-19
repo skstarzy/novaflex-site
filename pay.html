@@ -93,7 +93,16 @@ const payToken = params.get('t'); // secure token from an emailed stack pay link
 const money = (n) => '$' + Number(n).toFixed(2);
 const errEl = document.getElementById('err');
 const payBtn = document.getElementById('pay-btn');
-function showErr(m){ errEl.textContent = m; errEl.classList.add('show'); }
+function showErr(m, allowReload){
+  if (allowReload){
+    errEl.innerHTML = m + ' <a href="#" id="err-reload" style="color:var(--gold-bright);text-decoration:underline;">Reload the page</a>';
+    const rl = document.getElementById('err-reload');
+    if (rl) rl.addEventListener('click', (e) => { e.preventDefault(); location.reload(); });
+  } else {
+    errEl.textContent = m;
+  }
+  errEl.classList.add('show');
+}
 function shopToken(){ try{ return localStorage.getItem('nf_shop_token'); }catch(e){ return null; } }
 
 function renderSummary(b){
@@ -119,12 +128,39 @@ function mountPayment(publishableKey, clientSecret, breakdown){
     },
   });
   const paymentElement = elements.create('payment');
-  document.getElementById('payment-element').innerHTML = '';
-  paymentElement.mount('#payment-element');
-  payBtn.disabled = false;
+  const mountEl = document.getElementById('payment-element');
+
+  // Keep the Pay button disabled until the card form is genuinely ready — and
+  // never leave the buyer stuck on an endless spinner if it fails to load.
+  let ready = false, failed = false;
+  payBtn.disabled = true;
+
+  const watchdog = setTimeout(() => {
+    if (ready || failed) return;
+    failed = true;
+    mountEl.innerHTML = '';
+    showErr('The secure card form is taking too long to load — this is usually a slow connection or a browser extension blocking it.', true);
+  }, 20000);
+
+  paymentElement.on('ready', () => {
+    ready = true;
+    clearTimeout(watchdog);
+    payBtn.disabled = false;
+  });
+
+  paymentElement.on('loaderror', (event) => {
+    if (failed) return;
+    failed = true;
+    clearTimeout(watchdog);
+    mountEl.innerHTML = '';
+    showErr((event && event.error && event.error.message) || 'The secure card form could not load.', true);
+  });
+
+  paymentElement.mount(mountEl);
 
   document.getElementById('pay-form').addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (payBtn.disabled) return;
     payBtn.disabled = true; errEl.classList.remove('show');
     const orig = payBtn.textContent; payBtn.textContent = 'Processing…';
     const { error } = await stripe.confirmPayment({
