@@ -1,0 +1,70 @@
+<!--
+  NovaFlex — PRE-LAB LAUNCH SALE banner (saved 2026-07-20).
+  To relaunch: paste this block back into index.html right after <main id="top">,
+  and update the countdown start/end dates in the <script>.
+-->
+  <!-- ================= PRE-LAB LAUNCH SALE BANNER ================= -->
+  <style>
+  .preorder-wrap{max-width:var(--maxw);margin:0 auto;padding:16px 24px 0;}
+  .preorder{position:relative;overflow:hidden;border:1px solid var(--gold-deep);border-radius:16px;
+    background:linear-gradient(120deg,#f9f2e4,#ffffff 62%);display:flex;align-items:center;
+    justify-content:space-between;gap:26px;flex-wrap:wrap;padding:24px 28px;
+    box-shadow:0 0 44px rgba(201,164,76,0.13);}
+  .preorder::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 88% -10%,rgba(240,215,140,0.20),transparent 55%);pointer-events:none;}
+  .po-left{position:relative;z-index:1;}
+  .po-eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-bright);}
+  .po-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--gold-bright);box-shadow:0 0 10px var(--gold-bright);animation:poPulse 1.8s ease-in-out infinite;}
+  @keyframes poPulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+  .po-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(23px,3.2vw,32px);color:var(--silver-bright);margin:10px 0 7px;letter-spacing:-0.01em;}
+  .po-title span{color:var(--gold-bright);}
+  .po-sub{font-size:13.5px;color:var(--text-muted);line-height:1.6;max-width:440px;}
+  .po-sub b{color:var(--gold-bright);font-family:'IBM Plex Mono',monospace;letter-spacing:1px;padding:1px 7px;border:1px solid var(--gold-deep);border-radius:5px;}
+  .po-fine{margin-top:8px;font-size:10.5px;letter-spacing:0.04em;color:var(--text-muted);opacity:.75;}
+  .po-cta{display:inline-block;margin-top:15px;font-size:13px;font-weight:600;color:var(--gold-bright);border-bottom:1px solid var(--gold);padding-bottom:1px;}
+  .po-cta:hover{filter:brightness(1.15);}
+  .po-count{display:flex;gap:10px;position:relative;z-index:1;}
+  .po-unit{background:rgba(255,255,255,0.7);border:1px solid var(--line-strong);border-radius:10px;padding:11px 13px;min-width:60px;text-align:center;}
+  .po-unit b{display:block;font-family:'IBM Plex Mono',monospace;font-size:27px;font-weight:700;color:var(--gold-bright);font-variant-numeric:tabular-nums;line-height:1;}
+  .po-unit small{display:block;margin-top:5px;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);}
+  .po-live{position:relative;z-index:1;font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--gold-bright);font-size:17px;text-align:center;}
+  .po-countwrap{position:relative;z-index:1;}
+  .po-clabel{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-bright);margin-bottom:9px;text-align:right;}
+  @media(max-width:640px){.preorder{padding:20px 18px;}.po-countwrap{width:100%;}.po-count{justify-content:space-between;gap:7px;}.po-clabel{text-align:center;}.po-unit{min-width:0;flex:1;padding:9px 4px;}.po-unit b{font-size:21px;}}
+  </style>
+  <div class="preorder-wrap">
+    <div class="preorder">
+      <div class="po-left">
+        <span class="po-eyebrow">3 days only · Fri–Sun</span>
+        <h2 class="po-title">Pre-Lab Launch Sale — save <span>15%</span></h2>
+        <p class="po-sub"><strong style="color:var(--gold-bright)">Friday through Sunday only</strong> — 15% off <strong style="color:var(--gold-bright)">every order</strong> with code <b>PRE15</b>. This launch event won’t return; all orders ship within <strong style="color:var(--gold-bright)">2–5 business days</strong> of the event closing.</p>
+        <p class="po-fine">Supplied for laboratory research use only — not for human or veterinary use.</p>
+        <a href="#catalog" class="po-cta">Browse the catalog →</a>
+      </div>
+      <div class="po-countwrap">
+        <div class="po-clabel" id="poLabel">Launch sale starts Friday — opens in</div>
+        <div class="po-count" id="poCount" aria-label="Countdown">
+          <div class="po-unit"><b id="poD">00</b><small>days</small></div>
+          <div class="po-unit"><b id="poH">00</b><small>hrs</small></div>
+          <div class="po-unit"><b id="poM">00</b><small>min</small></div>
+          <div class="po-unit"><b id="poS">00</b><small>sec</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+  (function(){
+    var start=new Date('2026-07-17T00:00:00').getTime();   // Friday — launch sale opens
+    var end=new Date('2026-07-20T00:00:00').getTime();      // end of Sunday night
+    var label=document.getElementById('poLabel');
+    var D=document.getElementById('poD'),H=document.getElementById('poH'),M=document.getElementById('poM'),S=document.getElementById('poS');
+    function p(n){return String(n).padStart(2,'0');}
+    function set(t){ D.textContent=p(Math.floor(t/864e5)); H.textContent=p(Math.floor(t%864e5/36e5)); M.textContent=p(Math.floor(t%36e5/6e4)); S.textContent=p(Math.floor(t%6e4/1e3)); }
+    function tick(){
+      var now=Date.now();
+      if(now<start){ label.textContent='Launch sale starts Friday — opens in'; set(start-now); }
+      else if(now<end){ label.textContent='Launch sale is live — ends Sunday night in'; set(end-now); }
+      else { document.querySelector('.po-countwrap').innerHTML='<div class="po-live">The launch sale has ended — thank you!</div>'; return; }
+    }
+    tick(); setInterval(tick,1000);
+  })();
+  </script>
