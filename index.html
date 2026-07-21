@@ -830,6 +830,27 @@
   .promo-banner .pb-close:hover{opacity:1;}
   @media (max-width:600px){ .promo-banner{font-size:12.5px;padding:10px 40px 10px 12px;} }
   @media (prefers-reduced-motion:reduce){ .promo-banner{transition:none;} }
+  /* Research Credits — the reward should feel like it's already yours, so the
+     earned number leads and the progress bar fills toward the next $5. */
+  .credits-box{margin:12px 0 4px;padding:12px 13px;border:1px solid var(--line-strong);
+    border-left:2px solid var(--gold);border-radius:5px;background:var(--bg-alt);}
+  .cb-earn{display:flex;align-items:flex-start;gap:7px;font-size:13px;color:var(--text);line-height:1.4;}
+  .cb-earn b{color:var(--gold-bright);font-family:'IBM Plex Mono';font-weight:600;
+    font-variant-numeric:tabular-nums;}
+  .cb-star{color:var(--gold);flex:none;line-height:1.4;}
+  .cb-track{height:4px;border-radius:2px;background:var(--bg-alt-2);margin:9px 0 6px;overflow:hidden;}
+  .cb-fill{height:100%;width:0;border-radius:2px;background:linear-gradient(90deg,var(--gold),var(--gold-bright));
+    transition:width .5s cubic-bezier(.2,.8,.3,1);}
+  .cb-note{font-size:11.5px;color:var(--text-muted);line-height:1.45;}
+  .cb-note b{color:var(--gold-bright);font-weight:600;}
+  .cb-redeem{display:flex;align-items:center;gap:8px;margin-top:10px;
+    padding-top:10px;border-top:1px solid var(--line);}
+  .cb-redeem label{font-size:11.5px;color:var(--text-muted);text-transform:uppercase;
+    letter-spacing:.08em;flex:none;}
+  .cb-redeem select{flex:1;background:var(--bg);border:1px solid var(--line-strong);border-radius:4px;
+    padding:7px 9px;color:var(--text);font-size:12.5px;font-family:'IBM Plex Mono';}
+  .cb-redeem select:focus{outline:none;border-color:var(--gold);}
+  @media (prefers-reduced-motion:reduce){ .cb-fill{transition:none;} }
   .promo-row{display:flex;gap:8px;margin-bottom:8px;}
   .promo-row input{flex:1;background:var(--bg-alt);border:1px solid var(--line-strong);border-radius:4px;padding:8px 10px;color:var(--silver);font-size:13px;font-family:'IBM Plex Mono';text-transform:uppercase;}
   .promo-row input:focus{outline:none;border-color:var(--gold);}
@@ -1373,7 +1394,18 @@
     <div class="promo-msg" id="promoMsg"></div>
     <div class="drawer-line"><span>Subtotal</span><span id="drawerSubtotal">$0.00</span></div>
     <div class="drawer-line" id="drawerDiscountLine" style="display:none;"><span id="drawerDiscountLabel">Discount</span><span id="drawerDiscount">-$0.00</span></div>
+    <div class="drawer-line" id="drawerCreditLine" style="display:none;"><span id="drawerCreditLabel">Credits applied</span><span id="drawerCredit">-$0.00</span></div>
     <div class="drawer-subtotal"><span>Total</span><span class="amt" id="drawerTotal">$0.00</span></div>
+
+    <div class="credits-box" id="creditsBox" style="display:none;">
+      <div class="cb-earn"><span class="cb-star">✦</span><span>You’ll earn <b id="cbEarn">0</b> Research Credits on this order</span></div>
+      <div class="cb-track"><div class="cb-fill" id="cbFill"></div></div>
+      <div class="cb-note" id="cbNote"></div>
+      <div class="cb-redeem" id="cbRedeem" style="display:none;">
+        <label for="cbSelect">Use credits</label>
+        <select id="cbSelect"><option value="0">Don’t use credits</option></select>
+      </div>
+    </div>
     <button class="btn btn-gold" id="checkoutBtn" style="width:100%;justify-content:center;">Submit Research Order →</button>
     <button class="clear-cart-btn" id="clearCartBtn" type="button">Clear cart</button>
     <div class="checkout-err" id="checkoutErr"></div>
@@ -1554,6 +1586,7 @@ function clearCart(){
   appliedCode = null; appliedRate = 0;
   const pm = document.getElementById('promoMsg'); if (pm){ pm.textContent = ''; pm.className = 'promo-msg'; }
   const pi = document.getElementById('promoInput'); if (pi) pi.value = '';
+  CREDITS.applied = 0; // nothing left to spend them on
   saveCart();
   renderCartCount();
   renderDrawer();
@@ -1594,7 +1627,20 @@ function updateShipBar(subtotal){
 function updateDrawerTotals(){
   const subtotal = cartTotal();
   const discount = appliedCode ? subtotal * appliedRate : 0;
-  const total = subtotal - discount;
+  const afterPromo = Math.max(0, subtotal - discount);
+
+  // Clamp the selection to what this cart and this balance can actually
+  // support, in whole tiers. Without this, removing items (or applying a promo)
+  // after choosing credits leaves an over-large selection that the UI happily
+  // displays but the server rejects — the customer sees a total, then a hard
+  // checkout failure. Credits pay for goods only, never shipping or tax.
+  const maxByCart = Math.floor(afterPromo / CREDITS.tierValue) * CREDITS.tierCredits;
+  const maxByBalance = Math.floor(CREDITS.balance / CREDITS.tierCredits) * CREDITS.tierCredits;
+  CREDITS.applied = Math.max(0, Math.min(CREDITS.applied, maxByCart, maxByBalance));
+
+  const creditValue = (CREDITS.applied / CREDITS.tierCredits) * CREDITS.tierValue;
+  const total = Math.max(0, afterPromo - creditValue);
+
   document.getElementById('drawerSubtotal').textContent = '$' + subtotal.toFixed(2);
   const line = document.getElementById('drawerDiscountLine');
   if (appliedCode && discount > 0){
@@ -1604,11 +1650,117 @@ function updateDrawerTotals(){
   } else {
     line.style.display = 'none';
   }
+  const cLine = document.getElementById('drawerCreditLine');
+  if (creditValue > 0){
+    cLine.style.display = 'flex';
+    document.getElementById('drawerCreditLabel').textContent = 'Credits (' + CREDITS.applied + ')';
+    document.getElementById('drawerCredit').textContent = '-$' + creditValue.toFixed(2);
+  } else {
+    cLine.style.display = 'none';
+  }
   document.getElementById('drawerTotal').textContent = '$' + total.toFixed(2);
   const clearBtn = document.getElementById('clearCartBtn');
   if (clearBtn) clearBtn.style.display = cart.length ? 'block' : 'none';
   updateShipBar(subtotal);
+  renderCredits(afterPromo - creditValue);
 }
+
+// ---- Research Credits ----
+// Earn 1 per $1 of goods paid; redeem in 100-credit ($5) blocks. The tier
+// constants come from the API so the copy here can never drift from the
+// ledger's actual math.
+const CREDITS = {
+  signedIn: false, balance: 0, applied: 0,
+  tierCredits: 100, tierValue: 5, perDollar: 1, toNextTier: 100,
+};
+
+function creditsForAmount(amount){
+  return Math.max(0, Math.floor(amount * CREDITS.perDollar));
+}
+
+function renderCredits(payableGoods){
+  const box = document.getElementById('creditsBox');
+  if (!box) return;
+  if (!cart.length){ box.style.display = 'none'; return; }
+  box.style.display = 'block';
+
+  const earn = creditsForAmount(payableGoods);
+  document.getElementById('cbEarn').textContent = earn.toLocaleString();
+
+  // The bar fills toward the next redeemable $5 — a balance of 340 shows 40%
+  // of the way to 400, which reads as progress rather than a raw number.
+  const projected = CREDITS.balance - CREDITS.applied + earn;
+  const intoTier = projected % CREDITS.tierCredits;
+  const pct = projected > 0 ? (intoTier === 0 ? 100 : (intoTier / CREDITS.tierCredits) * 100) : 0;
+  document.getElementById('cbFill').style.width = pct.toFixed(1) + '%';
+
+  const note = document.getElementById('cbNote');
+  const worth = Math.floor(projected / CREDITS.tierCredits) * CREDITS.tierValue;
+  if (!CREDITS.signedIn){
+    note.innerHTML = CREDITS.tierCredits + ' credits = <b>$' + CREDITS.tierValue +
+      ' off</b> a future order. Sign in at checkout to keep them.';
+  } else if (worth > 0){
+    note.innerHTML = 'After this order you’ll have <b>' + projected.toLocaleString() +
+      '</b> credits — worth <b>$' + worth + ' off</b> your next one.';
+  } else {
+    const toGo = CREDITS.tierCredits - intoTier;
+    note.innerHTML = '<b>' + toGo.toLocaleString() + ' more</b> credits unlocks $' +
+      CREDITS.tierValue + ' off your next order.';
+  }
+
+  const redeem = document.getElementById('cbRedeem');
+  const sel = document.getElementById('cbSelect');
+  // payableGoods is already net of the applied credits, so add them back to get
+  // the cart's full redeemable value before working out how many tiers to offer.
+  const redeemable = payableGoods + (CREDITS.applied / CREDITS.tierCredits) * CREDITS.tierValue;
+  const maxTiers = Math.min(
+    Math.floor(CREDITS.balance / CREDITS.tierCredits),
+    Math.floor(redeemable / CREDITS.tierValue)
+  );
+  if (!CREDITS.signedIn || maxTiers < 1){
+    redeem.style.display = 'none';
+    if (CREDITS.applied && maxTiers < 1){ CREDITS.applied = 0; }
+    return;
+  }
+  redeem.style.display = 'flex';
+  const want = CREDITS.applied;
+  let html = '<option value="0">Don’t use credits</option>';
+  for (let t = 1; t <= maxTiers; t++){
+    const c = t * CREDITS.tierCredits;
+    html += '<option value="' + c + '"' + (c === want ? ' selected' : '') + '>' +
+      c.toLocaleString() + ' credits — $' + (t * CREDITS.tierValue) + ' off</option>';
+  }
+  sel.innerHTML = html;
+}
+
+// Refresh the balance from the server. Called when the drawer opens and after
+// sign-in, not on every keystroke — the cart math is done locally.
+async function refreshCredits(){
+  try {
+    let tok = null; try { tok = localStorage.getItem('nf_shop_token'); } catch(e){}
+    const res = await fetch(`${API_BASE}/api/credits?subtotal=${encodeURIComponent(cartTotal())}`,
+      tok ? { headers: { Authorization: 'Bearer ' + tok } } : undefined);
+    const d = await res.json();
+    CREDITS.signedIn = !!d.signedIn;
+    CREDITS.balance = Number(d.balance) || 0;
+    CREDITS.tierCredits = Number(d.tierCredits) || 100;
+    CREDITS.tierValue = Number(d.tierValue) || 5;
+    CREDITS.perDollar = Number(d.perDollar) || 1;
+    if (!CREDITS.signedIn) CREDITS.applied = 0;
+    if (CREDITS.applied > CREDITS.balance) CREDITS.applied = 0;
+  } catch (e){
+    // Offline or API down: fall back to showing the earn estimate only.
+    CREDITS.signedIn = false; CREDITS.balance = 0; CREDITS.applied = 0;
+  }
+  updateDrawerTotals();
+}
+
+document.addEventListener('change', (e)=>{
+  if (e.target && e.target.id === 'cbSelect'){
+    CREDITS.applied = Number(e.target.value) || 0;
+    updateDrawerTotals();
+  }
+});
 
 // Validates a code against the backend and puts it into effect. Shared by the
 // manual "Apply" button and by the scan-to-save link that flyer/QR traffic
@@ -1694,6 +1846,7 @@ document.addEventListener('click', (e)=>{
 })();
 
 function openDrawer(){
+  refreshCredits(); // balance may have changed since the last open (or they just signed in)
   document.getElementById('cartDrawer').classList.add('open');
   document.getElementById('drawerOverlay').classList.add('open');
 }
@@ -1751,11 +1904,15 @@ async function submitOrder(shipping){
       body: JSON.stringify({
         items: cart, certifiedResearchUse: true, certifiedAge: true,
         code: appliedCode || undefined, shipping, customerName: shipping.name,
+        // The server revalidates this against the real balance — the value here
+        // is only ever a request, never the authority.
+        redeemCredits: CREDITS.applied > 0 ? CREDITS.applied : undefined,
       }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Checkout failed.');
     cart = []; saveCart();
+    CREDITS.applied = 0; // spent — the server already posted the redeem entry
     if (data.orderId && data.clientSecret && data.publishableKey){
       try { sessionStorage.setItem('nf_pay_' + data.orderId, JSON.stringify({ clientSecret: data.clientSecret, publishableKey: data.publishableKey, total: data.total, subtotal: data.subtotal, shippingFee: data.shippingFee, taxAmount: data.taxAmount, discountAmount: data.discountAmount })); } catch(e){}
     }
