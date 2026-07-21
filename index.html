@@ -811,6 +811,25 @@
   .clear-cart-btn:hover{color:var(--red,#e08484);}
   .drawer-subtotal{display:flex;justify-content:space-between;font-size:14px;color:var(--silver-bright);margin-bottom:16px;}
   .drawer-subtotal .amt{font-family:'IBM Plex Mono';font-weight:600;font-size:17px;}
+  /* Confirmation for scan-to-save traffic — slides down from the top so it
+     reads immediately on a phone without covering the nav. */
+  /* Above #enterGate (1200): scan traffic lands on the sign-in gate first, and
+     the discount is exactly what motivates them to push through it. */
+  .promo-banner{position:fixed;top:0;left:0;right:0;z-index:1300;display:flex;align-items:center;
+    justify-content:center;gap:10px;padding:11px 44px 11px 16px;
+    background:linear-gradient(90deg,#171410,#2a2318);color:#f5efdf;
+    border-bottom:1px solid var(--gold);font-size:13.5px;letter-spacing:.01em;
+    transform:translateY(-100%);transition:transform .45s cubic-bezier(.2,.8,.3,1);
+    box-shadow:0 6px 24px rgba(30,24,10,.18);}
+  .promo-banner.show{transform:translateY(0);}
+  .promo-banner .pb-mark{color:var(--gold);font-size:15px;}
+  .promo-banner b{color:var(--gold);font-weight:700;}
+  .promo-banner .pb-close{position:absolute;right:10px;top:50%;transform:translateY(-50%);
+    background:none;border:none;color:#f5efdf;font-size:22px;line-height:1;cursor:pointer;
+    padding:0 8px;opacity:.7;}
+  .promo-banner .pb-close:hover{opacity:1;}
+  @media (max-width:600px){ .promo-banner{font-size:12.5px;padding:10px 40px 10px 12px;} }
+  @media (prefers-reduced-motion:reduce){ .promo-banner{transition:none;} }
   .promo-row{display:flex;gap:8px;margin-bottom:8px;}
   .promo-row input{flex:1;background:var(--bg-alt);border:1px solid var(--line-strong);border-radius:4px;padding:8px 10px;color:var(--silver);font-size:13px;font-family:'IBM Plex Mono';text-transform:uppercase;}
   .promo-row input:focus{outline:none;border-color:var(--gold);}
@@ -1329,6 +1348,12 @@
 
 <div class="coa-lightbox" id="coaLightbox" onclick="closeCoa()"><img id="coaLightboxImg" src="" alt="Certificate of Analysis"></div>
 
+<div class="promo-banner" id="promoBanner" role="status" aria-live="polite">
+  <span class="pb-mark">✦</span>
+  <span class="pb-text"><b class="pb-rate">10% off</b> unlocked — code <b class="pb-code">NOVA10</b> is applied to your cart.</span>
+  <button type="button" id="promoBannerClose" class="pb-close" aria-label="Dismiss">×</button>
+</div>
+
 <div class="drawer-overlay" id="drawerOverlay"></div>
 <div class="cart-drawer" id="cartDrawer">
   <div class="drawer-head">
@@ -1532,6 +1557,10 @@ function clearCart(){
   saveCart();
   renderCartCount();
   renderDrawer();
+  // A scanned flyer code is an entitlement, not a cart item — emptying the
+  // cart shouldn't quietly cost someone the discount they scanned for.
+  const kept = storedPromo();
+  if (kept) applyPromoCode(kept);
 }
 
 // ---- Promo / partner code ----
@@ -1581,31 +1610,88 @@ function updateDrawerTotals(){
   updateShipBar(subtotal);
 }
 
-document.getElementById('promoApply').addEventListener('click', async ()=>{
-  const input = document.getElementById('promoInput');
+// Validates a code against the backend and puts it into effect. Shared by the
+// manual "Apply" button and by the scan-to-save link that flyer/QR traffic
+// lands on, so both paths behave identically.
+async function applyPromoCode(code, { showInDrawer = true } = {}){
   const msg = document.getElementById('promoMsg');
-  const code = input.value.trim();
-  if (!code){ appliedCode = null; appliedRate = 0; msg.textContent = ''; msg.className = 'promo-msg'; updateDrawerTotals(); return; }
-  msg.textContent = 'Checking…'; msg.className = 'promo-msg';
+  const setMsg = (text, cls) => {
+    if (!msg || !showInDrawer) return;
+    msg.textContent = text;
+    msg.className = 'promo-msg' + (cls ? ' ' + cls : '');
+  };
+  code = (code || '').trim();
+  if (!code){
+    appliedCode = null; appliedRate = 0;
+    forgetPromo();
+    setMsg('', '');
+    updateDrawerTotals();
+    return false;
+  }
+  setMsg('Checking…', '');
   try {
     const res = await fetch(`${API_BASE}/api/promo/${encodeURIComponent(code)}`);
     const data = await res.json();
     if (data.valid){
       appliedCode = data.code; appliedRate = data.discountRate;
-      msg.textContent = `✓ Code applied — ${Math.round(data.discountRate*100)}% off`;
-      msg.className = 'promo-msg ok';
-    } else {
-      appliedCode = null; appliedRate = 0;
-      msg.textContent = 'That code isn’t valid.';
-      msg.className = 'promo-msg err';
+      rememberPromo(data.code);
+      const input = document.getElementById('promoInput');
+      if (input && showInDrawer) input.value = data.code;
+      setMsg(`✓ Code applied — ${Math.round(data.discountRate*100)}% off`, 'ok');
+      updateDrawerTotals();
+      return true;
     }
+    appliedCode = null; appliedRate = 0;
+    forgetPromo();
+    setMsg('That code isn’t valid.', 'err');
   } catch (e){
     appliedCode = null; appliedRate = 0;
-    msg.textContent = 'Could not check that code right now.';
-    msg.className = 'promo-msg err';
+    setMsg('Could not check that code right now.', 'err');
   }
   updateDrawerTotals();
+  return false;
+}
+
+document.getElementById('promoApply').addEventListener('click', ()=>{
+  applyPromoCode(document.getElementById('promoInput').value);
 });
+
+// ---- Scan-to-save: ?promo=CODE auto-applies and survives browsing ----
+// Someone scanning a flyer lands on the homepage, then browses for a while
+// before opening the cart, so the code has to persist across page loads —
+// otherwise the discount silently evaporates before they reach checkout.
+const PROMO_KEY = 'nf_promo';
+function rememberPromo(code){ try { localStorage.setItem(PROMO_KEY, code); } catch(e){} }
+function forgetPromo(){ try { localStorage.removeItem(PROMO_KEY); } catch(e){} }
+function storedPromo(){ try { return localStorage.getItem(PROMO_KEY); } catch(e){ return null; } }
+
+function showPromoBanner(code, rate){
+  const el = document.getElementById('promoBanner');
+  if (!el) return;
+  el.querySelector('.pb-rate').textContent = Math.round(rate * 100) + '% off';
+  el.querySelector('.pb-code').textContent = code;
+  el.classList.add('show');
+  setTimeout(()=> el.classList.remove('show'), 9000);
+}
+document.addEventListener('click', (e)=>{
+  if (e.target.closest('#promoBannerClose')) document.getElementById('promoBanner').classList.remove('show');
+});
+
+(async function initPromo(){
+  let fromUrl = null;
+  try { fromUrl = new URLSearchParams(location.search).get('promo'); } catch(e){}
+  const code = fromUrl || storedPromo();
+  if (!code) return;
+  const ok = await applyPromoCode(code, { showInDrawer: true });
+  if (ok && fromUrl) showPromoBanner(appliedCode, appliedRate);
+  // Strip the param so a shared/bookmarked URL stays clean — the code is
+  // already persisted, so removing it from the address bar changes nothing.
+  if (fromUrl && history.replaceState){
+    const u = new URL(location.href);
+    u.searchParams.delete('promo');
+    history.replaceState({}, '', u.pathname + u.search + u.hash);
+  }
+})();
 
 function openDrawer(){
   document.getElementById('cartDrawer').classList.add('open');
