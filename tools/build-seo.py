@@ -44,6 +44,9 @@ STATIC_PAGES = [
     ("/", "1.0", "weekly"),
     ("/policies.html", "0.3", "yearly"),
     ("/team.html", "0.4", "monthly"),
+    # Linkable asset: free tools are what earn backlinks, which is the thing
+    # this domain most lacks. Higher priority than the policy pages.
+    ("/reconstitution-calculator.html", "0.7", "monthly"),
 ]
 
 
