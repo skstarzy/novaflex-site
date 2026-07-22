@@ -1910,6 +1910,24 @@ async function submitOrder(shipping){
       }),
     });
     const data = await res.json();
+    // A dead promo code shouldn't cost us the order. Drop it, re-price the
+    // cart so the buyer sees the real total BEFORE paying, and let them
+    // continue — rather than leaving them stuck behind an error they can't
+    // clear, which is what used to happen with first-order-only codes.
+    if (res.status === 409 && data.code === 'PROMO_INELIGIBLE'){
+      appliedCode = null; appliedRate = 0;
+      forgetPromo();
+      const pi = document.getElementById('promoInput'); if (pi) pi.value = '';
+      const pm = document.getElementById('promoMsg');
+      if (pm){ pm.textContent = data.error || 'That code was removed.'; pm.className = 'promo-msg err'; }
+      updateDrawerTotals();
+      // Stay in the address step — they've already filled it in, and the catch
+      // below surfaces this message right where they're looking. One more tap
+      // on Continue completes the order at the corrected total.
+      const newTotal = document.getElementById('drawerTotal').textContent;
+      throw new Error((data.error || 'That code was removed.') +
+        ' Your total is now ' + newTotal + ' — tap Continue again to place the order.');
+    }
     if (!res.ok) throw new Error(data.error || 'Checkout failed.');
     cart = []; saveCart();
     CREDITS.applied = 0; // spent — the server already posted the redeem entry
