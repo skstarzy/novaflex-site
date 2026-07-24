@@ -25,7 +25,7 @@ Deliberately NOT emitted:
     sign-in gate; publishing it to Google would defeat that gate. Costs us the
     merchant rich result — a conscious trade, not an oversight.
   • The real names of the three renamed compounds. Retatrutide, Tirzepatide and
-    BPC-157 display as NV-3RT, NV-2TZ and BP+ on purpose; this script uses the
+    BPC-157 display as GL-3RT, NV-2TZ and BP+ on purpose; this script uses the
     display name so it can't quietly undo that decision.
 """
 
