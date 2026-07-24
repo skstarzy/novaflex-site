@@ -47,6 +47,7 @@ STATIC_PAGES = [
     # Linkable asset: free tools are what earn backlinks, which is the thing
     # this domain most lacks. Higher priority than the policy pages.
     ("/reconstitution-calculator.html", "0.7", "monthly"),
+    ("/how-to-read-a-coa.html", "0.7", "monthly"),
 ]
 
 

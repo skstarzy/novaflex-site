@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Read a Peptide Certificate of Analysis (COA) — HPLC & Mass Spec Guide | NovaFlex Peptides</title>
+<meta name="description" content="A plain-English guide to reading a peptide Certificate of Analysis: what HPLC purity means, how mass spectrometry confirms identity, how to spot a real COA from a fake, and the exact fields to check on every batch. For research use.">
+<meta name="robots" content="index, follow, noai, noimageai">
+<meta name="theme-color" content="#f7f4ee">
+<link rel="canonical" href="https://novaflexusa.com/how-to-read-a-coa.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to Read a Peptide Certificate of Analysis (COA) — HPLC & Mass Spec Guide | NovaFlex Peptides">
+<meta property="og:description" content="A plain-English guide to reading a peptide Certificate of Analysis: what HPLC purity means, how mass spectrometry confirms identity, how to spot a real COA from a fake, and the exact fields to check on every batch. For research use.">
+<meta property="og:url" content="https://novaflexusa.com/how-to-read-a-coa.html">
+<link rel="icon" href="assets/logo.webp?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "How to Read a Peptide Certificate of Analysis (COA)", "description": "A plain-English guide to reading a peptide Certificate of Analysis: what HPLC purity means, how mass spectrometry confirms identity, how to spot a real COA from a fake, and the exact fields to check on every batch. For research use.", "url": "https://novaflexusa.com/how-to-read-a-coa.html", "author": {"@type": "Organization", "name": "NovaFlex Peptides"}, "publisher": {"@type": "Organization", "name": "NovaFlex Peptides"}, "mainEntityOfPage": "https://novaflexusa.com/how-to-read-a-coa.html"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is a Certificate of Analysis (COA)?", "acceptedAnswer": {"@type": "Answer", "text": "A COA is the analytical report a laboratory produces for a specific batch of material. For a research peptide it states the measured purity (usually by HPLC), confirms the compound's identity (usually by mass spectrometry), names the testing lab, and carries a unique lot number that should match the vial you receive. A COA describes one batch — not the product in general."}}, {"@type": "Question", "name": "What does HPLC purity actually measure?", "acceptedAnswer": {"@type": "Answer", "text": "High-Performance Liquid Chromatography separates everything in the sample and measures the area under each peak. Purity is the target peptide's peak area divided by the total area of all peaks, as a percentage. “99% by HPLC” means 99% of the detected material is the target and ≤1% is everything else — truncated sequences, deletion products, or residual solvents. A purity number without the chromatogram beside it is a claim, not a result."}}, {"@type": "Question", "name": "Why does a COA need mass spectrometry too?", "acceptedAnswer": {"@type": "Answer", "text": "HPLC tells you how pure the sample is; it does not prove what the compound is. Mass spectrometry measures molecular weight, confirming the peptide's identity matches its theoretical mass. A complete COA carries both: HPLC for purity, MS for identity. One without the other is only half the picture."}}, {"@type": "Question", "name": "How do I tell a real COA from a fake one?", "acceptedAnswer": {"@type": "Answer", "text": "A genuine COA names the testing laboratory, carries a unique report or lot number, is dated, and shows the actual chromatogram and mass-spec trace rather than just a headline percentage. The lot number on the COA should match the lot on your vial. Independently recognized labs — Janoshik, MZ Biolabs, Colmaric — can often be verified directly. A single number with no lab, no lot, and no chromatogram is not a COA."}}, {"@type": "Question", "name": "What purity should I expect for a research peptide?", "acceptedAnswer": {"@type": "Answer", "text": "≥98% is a common baseline for research supply and ≥99% is widely available. Below 95% generally indicates the synthesis or purification did not go cleanly. The right threshold depends on the study: a binding assay tolerates less than a kinetics experiment. Always read the number against the method and the chromatogram, not on its own."}}, {"@type": "Question", "name": "Should the COA match the exact vial I received?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. A COA is batch-specific, so the lot number printed on the vial should match the lot on the certificate. A COA for a different lot tells you about material you did not receive. Reputable suppliers make the current batch's COA available and tie it to the lot you are shipped."}}]}</script>
+<style>
+  :root{
+    --bg:#f7f4ee; --bg-alt:#ffffff; --bg-alt-2:#efeadf;
+    --line:rgba(30,24,10,0.12); --line-strong:rgba(30,24,10,0.22);
+    --silver:#4b4842; --silver-bright:#171410; --silver-dim:#8c887f;
+    --gold:#b08d2e; --gold-bright:#8a6a24; --gold-deep:#6f5518;
+    --text:#221f18; --text-muted:#6b675f; --maxw:1080px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+  h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif;margin:0;letter-spacing:-0.01em;}
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;height:auto;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);}
+  :focus-visible{outline:2px solid var(--gold-bright);outline-offset:2px;}
+
+  .btn{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;padding:12px 22px;border-radius:4px;cursor:pointer;border:1px solid transparent;transition:all .2s ease;font-family:'Inter',sans-serif;}
+  .btn-gold{background:linear-gradient(135deg,var(--gold-bright),var(--gold) 60%,var(--gold-deep));color:#141008;}
+  .btn-gold:hover{filter:brightness(1.08);transform:translateY(-1px);}
+  .btn-gold:disabled{filter:grayscale(0.6);opacity:.55;cursor:not-allowed;transform:none;}
+  .btn-ghost{background:transparent;border-color:var(--line-strong);color:var(--silver);}
+  .btn-ghost:hover{border-color:var(--gold);color:var(--gold-bright);}
+
+  /* nav */
+  .nav{border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(255,255,255,0.9);backdrop-filter:blur(8px);z-index:30;}
+  .nav-inner{max-width:var(--maxw);margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand img{width:auto;height:34px;}
+  .brand-text{font-family:'Space Grotesk';font-weight:700;font-size:19px;letter-spacing:-0.02em;color:var(--silver-bright);}
+  .brand-text .flex{color:var(--gold-bright);}
+  .nav-links{display:flex;gap:22px;font-size:14px;}
+  .nav-links a{color:var(--silver);}
+  .nav-links a:hover{color:var(--gold-bright);}
+  .cart-btn{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--silver);border:1px solid var(--line-strong);border-radius:4px;padding:7px 12px;}
+  .cart-btn:hover{border-color:var(--gold);color:var(--gold-bright);}
+  .cart-count{background:var(--gold);color:#141008;font-size:10px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;padding:0 4px;}
+
+  /* product detail */
+  main{padding:36px 0 60px;}
+  .pd-back{font-size:13px;color:var(--text-muted);font-family:'IBM Plex Mono';display:inline-block;margin-bottom:26px;}
+  .pd-back:hover{color:var(--gold-bright);}
+  .pd-hero{display:grid;grid-template-columns:0.9fr 1.1fr;gap:48px;align-items:center;}
+  .pd-media{background:radial-gradient(circle at 50% 32%,#ffffff,#f1ede3 72%);border:1px solid var(--line);border-radius:14px;padding:30px;display:flex;align-items:center;justify-content:center;}
+  .pd-media img{width:78%;filter:drop-shadow(0 16px 30px rgba(0,0,0,0.6));}
+  .pd-info .pd-cat{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);}
+  .pd-name{font-size:clamp(30px,4.6vw,44px);margin-top:10px;color:var(--silver-bright);}
+  .pd-sub{margin-top:12px;font-size:13.5px;color:var(--text-muted);font-family:'IBM Plex Mono';display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .pd-sub .dot{color:var(--line-strong);}
+  .pd-tagline{margin-top:18px;font-size:16px;line-height:1.6;color:var(--silver);max-width:460px;}
+  .pd-buy{margin-top:26px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+  /* Research Credits earned on this product — the number leads, the rule
+     follows in small type so it reads as a reward, not a terms line. */
+  .pd-credits{display:flex;align-items:center;gap:10px;margin-top:12px;padding:9px 12px;
+    border:1px solid var(--line-strong);border-left:2px solid var(--gold);border-radius:5px;
+    background:var(--bg-alt);}
+  .pd-credits-n{font-family:'IBM Plex Mono';font-size:19px;font-weight:600;color:var(--gold-bright);
+    font-variant-numeric:tabular-nums;flex:none;}
+  .pd-credits-t{font-size:12.5px;color:var(--text);line-height:1.4;}
+  .pd-credits-t b{display:block;font-size:11px;color:var(--text-muted);font-weight:500;margin-top:1px;}
+  .pd-price{font-family:'IBM Plex Mono';font-size:30px;font-weight:600;color:var(--silver-bright);}
+  .pd-soldtag{font-family:'IBM Plex Mono';font-size:12px;color:var(--silver-dim);border:1px solid var(--line-strong);border-radius:3px;padding:4px 9px;text-transform:uppercase;letter-spacing:0.08em;}
+  .pd-trust{margin-top:24px;display:flex;flex-wrap:wrap;gap:10px;}
+  .pd-chip{font-family:'IBM Plex Mono';font-size:11px;color:var(--silver-dim);border:1px solid var(--line);border-radius:20px;padding:6px 12px;display:inline-flex;align-items:center;gap:6px;}
+  .pd-chip b{color:var(--gold-bright);font-weight:600;}
+  .pd-ship{margin-top:14px;font-family:'IBM Plex Mono';font-size:12px;letter-spacing:0.04em;color:var(--gold);display:flex;align-items:center;gap:7px;}
+  .pd-ship .star{color:var(--gold-bright);font-size:11px;}
+
+  .pd-section{margin-top:56px;max-width:760px;}
+  .pd-section h2{font-size:22px;color:var(--silver-bright);}
+  .pd-section h2 .eyebrow{display:block;margin-bottom:8px;}
+  .pd-section p{margin-top:14px;font-size:15px;line-height:1.75;color:var(--text-muted);}
+  .pd-benefits{list-style:none;padding:0;margin:20px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .pd-benefits li{display:flex;gap:12px;align-items:flex-start;background:var(--bg-alt);border:1px solid var(--line);border-radius:8px;padding:14px 16px;font-size:14px;color:var(--silver);line-height:1.45;}
+  .pd-benefits .ck{color:var(--gold-bright);flex:none;margin-top:1px;}
+  .pd-spec-grid{margin-top:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  .pd-spec-cell{background:var(--bg);padding:16px 18px;}
+  .pd-spec-cell .k{font-family:'IBM Plex Mono';font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);}
+  .pd-spec-cell .v{margin-top:6px;font-size:14px;color:var(--silver-bright);font-weight:500;}
+  .pd-disclaimer{margin-top:52px;background:var(--bg-alt);border:1px solid var(--line);border-left:2px solid var(--gold);border-radius:0 8px 8px 0;padding:22px 24px;max-width:900px;}
+  .pd-disclaimer h3{font-size:13px;font-family:'IBM Plex Mono';letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);}
+  .pd-disclaimer p{margin-top:12px;font-size:12.5px;line-height:1.7;color:var(--text-muted);}
+  .pd-note{margin-top:14px;font-size:14px;line-height:1.75;color:var(--silver);}
+  .pd-faq{margin-top:18px;display:flex;flex-direction:column;}
+  .pd-faq-item{border-top:1px solid var(--line);padding:18px 0;}
+  .pd-faq-item:last-child{border-bottom:1px solid var(--line);}
+  .pd-faq-q{font-family:'Space Grotesk';font-size:15px;font-weight:600;color:var(--silver-bright);}
+  .pd-faq-a{margin-top:8px;font-size:14px;line-height:1.7;color:var(--text-muted);}
+
+  /* footer */
+  footer{border-top:1px solid var(--line);padding:40px 0 30px;margin-top:60px;}
+  .foot-inner{max-width:var(--maxw);margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center;}
+  .foot-inner p{font-size:12.5px;color:var(--text-muted);margin:0;}
+  .foot-links{display:flex;gap:20px;font-size:13px;}
+  .foot-links a{color:var(--silver-dim);}
+  .foot-links a:hover{color:var(--gold-bright);}
+
+  /* compliant site footer */
+  .sf{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+  .sf-disc{padding:34px 0 30px;border-bottom:1px solid var(--line);}
+  .sf-disc p{font-size:13.5px;line-height:1.75;color:var(--text-muted);max-width:1100px;margin:0 0 14px;}
+  .sf-disc p:last-child{margin-bottom:0;}
+  .sf-disc a{color:var(--silver-dim);text-decoration:underline;text-underline-offset:2px;}
+  .sf-disc a:hover{color:var(--gold-bright);}
+  .sf-band{margin:34px 0;border:1px solid var(--line);border-radius:8px;padding:20px 24px;text-align:center;background:var(--bg-alt);}
+  .sf-band strong{display:block;font-size:14px;color:var(--silver);letter-spacing:.01em;}
+  .sf-band span{display:block;margin-top:7px;font-size:12px;line-height:1.65;color:var(--text-muted);}
+  .sf-cols{display:grid;grid-template-columns:1.3fr 1fr 1.3fr;gap:40px;padding-bottom:34px;}
+  .sf-col h4{font-size:12px;font-family:'IBM Plex Mono';letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin:0 0 14px;}
+  .sf-col p,.sf-col a{font-size:13px;line-height:1.7;color:var(--text-muted);margin:0;}
+  .sf-col a{display:block;text-decoration:none;}
+  .sf-col a:hover{color:var(--gold-bright);}
+  .sf-brand-name{font-weight:700;color:var(--silver);letter-spacing:.02em;}
+  .sf-todo{color:#c98a3a;}
+  .sf-bottom{border-top:1px solid var(--line);padding:20px 0 4px;text-align:center;}
+  .sf-bottom p{font-size:12px;color:var(--text-muted);margin:0;}
+  @media(max-width:720px){.sf-cols{grid-template-columns:1fr;gap:26px;}}
+
+  /* toast */
+  .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--gold);color:#141008;font-weight:600;font-size:14px;padding:11px 20px;border-radius:6px;opacity:0;pointer-events:none;transition:all .25s ease;z-index:60;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  /* age gate */
+  #ageGate{position:fixed;inset:0;background:rgba(4,4,6,0.94);z-index:100;display:flex;padding:24px;overflow-y:auto;}
+  #ageGate.hidden{display:none;}
+  .gate-card{margin:auto;background:var(--bg-alt);border:1px solid var(--line-strong);border-radius:14px;padding:32px 28px;max-width:420px;text-align:center;}
+  .gate-card img{width:88px;margin:0 auto 18px;}
+  .gate-card h2{font-size:20px;color:var(--silver-bright);}
+  .gate-card p{margin-top:12px;font-size:13px;color:var(--text-muted);line-height:1.6;}
+  .gate-checks{margin-top:22px;display:flex;flex-direction:column;gap:14px;text-align:left;}
+  .gate-check{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--silver);line-height:1.5;}
+  .gate-check input{margin-top:2px;accent-color:var(--gold);width:15px;height:15px;flex-shrink:0;}
+  .gate-card .btn-gold{width:100%;justify-content:center;margin-top:22px;}
+  .gate-leave{margin-top:14px;font-size:12px;color:var(--text-muted);}
+  .gate-leave a{color:var(--gold);text-decoration:underline;}
+  /* researcher account modal */
+  #authModal{position:fixed;inset:0;z-index:200;background:rgba(4,4,6,0.94);display:none;align-items:center;justify-content:center;padding:24px;overflow-y:auto;}
+  #authModal.open{display:flex;}
+  #authModal .gate-card{position:relative;}
+  .auth-close{position:absolute;top:14px;right:18px;font-size:24px;line-height:1;color:var(--silver-dim);cursor:pointer;background:none;border:none;}
+  .auth-tabs{display:flex;gap:8px;margin-top:22px;}
+  .auth-tab{flex:1;padding:10px;font-size:13px;font-weight:600;border-radius:6px;cursor:pointer;border:1px solid var(--line-strong);background:transparent;color:var(--silver-dim);font-family:'Inter';}
+  .auth-tab.active{background:var(--gold);color:#141008;border-color:var(--gold);}
+  .auth-input{width:100%;margin-top:12px;background:var(--bg);border:1px solid var(--line-strong);border-radius:6px;padding:12px 13px;color:var(--silver);font-size:14px;font-family:'Inter';}
+  .auth-input:focus{outline:none;border-color:var(--gold);}
+  .auth-msg{margin-top:12px;font-size:12.5px;line-height:1.5;display:none;text-align:left;}
+  .auth-msg.err{display:block;color:#e08484;}
+  .pd-price.locked{cursor:pointer;color:var(--gold);font-size:16px;}
+
+  @media (max-width:780px){
+    .pd-hero{grid-template-columns:1fr;gap:26px;}
+    .pd-media{max-width:340px;}
+    .nav-links{display:none;}
+    .pd-benefits{grid-template-columns:1fr;}
+  }
+
+  .g-wrap{max-width:760px;margin:0 auto;padding:0 24px;}
+  .g-head{padding:44px 0 8px;}
+  .g-head h1{font-size:clamp(28px,4.2vw,40px);color:var(--silver-bright);line-height:1.14;letter-spacing:-.02em;}
+  .g-head .lede{margin-top:16px;font-size:17px;line-height:1.7;color:var(--text-muted);}
+  .g-meta{margin-top:16px;font-family:'IBM Plex Mono';font-size:12px;letter-spacing:.04em;color:var(--text-muted);}
+  .g-body{margin-top:20px;}
+  .g-body h2{font-size:24px;color:var(--silver-bright);margin:44px 0 0;letter-spacing:-.02em;}
+  .g-body h2 .num{font-family:'IBM Plex Mono';font-size:13px;color:var(--gold-bright);display:block;margin-bottom:6px;letter-spacing:.1em;}
+  .g-body p{margin:14px 0 0;font-size:16px;line-height:1.78;color:var(--text);}
+  .g-body p.muted{color:var(--text-muted);font-size:15px;}
+  .g-body strong{color:var(--silver-bright);}
+  /* the anatomy checklist */
+  .anat{margin:22px 0 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;}
+  .anat-row{display:grid;grid-template-columns:0.9fr 1.6fr;gap:0;border-bottom:1px solid var(--line);}
+  .anat-row:last-child{border-bottom:none;}
+  .anat-row>div{padding:14px 18px;}
+  .anat-row .k{background:var(--bg-alt);font-family:'IBM Plex Mono';font-size:12.5px;letter-spacing:.05em;
+    text-transform:uppercase;color:var(--gold-bright);border-right:1px solid var(--line);}
+  .anat-row .v{font-size:14.5px;line-height:1.6;color:var(--text);}
+  .anat-row .v b{color:var(--silver-bright);}
+  /* real vs fake callout */
+  .rf{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:24px 0 0;}
+  .rf .col{border-radius:11px;padding:18px 20px;border:1px solid;}
+  .rf .real{background:rgba(63,107,77,.07);border-color:rgba(63,107,77,.28);}
+  .rf .fake{background:rgba(161,56,42,.06);border-color:rgba(161,56,42,.26);}
+  .rf h4{margin:0 0 8px;font-size:12px;font-family:'IBM Plex Mono';letter-spacing:.13em;text-transform:uppercase;}
+  .rf .real h4{color:#3f6b4d;} .rf .fake h4{color:#a1382a;}
+  .rf ul{margin:0;padding:0;list-style:none;}
+  .rf li{font-size:14px;line-height:1.5;margin-top:8px;padding-left:18px;position:relative;color:var(--text);}
+  .rf .real li::before{content:'✓';position:absolute;left:0;color:#3f6b4d;font-weight:700;}
+  .rf .fake li::before{content:'✕';position:absolute;left:0;color:#a1382a;font-weight:700;}
+  .g-faq{margin-top:52px;}
+  .g-faq > h2{font-size:24px;color:var(--silver-bright);letter-spacing:-.02em;}
+  .cq{margin-top:26px;}
+  .cq h3{font-size:17px;color:var(--silver-bright);}
+  .cq p{margin-top:8px;font-size:15.5px;line-height:1.78;color:var(--text-muted);}
+  .g-cta{margin:48px 0 60px;background:var(--bg-alt);border:1px solid var(--line);
+    border-left:2px solid var(--gold);border-radius:0 10px 10px 0;padding:24px 26px;}
+  .g-cta h3{font-size:18px;color:var(--silver-bright);}
+  .g-cta p{margin-top:8px;font-size:15px;line-height:1.65;color:var(--text-muted);}
+  .g-cta a{display:inline-block;margin-top:14px;color:var(--gold-bright);font-weight:600;font-size:15px;}
+  .g-ruo{margin-top:26px;font-size:12.5px;line-height:1.6;color:var(--text-muted);
+    border-top:1px solid var(--line);padding-top:18px;}
+  @media (max-width:640px){ .anat-row{grid-template-columns:1fr;} .anat-row .k{border-right:none;border-bottom:1px solid var(--line);} .rf{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <img src="assets/logo.webp?v=4" alt="NovaFlex Peptides">
+      <span class="brand-text">NOVA<span class="flex">FLEX</span></span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html#catalog">Catalog</a>
+      <a href="index.html#categories">Categories</a>
+      <a href="index.html#lab-reports">Lab Reports</a>
+      <a href="reconstitution-calculator.html">Calculator</a>
+      <a href="how-to-read-a-coa.html">Guides</a>
+      <a href="index.html#faq">FAQ</a>
+      <a href="index.html#team">Team</a>
+    </nav>
+    <a href="index.html#cart" class="cart-btn"><span>Order</span><span class="cart-count" id="cartCount">0</span></a>
+  </div>
+</header>
+
+<main>
+  <div class="g-wrap">
+    <div class="g-head">
+      <div class="eyebrow">Reference · Verification</div>
+      <h1>How to read a peptide Certificate of Analysis</h1>
+      <p class="lede">A COA is the single most important document in research-compound sourcing — and the
+      most commonly faked. This is how to read one properly: what the purity number means, how identity is
+      confirmed, and how to tell a real certificate from a decorative one.</p>
+      <div class="g-meta">Plain-English guide · For laboratory research use</div>
+    </div>
+
+    <div class="g-body">
+      <h2><span class="num">01</span>What a COA actually is</h2>
+      <p>A Certificate of Analysis is the analytical report a laboratory produces for <strong>one specific
+      batch</strong> of material. It is not a marketing document and it is not a statement about the product
+      in general — it describes the lot in your hand. A real COA answers two separate questions:
+      <strong>how pure is it</strong> (by HPLC) and <strong>is it actually the compound claimed</strong>
+      (by mass spectrometry). A certificate that answers only one has told you half of what you need.</p>
+
+      <h2><span class="num">02</span>HPLC — the purity number</h2>
+      <p>High-Performance Liquid Chromatography pushes the dissolved sample through a column that separates
+      its components by how strongly each interacts with the column material. A detector records each
+      component as a peak. <strong>Purity is the area under the target peptide's peak divided by the total
+      area of all peaks</strong>, expressed as a percentage.</p>
+      <p>So "99% by HPLC" means 99% of the detected material is your target compound and ≤1% is everything
+      else — truncated sequences, deletion products, or leftover synthesis solvents. The critical habit:
+      <strong>always read the number next to its chromatogram.</strong> The chromatogram is the actual
+      graph of peaks. A percentage printed without the chromatogram beside it is a claim, not a result —
+      there is nothing to check it against.</p>
+
+      <h2><span class="num">03</span>Mass spectrometry — the identity check</h2>
+      <p>HPLC proves the sample is pure. It does not prove <em>what</em> it is. That is what mass
+      spectrometry does: it measures the molecular weight of the compound and compares it to the theoretical
+      mass of the peptide it is supposed to be. If the measured mass matches, identity is confirmed. A
+      complete COA carries both traces — <strong>HPLC for purity, MS for identity</strong> — because a pure
+      sample of the wrong molecule is still the wrong molecule.</p>
+
+      <h2><span class="num">04</span>The anatomy of a real certificate</h2>
+      <p class="muted">Every field below should be present. Missing fields are how you spot a certificate
+      that was designed rather than measured.</p>
+      <div class="anat">
+        <div class="anat-row"><div class="k">Testing lab</div><div class="v"><b>Named, ideally independent.</b> Janoshik, MZ Biolabs, and Colmaric are recognized third-party labs. "Tested in-house" is weaker than an independent name.</div></div>
+        <div class="anat-row"><div class="k">Lot / batch №</div><div class="v"><b>Unique, and it matches your vial.</b> A COA is batch-specific — the lot on the paper must match the lot on the material you received.</div></div>
+        <div class="anat-row"><div class="k">Compound + spec</div><div class="v"><b>The exact peptide and quantity</b> the certificate refers to, matching what you ordered.</div></div>
+        <div class="anat-row"><div class="k">HPLC result</div><div class="v"><b>A purity percentage <em>and</em> the chromatogram.</b> The graph, not just the number.</div></div>
+        <div class="anat-row"><div class="k">MS result</div><div class="v"><b>Measured mass vs. theoretical mass</b>, with the spectrum shown.</div></div>
+        <div class="anat-row"><div class="k">Date</div><div class="v"><b>When the batch was tested.</b> An undated certificate cannot be tied to anything.</div></div>
+      </div>
+
+      <h2><span class="num">05</span>Real vs. decorative</h2>
+      <p>The peptide space is full of official-looking documents that contain no actual data. The
+      difference is not how polished the certificate looks — it is whether the claims are checkable.</p>
+      <div class="rf">
+        <div class="col real">
+          <h4>A real COA</h4>
+          <ul>
+            <li>Names the testing laboratory</li>
+            <li>Has a unique lot number that matches your vial</li>
+            <li>Shows the HPLC chromatogram, not just a percentage</li>
+            <li>Includes a mass-spec trace confirming identity</li>
+            <li>Is dated and often independently verifiable</li>
+          </ul>
+        </div>
+        <div class="col fake">
+          <h4>A decorative one</h4>
+          <ul>
+            <li>A headline "99%" with no chromatogram</li>
+            <li>No testing lab named</li>
+            <li>No lot number, or one that doesn't match the vial</li>
+            <li>Purity only — no identity confirmation at all</li>
+            <li>Reused across every product regardless of batch</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="g-faq">
+      <h2>Common questions</h2>
+      <div class="cq"><h3>What is a Certificate of Analysis (COA)?</h3><p>A COA is the analytical report a laboratory produces for a specific batch of material. For a research peptide it states the measured purity (usually by HPLC), confirms the compound's identity (usually by mass spectrometry), names the testing lab, and carries a unique lot number that should match the vial you receive. A COA describes one batch — not the product in general.</p></div><div class="cq"><h3>What does HPLC purity actually measure?</h3><p>High-Performance Liquid Chromatography separates everything in the sample and measures the area under each peak. Purity is the target peptide's peak area divided by the total area of all peaks, as a percentage. “99% by HPLC” means 99% of the detected material is the target and ≤1% is everything else — truncated sequences, deletion products, or residual solvents. A purity number without the chromatogram beside it is a claim, not a result.</p></div><div class="cq"><h3>Why does a COA need mass spectrometry too?</h3><p>HPLC tells you how pure the sample is; it does not prove what the compound is. Mass spectrometry measures molecular weight, confirming the peptide's identity matches its theoretical mass. A complete COA carries both: HPLC for purity, MS for identity. One without the other is only half the picture.</p></div><div class="cq"><h3>How do I tell a real COA from a fake one?</h3><p>A genuine COA names the testing laboratory, carries a unique report or lot number, is dated, and shows the actual chromatogram and mass-spec trace rather than just a headline percentage. The lot number on the COA should match the lot on your vial. Independently recognized labs — Janoshik, MZ Biolabs, Colmaric — can often be verified directly. A single number with no lab, no lot, and no chromatogram is not a COA.</p></div><div class="cq"><h3>What purity should I expect for a research peptide?</h3><p>≥98% is a common baseline for research supply and ≥99% is widely available. Below 95% generally indicates the synthesis or purification did not go cleanly. The right threshold depends on the study: a binding assay tolerates less than a kinetics experiment. Always read the number against the method and the chromatogram, not on its own.</p></div><div class="cq"><h3>Should the COA match the exact vial I received?</h3><p>Yes. A COA is batch-specific, so the lot number printed on the vial should match the lot on the certificate. A COA for a different lot tells you about material you did not receive. Reputable suppliers make the current batch's COA available and tie it to the lot you are shipped.</p></div>
+    </div>
+
+    <div class="g-cta">
+      <h3>NovaFlex publishes a COA for every batch</h3>
+      <p>Every lot is verified by HPLC and mass spectrometry, with the certificate tied to the compound you
+      receive. US-based, $0 shipping over $199.</p>
+      <a href="index.html#catalog">Browse the catalog →</a>
+    </div>
+
+    <p class="g-ruo"><strong>For research use only — not for human or veterinary use.</strong> This guide
+    describes how analytical documentation is produced and read for laboratory research materials. It is not
+    guidance on the use of any compound.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="sf">
+    <div class="sf-disc">
+      <p>All materials offered by NovaFlex Peptides are supplied solely for lawful laboratory research by qualified professionals. Products are not drugs, food, or cosmetics and are not intended for human or animal consumption, diagnosis, cure, mitigation, treatment, or prevention of any disease.</p>
+      <p>Sales are restricted to purchasers age 21 or older acting on behalf of a qualified laboratory, institution, or business entity engaged in lawful research.</p>
+      <p>Please review our <a href="policies.html#terms">Terms and Conditions</a>, <a href="policies.html#privacy">Privacy Policy</a>, <a href="policies.html#shipping">Shipping Policy</a>, and <a href="policies.html#refund">Refund Policy</a> before creating an account or placing an order.</p>
+    </div>
+
+    <div class="sf-band">
+      <strong>For research and laboratory use only. Not for human or animal consumption.</strong>
+      <span>Products are not drugs, food, or cosmetics and are not intended for diagnosis, cure, mitigation, treatment, or prevention of any disease.</span>
+    </div>
+
+    <div class="sf-cols">
+      <div class="sf-col">
+        <h4>NovaFlex Peptides</h4>
+        <p class="sf-brand-name">NovaFlex Peptides</p>
+        <p>Qualified Research Supply Company</p>
+        <p>300 Westerman Place</p>
+        <p>Smithfield, NC 27577</p>
+        <p>(919) 333-7234</p>
+        <a href="mailto:support@novaflexusa.com">support@novaflexusa.com</a>
+      </div>
+      <div class="sf-col">
+        <h4>Policies</h4>
+        <a href="policies.html#terms">Terms and Conditions</a>
+        <a href="policies.html#privacy">Privacy Policy</a>
+        <a href="policies.html#shipping">Shipping Policy</a>
+        <a href="policies.html#refund">Refund Policy</a>
+      </div>
+      <div class="sf-col">
+        <h4>Eligibility</h4>
+        <p>Sales are restricted to purchasers age 21 or older acting on behalf of a qualified laboratory, institution, or business entity engaged in lawful research. All accounts are subject to verification and order screening.</p>
+      </div>
+    </div>
+
+    <div class="sf-bottom">
+      <p>© 2026 NovaFlex Peptides, dba NOVAFLEX. All rights reserved. Research Use Only.</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
