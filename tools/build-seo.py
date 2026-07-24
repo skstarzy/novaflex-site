@@ -48,6 +48,7 @@ STATIC_PAGES = [
     # this domain most lacks. Higher priority than the policy pages.
     ("/reconstitution-calculator.html", "0.7", "monthly"),
     ("/how-to-read-a-coa.html", "0.7", "monthly"),
+    ("/glp1-gip-glucagon-receptor-agonists.html", "0.7", "monthly"),
 ]
 
 
