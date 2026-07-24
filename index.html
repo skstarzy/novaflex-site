@@ -191,17 +191,17 @@
     max-width:var(--maxw);margin:0 auto;padding:14px 28px;
     display:flex;align-items:center;justify-content:space-between;gap:24px;
   }
-  .brand{display:flex;align-items:center;gap:10px;}
+  .brand{display:flex;align-items:center;gap:10px;flex:none;}
   .brand img{height:34px;width:auto;}
   .brand-text{font-family:'Space Grotesk';font-weight:700;font-size:17px;letter-spacing:0.02em;}
   .brand-text .flex{color:var(--gold-bright);}
-  .nav-links{display:flex;gap:32px;align-items:center;}
+  .nav-links{display:flex;gap:26px;align-items:center;flex-wrap:nowrap;}
   .nav-links a{
     font-size:13.5px;font-weight:500;color:var(--silver-dim);
-    transition:color .2s;
+    transition:color .2s;white-space:nowrap;
   }
   .nav-links a:hover{color:var(--gold-bright);}
-  .nav-cta{display:flex;align-items:center;gap:16px;}
+  .nav-cta{display:flex;align-items:center;gap:16px;flex:none;}
   .btn{
     display:inline-flex;align-items:center;justify-content:center;gap:8px;
     padding:11px 22px;
@@ -237,7 +237,7 @@
   .mobile-menu a{padding:12px 0;font-size:14px;color:var(--silver);border-bottom:1px solid var(--line);}
   .mobile-menu.open{display:flex;}
 
-  @media (max-width:880px){
+  @media (max-width:1120px){
     .nav-links{display:none;}
     .hamburger{display:block;}
     .nav-cta .btn-ghost{display:none;}
@@ -981,7 +981,6 @@
       <a href="#faq">FAQ</a>
       <a href="#contact">Contact</a>
       <a href="#team">Team</a>
-      <a href="account.html">Account</a>
     </nav>
     <div class="nav-cta">
       <a href="#" class="cart-btn"><span>Order</span><span class="cart-count" id="cartCount">0</span></a>
@@ -996,6 +995,8 @@
     <a href="#catalog">Catalog</a>
     <a href="#categories">Categories</a>
     <a href="#quality">Lab Reports</a>
+    <a href="reconstitution-calculator.html">Calculator</a>
+    <a href="how-to-read-a-coa.html">Guides</a>
     <a href="#faq">FAQ</a>
     <a href="#contact">Contact</a>
     <a href="#team">Team</a>
