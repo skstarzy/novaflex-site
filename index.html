@@ -1434,13 +1434,13 @@ const PRODUCTS = [
   {name:"KPV", spec:"10mg vial", cat:"structural", price:45, purity:"99.0%", slug:"kpv-10mg"},
   {name:"GHK-Cu", spec:"50mg vial", cat:"copper-mc", price:42, purity:"99.2%", slug:"ghkcu-50mg", soldOut:true},
   {name:"GHK-Cu", spec:"100mg vial", cat:"copper-mc", price:58, purity:"99.2%", badge:"bestseller", slug:"ghkcu-100mg"},
-  {name:"Melanotan II", spec:"10mg vial", cat:"copper-mc", price:45, purity:"99.0%", badge:"bestseller", slug:"mt2-10mg"},
+  {name:"Melanotan I", display:"MT-1", spec:"10mg vial", cat:"copper-mc", price:45, purity:"99.0%", badge:"bestseller", slug:"mt2-10mg"},
   {name:"Semax", spec:"5mg vial", cat:"specialty", price:40, purity:"99.1%", slug:"semax-5mg"},
   {name:"Selank", spec:"10mg vial", cat:"specialty", price:55, purity:"99.0%", slug:"selank-10mg"},
   {name:"Kisspeptin-10", spec:"5mg vial", cat:"specialty", price:55, purity:"99.0%", slug:"kisspeptin10-5mg"},
   {name:"NAD+", spec:"500mg vial", cat:"specialty", price:60, purity:"99.1%", slug:"nad-500mg"},
   {name:"SS-31", spec:"10mg vial", cat:"specialty", price:85, purity:"99.2%", slug:"ss31-10mg"},
-  {name:"PT-141", spec:"5mg vial", cat:"specialty", price:50, purity:"99.0%", slug:"pt141-5mg"},
+  {name:"PT-141", spec:"10mg vial", cat:"specialty", price:55, purity:"99.0%", slug:"pt141-5mg"},
   {name:"Glow Blend", display:"GHK-Cu · BP+ · TB-500", spec:"70mg vial", cat:"fusions", cats:["copper-mc"], price:130, purity:"99.2%", slug:"glow-70mg"},
   {name:"Klow Blend", display:"KPV · GHK-Cu · BP+ · TB-500", spec:"80mg vial", cat:"fusions", cats:["copper-mc"], price:135, purity:"99.2%", slug:"klow-80mg"},
   {name:"Wolverine Stack", display:"BP+ · TB-500", spec:"10mg vial", cat:"fusions", cats:["structural"], price:75, purity:"99.1%", slug:"wolverine-10mg"},
@@ -1464,7 +1464,7 @@ const CAT_LABELS = {
 };
 function catLabel(c){ return CAT_LABELS[c] || c; }
 
-const FEATURED_NAMES = ["Retatrutide","Tesamorelin","GHK-Cu 100mg vial","Melanotan II","BP+","Tirzepatide","NAD+","Klow Blend"];
+const FEATURED_NAMES = ["Retatrutide","Tesamorelin","GHK-Cu 100mg vial","Melanotan I","BP+","Tirzepatide","NAD+","Klow Blend"];
 
 // ---------------- Cart state ----------------
 let cart = []; // { name, spec, price, qty }
