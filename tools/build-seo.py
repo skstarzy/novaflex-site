@@ -49,6 +49,7 @@ STATIC_PAGES = [
     ("/reconstitution-calculator.html", "0.7", "monthly"),
     ("/how-to-read-a-coa.html", "0.7", "monthly"),
     ("/glp1-gip-glucagon-receptor-agonists.html", "0.7", "monthly"),
+    ("/hplc-vs-mass-spectrometry.html", "0.7", "monthly"),
 ]
 
 
