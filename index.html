@@ -851,6 +851,13 @@
     padding:7px 9px;color:var(--text);font-size:12.5px;font-family:'IBM Plex Mono';}
   .cb-redeem select:focus{outline:none;border-color:var(--gold);}
   @media (prefers-reduced-motion:reduce){ .cb-fill{transition:none;} }
+  /* Welcome-credit offer shown on the sign-in / register forms. */
+  .signup-perk{display:none;align-items:flex-start;gap:9px;margin:0 0 14px;padding:11px 13px;
+    background:var(--bg-alt-2);border:1px solid var(--line-strong);border-left:2px solid var(--gold);
+    border-radius:0 6px 6px 0;font-size:12.5px;line-height:1.5;color:var(--text);}
+  .signup-perk.show{display:flex;}
+  .signup-perk .sp-star{color:var(--gold);flex:none;line-height:1.5;}
+  .signup-perk b{color:var(--silver-bright);}
   .promo-row{display:flex;gap:8px;margin-bottom:8px;}
   .promo-row input{flex:1;background:var(--bg-alt);border:1px solid var(--line-strong);border-radius:4px;padding:8px 10px;color:var(--silver);font-size:13px;font-family:'IBM Plex Mono';text-transform:uppercase;}
   .promo-row input:focus{outline:none;border-color:var(--gold);}
@@ -912,6 +919,7 @@
         <form id="egForm" autocomplete="on">
           <input class="eg-input" type="email" id="egEmail" placeholder="you@lab.com" autocomplete="email" required>
           <input class="eg-input" type="password" id="egPassword" placeholder="Password (min 8 characters)" autocomplete="current-password" required>
+          <div class="signup-perk" id="egPerk"><span class="sp-star">✦</span><span><b>Create an account and get <span class="sp-n">100</span> Research Credits</b> — worth <span class="sp-v">$5</span> off your first order.</span></div>
           <label class="eg-check" id="egRuoRow" style="display:none;"><input type="checkbox" id="egRuo"> I am at least 21 and a qualified researcher (or purchasing for a research institution). I understand all products are for in-vitro research use only — not for human or veterinary use.</label>
           <button type="submit" class="btn btn-gold" id="egSubmit">Sign in →</button>
         </form>
@@ -935,6 +943,7 @@
     <form id="authForm" autocomplete="on">
       <input class="auth-input" type="email" id="authEmail" placeholder="you@lab.com" autocomplete="email" required>
       <input class="auth-input" type="password" id="authPassword" placeholder="Password (min 8 characters)" autocomplete="current-password" required>
+      <div class="signup-perk" id="authPerk"><span class="sp-star">✦</span><span><b>Create an account and get <span class="sp-n">100</span> Research Credits</b> — worth <span class="sp-v">$5</span> off your first order.</span></div>
       <label class="gate-check" id="authRuoRow" style="margin-top:14px;display:none;"><input type="checkbox" id="authRuo"> I am a qualified researcher and accept that all products are for research use only — not for human or veterinary use.</label>
       <button type="submit" class="btn btn-gold" id="authSubmit" style="width:100%;margin-top:18px;">Log in</button>
     </form>
@@ -2056,6 +2065,8 @@ function openAuthModal(){ setAuthMode(authMode); document.getElementById('authMo
 function closeAuthModal(){ document.getElementById('authModal').classList.remove('open'); }
 function setAuthMode(mode){
   authMode = mode;
+  const authPerk = document.getElementById('authPerk');
+  if (authPerk) authPerk.classList.toggle('show', mode === 'register');
   document.getElementById('tabLogin').classList.toggle('active', mode==='login');
   document.getElementById('tabRegister').classList.toggle('active', mode==='register');
   document.getElementById('authTitle').textContent = mode==='register' ? 'Create a researcher account' : 'Researcher sign in';
@@ -2316,8 +2327,24 @@ const enterGate = document.getElementById('enterGate');
 let egMode = 'login';
 function showEnterGate(){ if(enterGate){ enterGate.classList.remove('hidden'); document.body.style.overflow='hidden'; } }
 function hideEnterGate(){ if(enterGate){ enterGate.classList.add('hidden'); document.body.style.overflow=''; } }
+// Pull the real numbers once, so the offer copy always matches lib/credits.js.
+(function(){
+  try {
+    fetch(CHECKOUT_API_URL.replace(/\/api\/checkout$/, '') + '/api/credits')
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if (!d || !d.signupBonus) return;
+        const value = Math.floor(d.signupBonus / (d.tierCredits || 100)) * (d.tierValue || 5);
+        document.querySelectorAll('.sp-n').forEach(function(el){ el.textContent = d.signupBonus.toLocaleString(); });
+        document.querySelectorAll('.sp-v').forEach(function(el){ el.textContent = '$' + value; });
+      }).catch(function(){});
+  } catch(e){}
+})();
+
 function egSetMode(mode){
   egMode = mode;
+  const egPerk = document.getElementById('egPerk');
+  if (egPerk) egPerk.classList.toggle('show', mode === 'register');
   document.getElementById('egTabLogin').classList.toggle('active', mode==='login');
   document.getElementById('egTabRegister').classList.toggle('active', mode==='register');
   document.getElementById('egRuoRow').style.display = mode==='register' ? 'flex' : 'none';
@@ -2347,7 +2374,11 @@ function egSetMode(mode){
   });
 })();
 // First open: show the gate unless a session is already stored.
-if(shopAuthed()){ hideEnterGate(); } else { showEnterGate(); }
+// Deliberately NOT shown on arrival. Ad and search traffic gets to read the
+// catalog, lab reports and FAQ first; the gate opens on demand from any
+// "Sign in for price" control. Prices stay hidden either way, and the RUO
+// acknowledgement is still enforced in the register form.
+hideEnterGate();
 </script>
 </body>
 </html>
