@@ -9,7 +9,15 @@
 # ignore it. Real enforcement is handled at the Cloudflare edge (WAF rules).
 
 # ---------------------------------------------------------------------------
-# Allowed — Anthropic / Claude
+# Allowed — RETRIEVAL crawlers.
+#
+# These fetch a page in order to cite it to a person asking a question right
+# now; they are not training corpora. "Which suppliers actually publish a COA"
+# is the query this business most wants to win, and it is increasingly asked of
+# an assistant rather than typed into a search box. Blocking these removed
+# NovaFlex from that answer entirely while protecting nothing — the training
+# crawlers below are the ones that take without giving back, and they stay
+# blocked.
 # ---------------------------------------------------------------------------
 User-agent: ClaudeBot
 Allow: /
@@ -26,16 +34,25 @@ Allow: /
 User-agent: anthropic-ai
 Allow: /
 
-# ---------------------------------------------------------------------------
-# Disallowed — AI training / scraping / answer-engine crawlers
-# ---------------------------------------------------------------------------
-User-agent: GPTBot
-Disallow: /
+User-agent: OAI-SearchBot
+Allow: /
 
 User-agent: ChatGPT-User
-Disallow: /
+Allow: /
 
-User-agent: OAI-SearchBot
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
+
+# ---------------------------------------------------------------------------
+# Disallowed — AI TRAINING / scraping crawlers
+# ---------------------------------------------------------------------------
+User-agent: GPTBot
 Disallow: /
 
 User-agent: Google-Extended
@@ -45,12 +62,6 @@ User-agent: GoogleOther
 Disallow: /
 
 User-agent: Applebot-Extended
-Disallow: /
-
-User-agent: PerplexityBot
-Disallow: /
-
-User-agent: Perplexity-User
 Disallow: /
 
 User-agent: Amazonbot
@@ -102,9 +113,6 @@ User-agent: AI2Bot
 Disallow: /
 
 User-agent: Ai2Bot-Dolma
-Disallow: /
-
-User-agent: DuckAssistBot
 Disallow: /
 
 User-agent: iaskspider
