@@ -858,6 +858,10 @@
   .signup-perk.show{display:flex;}
   .signup-perk .sp-star{color:var(--gold);flex:none;line-height:1.5;}
   .signup-perk b{color:var(--silver-bright);}
+  .vol-nudge{margin:0 0 10px;padding:9px 12px;background:var(--bg-alt-2);
+    border-left:2px solid var(--gold);border-radius:0 5px 5px 0;
+    font-size:12.5px;line-height:1.45;color:var(--text);}
+  .vol-nudge b{color:var(--silver-bright);}
   .promo-row{display:flex;gap:8px;margin-bottom:8px;}
   .promo-row input{flex:1;background:var(--bg-alt);border:1px solid var(--line-strong);border-radius:4px;padding:8px 10px;color:var(--silver);font-size:13px;font-family:'IBM Plex Mono';text-transform:uppercase;}
   .promo-row input:focus{outline:none;border-color:var(--gold);}
@@ -972,7 +976,7 @@
 </div>
 
 <div class="announce">
-  <b>For research use only</b> — not for human or veterinary use <span class="announce-sep">·</span> Third-party tested (HPLC &amp; MS) <span class="announce-sep">·</span> <b style="color:var(--gold-bright)">$0 U.S. shipping on orders $199+</b> <a href="#catalog" style="border-bottom:1px solid var(--gold);">Browse catalog →</a>
+  <b>For research use only</b> — not for human or veterinary use <span class="announce-sep">·</span> Third-party tested (HPLC &amp; MS) <span class="announce-sep">·</span> <b style="color:var(--gold-bright)">$0 U.S. shipping on orders $199+ · Volume discounts 5+ &amp; 10+</b> <a href="#catalog" style="border-bottom:1px solid var(--gold);">Browse catalog →</a>
 </div>
 
 <header class="nav">
@@ -1047,7 +1051,7 @@
           <div class="stat"><div class="num">25+</div><div class="lbl">Research compounds</div></div>
           <div class="stat"><div class="num">99%+</div><div class="lbl">Verified purity</div></div>
           <div class="stat"><div class="num">3–5</div><div class="lbl">Day fulfillment</div></div>
-          <div class="stat"><div class="num">24/7</div><div class="lbl">Order tracking</div></div>
+          <div class="stat"><div class="num">30-Day</div><div class="lbl">Satisfaction guarantee</div></div>
         </div>
       </div>
       <div class="hero-visual">
@@ -1405,6 +1409,8 @@
     </div>
     <div class="promo-msg" id="promoMsg"></div>
     <div class="drawer-line"><span>Subtotal</span><span id="drawerSubtotal">$0.00</span></div>
+    <div class="vol-nudge" id="volNudge" style="display:none;"></div>
+    <div class="drawer-line" id="drawerVolumeLine" style="display:none;"><span>Volume discount</span><span id="drawerVolume">-$0.00</span></div>
     <div class="drawer-line" id="drawerDiscountLine" style="display:none;"><span id="drawerDiscountLabel">Discount</span><span id="drawerDiscount">-$0.00</span></div>
     <div class="drawer-line" id="drawerCreditLine" style="display:none;"><span id="drawerCreditLabel">Credits applied</span><span id="drawerCredit">-$0.00</span></div>
     <div class="drawer-subtotal"><span>Total</span><span class="amt" id="drawerTotal">$0.00</span></div>
@@ -1544,6 +1550,51 @@ function cartTotal(){
   return cart.reduce((sum,i)=> sum + i.price*i.qty, 0);
 }
 
+// ---- Volume pricing ----
+// Mirrors lib/pricing.js on the server. Tiers are fetched from /api/pricing at
+// load so the cart can never quote a rate that checkout won't honour; the
+// defaults here are only a fallback if that request fails.
+let VOLUME_TIERS = [{minQty:10,rate:0.15},{minQty:5,rate:0.10}];
+(function(){
+  try {
+    fetch(CHECKOUT_API_URL.replace(/\/api\/checkout$/, '') + '/api/pricing')
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if (d && Array.isArray(d.volumeTiers) && d.volumeTiers.length){
+          VOLUME_TIERS = d.volumeTiers;
+          if (typeof updateDrawerTotals === 'function') updateDrawerTotals();
+        }
+      }).catch(function(){});
+  } catch(e){}
+})();
+
+function volumeRateForQty(qty){
+  const n = Number(qty) || 0;
+  for (const t of VOLUME_TIERS){ if (n >= t.minQty) return t.rate; }
+  return 0;
+}
+// Per SKU, not per cart — five of one compound earns it, one each of five does not.
+function cartVolumeDiscount(){
+  return cart.reduce(function(sum,i){
+    return sum + (i.price * i.qty * volumeRateForQty(i.qty));
+  }, 0);
+}
+// The nearest line to a tier, for the "add N more" nudge.
+function volumeNudge(){
+  let best = null;
+  const asc = [...VOLUME_TIERS].sort(function(a,b){ return a.minQty - b.minQty; });
+  cart.forEach(function(i){
+    for (const t of asc){
+      if (i.qty < t.minQty){
+        const needed = t.minQty - i.qty;
+        if (!best || needed < best.needed) best = { needed:needed, rate:t.rate, name:i.display || i.name };
+        break;
+      }
+    }
+  });
+  return best;
+}
+
 function renderCartCount(){
   const count = cart.reduce((sum,i)=>sum+i.qty,0);
   document.getElementById('cartCount').textContent = count;
@@ -1637,7 +1688,9 @@ function updateShipBar(subtotal){
 }
 
 function updateDrawerTotals(){
-  const subtotal = cartTotal();
+  const listSubtotal = cartTotal();
+  const volume = cartVolumeDiscount();
+  const subtotal = Math.max(0, listSubtotal - volume);
   const discount = appliedCode ? subtotal * appliedRate : 0;
   const afterPromo = Math.max(0, subtotal - discount);
 
@@ -1653,7 +1706,25 @@ function updateDrawerTotals(){
   const creditValue = (CREDITS.applied / CREDITS.tierCredits) * CREDITS.tierValue;
   const total = Math.max(0, afterPromo - creditValue);
 
-  document.getElementById('drawerSubtotal').textContent = '$' + subtotal.toFixed(2);
+  document.getElementById('drawerSubtotal').textContent = '$' + listSubtotal.toFixed(2);
+  const nudge = document.getElementById('volNudge');
+  if (nudge){
+    const n = cart.length ? volumeNudge() : null;
+    if (n){
+      nudge.style.display = 'block';
+      nudge.innerHTML = 'Add <b>' + n.needed + ' more ' + (n.needed === 1 ? 'vial' : 'vials') +
+        '</b> of ' + n.name + ' for <b>' + Math.round(n.rate * 100) + '% off</b> that item.';
+    } else {
+      nudge.style.display = 'none';
+    }
+  }
+  const vLine = document.getElementById('drawerVolumeLine');
+  if (volume > 0){
+    vLine.style.display = 'flex';
+    document.getElementById('drawerVolume').textContent = '-$' + volume.toFixed(2);
+  } else {
+    vLine.style.display = 'none';
+  }
   const line = document.getElementById('drawerDiscountLine');
   if (appliedCode && discount > 0){
     line.style.display = 'flex';
