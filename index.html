@@ -976,7 +976,7 @@
 </div>
 
 <div class="announce">
-  <b>For research use only</b> — not for human or veterinary use <span class="announce-sep">·</span> Third-party tested (HPLC &amp; MS) <span class="announce-sep">·</span> <b style="color:var(--gold-bright)">$0 U.S. shipping on orders $199+ · Volume discounts 5+ &amp; 10+</b> <a href="#catalog" style="border-bottom:1px solid var(--gold);">Browse catalog →</a>
+  <b>For research use only</b> — not for human or veterinary use <span class="announce-sep">·</span> Third-party tested (HPLC &amp; MS) <span class="announce-sep">·</span> <b style="color:var(--gold-bright)">$0 U.S. shipping on orders $249+ · Volume discounts 5+ &amp; 10+</b> <a href="#catalog" style="border-bottom:1px solid var(--gold);">Browse catalog →</a>
 </div>
 
 <header class="nav">
@@ -1560,10 +1560,10 @@ let VOLUME_TIERS = [{minQty:10,rate:0.15},{minQty:5,rate:0.10}];
     fetch(CHECKOUT_API_URL.replace(/\/api\/checkout$/, '') + '/api/pricing')
       .then(function(r){ return r.json(); })
       .then(function(d){
-        if (d && Array.isArray(d.volumeTiers) && d.volumeTiers.length){
-          VOLUME_TIERS = d.volumeTiers;
-          if (typeof updateDrawerTotals === 'function') updateDrawerTotals();
-        }
+        if (!d) return;
+        if (Array.isArray(d.volumeTiers) && d.volumeTiers.length) VOLUME_TIERS = d.volumeTiers;
+        if (d.freeShippingThreshold) FREE_SHIP_THRESHOLD = d.freeShippingThreshold;
+        if (typeof updateDrawerTotals === 'function') updateDrawerTotals();
       }).catch(function(){});
   } catch(e){}
 })();
@@ -1665,7 +1665,9 @@ let appliedCode = null;
 let appliedRate = 0;
 
 // ---- Partner application form ----
-const FREE_SHIP_THRESHOLD = 199;
+// Fed from /api/pricing on load so it can't drift from what checkout charges;
+// this value is only the fallback if that request fails.
+let FREE_SHIP_THRESHOLD = 249;
 let shipWasUnlocked = false;
 function updateShipBar(subtotal){
   const bar = document.getElementById('shipBar');
@@ -1681,7 +1683,7 @@ function updateShipBar(subtotal){
     if (!shipWasUnlocked){ bar.classList.remove('celebrate'); void bar.offsetWidth; bar.classList.add('celebrate'); shipWasUnlocked = true; }
   } else {
     const remaining = (FREE_SHIP_THRESHOLD - subtotal).toFixed(2);
-    msg.innerHTML = '<b>$0 shipping</b> on all orders $199+ — add <b>$' + remaining + '</b> to unlock.';
+    msg.innerHTML = '<b>$0 shipping</b> on all orders $' + FREE_SHIP_THRESHOLD + '+ — add <b>$' + remaining + '</b> to unlock.';
     bar.classList.remove('unlocked','celebrate');
     shipWasUnlocked = false;
   }
