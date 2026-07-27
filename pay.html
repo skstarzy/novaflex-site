@@ -14,8 +14,8 @@
 <style>
   :root{
     --bg:#f7f4ee; --bg-alt:#ffffff; --line:rgba(30,24,10,0.12); --line-strong:rgba(30,24,10,0.22);
-    --silver:#4b4842; --silver-bright:#171410; --silver-dim:#8c887f;
-    --gold:#b08d2e; --gold-bright:#8a6a24; --gold-deep:#6f5518; --text:#221f18; --text-muted:#6b675f; --red:#e08484; --maxw:920px;
+    --silver:#4b4842; --silver-bright:#171410; --silver-dim:#6b675f;
+    --gold:#b08d2e; --gold-bright:#8a6a24; --gold-deep:#6f5518; --text:#221f18; --text-muted:#55514a; --red:#e08484; --maxw:920px;
   }
   *{box-sizing:border-box;}
   body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
@@ -122,9 +122,47 @@ function mountPayment(publishableKey, clientSecret, breakdown){
   const stripe = Stripe(publishableKey);
   const elements = stripe.elements({
     clientSecret,
+    // The site moved from a dark palette to a light one, but this kept
+    // theme:'night' with its near-white colorText (#e7e7ea) sitting on a cream
+    // colorBackground — light text on a light field, effectively invisible.
+    // Light theme, near-black text, white fields.
     appearance: {
-      theme: 'night',
-      variables: { colorPrimary: '#c9a44c', colorBackground: '#f7f4ee', colorText: '#e7e7ea', borderRadius: '8px', fontFamily: 'Inter, sans-serif' },
+      theme: 'stripe',
+      variables: {
+        colorPrimary: '#b08d2e',
+        colorBackground: '#ffffff',
+        colorText: '#171410',
+        colorTextSecondary: '#3f3b33',
+        colorTextPlaceholder: '#8c887f',
+        colorDanger: '#a1382a',
+        borderRadius: '8px',
+        fontFamily: 'Inter, system-ui, sans-serif',
+        fontSizeBase: '16px',
+        spacingUnit: '4px',
+      },
+      rules: {
+        '.Label': {
+          color: '#171410',
+          fontWeight: '600',
+          fontSize: '13px',
+          letterSpacing: '.01em',
+        },
+        '.Input': {
+          color: '#171410',
+          backgroundColor: '#ffffff',
+          border: '1px solid rgba(30,24,10,0.28)',
+          boxShadow: 'none',
+          padding: '12px',
+        },
+        '.Input:focus': {
+          border: '1px solid #b08d2e',
+          boxShadow: '0 0 0 2px rgba(176,141,46,0.18)',
+        },
+        '.Input::placeholder': { color: '#9a958b' },
+        '.Error': { color: '#a1382a', fontWeight: '500' },
+        '.Tab, .Block': { backgroundColor: '#ffffff', border: '1px solid rgba(30,24,10,0.18)' },
+        '.TabLabel, .BlockText': { color: '#171410' },
+      },
     },
   });
   const paymentElement = elements.create('payment');
