@@ -403,6 +403,8 @@ function renderStackBuilder(existingShip){
         '<input id="stLine2" placeholder="Apt, suite (optional)" value="'+esc(s.line2||'')+'">'+
         '<input id="stCity" placeholder="City" value="'+esc(s.city||'')+'">'+
         '<div style="display:flex;gap:8px;"><select id="stState" style="flex:1;">'+stateOpts+'</select><input id="stPostal" placeholder="ZIP" inputmode="numeric" style="flex:1;" value="'+esc(s.postal||'')+'"></div>'+
+        '<input id="stPhone" placeholder="Phone number" inputmode="tel" autocomplete="tel-national" maxlength="20" value="'+esc(s.phone||'')+'">'+
+        '<p style="font-size:12px;color:var(--silver-dim);margin:6px 2px 0;">Required by the carrier for delivery — used for shipping only.</p>'+
       '</div>'+
       '<label class="check" style="margin-top:16px;"><input type="checkbox" id="stConsent"> I authorize NovaFlex to prepare and bill this stack order automatically on the 5th of each month (via a one-click pay link) until I pause or cancel it.</label>'+
       '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;"><button class="btn btn-gold" id="stackSave">Start my stack</button>'+(stackSel.length?'<button class="btn btn-ghost" id="stackBack">Back</button>':'')+'</div>'+
@@ -427,8 +429,12 @@ async function saveStack(){
   const msg=document.getElementById('stackMsg'); msg.className='msg';
   const sel = stackSel.map(k=>{ const p=STACK_PRODUCTS.find(x=>prodKey(x)===k); return p?{name:p.name,spec:p.spec}:null; }).filter(Boolean);
   if(sel.length<2||sel.length>4){ msg.className='msg err'; msg.textContent='Choose 2 to 4 compounds.'; return; }
-  const ship = { name:val('stName'), line1:val('stLine1'), line2:val('stLine2'), city:val('stCity'), state:document.getElementById('stState').value, postal:val('stPostal'), country:'US' };
-  if(!ship.name||!ship.line1||!ship.city||!ship.state||!ship.postal){ msg.className='msg err'; msg.textContent='Please complete the shipping address.'; return; }
+  const ship = { name:val('stName'), line1:val('stLine1'), line2:val('stLine2'), city:val('stCity'), state:document.getElementById('stState').value, postal:val('stPostal'), phone:val('stPhone'), country:'US' };
+  if(!ship.name||!ship.line1||!ship.city||!ship.state||!ship.postal||!ship.phone){ msg.className='msg err'; msg.textContent='Please complete the shipping address.'; return; }
+  // Mirrors normalizePhone() in the backend's lib/phone.js. Without this the
+  // form would post, the server would reject, and a subscriber trying to fix
+  // exactly this would be bounced with no idea which field was wrong.
+  if(!isUsPhone(ship.phone)){ msg.className='msg err'; msg.textContent='Enter a valid 10-digit U.S. phone number — the carrier requires one for delivery.'; document.getElementById('stPhone').focus(); return; }
   if(!document.getElementById('stConsent').checked){ msg.className='msg err'; msg.textContent='Please authorize the monthly billing to start your stack.'; return; }
   const btn=document.getElementById('stackSave'); btn.disabled=true; const o=btn.textContent; btn.textContent='Saving…';
   try{
@@ -437,6 +443,13 @@ async function saveStack(){
     toast('Research Stack saved'); renderStack();
   }catch(e){ msg.className='msg err'; msg.textContent=e.message; btn.disabled=false; btn.textContent=o; }
 }
+function isUsPhone(raw){
+  const digits = String(raw||'').replace(/\D/g,'');
+  const n = (digits.length === 11 && digits.startsWith('1')) ? digits.slice(1) : digits;
+  if (n.length !== 10) return false;
+  return !'01'.includes(n[0]) && !'01'.includes(n[3]);
+}
+
 function val(id){ return (document.getElementById(id).value||'').trim(); }
 
 async function changePassword(e){
