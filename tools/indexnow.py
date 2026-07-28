@@ -31,6 +31,7 @@ import urllib.request
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HOST = "novaflexusa.com"
 ENDPOINT = "https://api.indexnow.org/indexnow"
+UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) NovaFlex-IndexNow/1.0"
 
 
 def find_key():
@@ -58,8 +59,11 @@ def main():
     # Refuse to submit if the key file isn't actually live — the endpoint
     # answers 200 either way and silently drops the batch, so checking here is
     # the difference between "submitted" and "believed submitted".
+    # Cloudflare sits in front of the site and 403s urllib's default
+    # User-Agent, so the check has to identify itself like a client.
+    probe = urllib.request.Request(key_location, headers={"User-Agent": UA})
     try:
-        with urllib.request.urlopen(key_location, timeout=20) as r:
+        with urllib.request.urlopen(probe, timeout=20) as r:
             if r.read().decode().strip() != key:
                 sys.exit("key file at %s does not contain the key" % key_location)
     except Exception as e:
@@ -74,7 +78,7 @@ def main():
     req = urllib.request.Request(
         ENDPOINT,
         data=json.dumps(payload).encode(),
-        headers={"Content-Type": "application/json; charset=utf-8"},
+        headers={"Content-Type": "application/json; charset=utf-8", "User-Agent": UA},
         method="POST",
     )
     with urllib.request.urlopen(req, timeout=30) as r:
