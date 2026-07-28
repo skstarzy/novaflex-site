@@ -383,6 +383,86 @@ def product_jsonld(p, c, url):
     return data
 
 
+def breadcrumb_jsonld(p, url, cat_labels):
+    """Breadcrumbs give the result a readable path instead of a bare URL, and
+    they tell Google the catalog has a shape — which matters more than usual
+    here, where every product sits one hop from the homepage and nothing else."""
+    label = p.get("display") or p["name"]
+    if "·" in label:
+        label = p["name"]
+    cat = cat_labels.get(p.get("cat", ""), "Catalog")
+    return {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "NovaFlex Peptides", "item": SITE + "/"},
+            {"@type": "ListItem", "position": 2, "name": cat, "item": SITE + "/#catalog"},
+            {"@type": "ListItem", "position": 3, "name": label, "item": url},
+        ],
+    }
+
+
+def related_for(p, products, n=4):
+    """Nearest neighbours by research focus, falling back to the wider catalog
+    so even a thin category gets a full row.
+
+    The neighbours are the n entries FOLLOWING this one in its category, wrapping
+    around, rather than the first n. Taking the first n every time means the
+    alphabetically-early slugs collect all the links and the late ones receive
+    none — which is how a fix for orphan pages quietly leaves orphan pages. A
+    cyclic window makes every product appear as a neighbour exactly as often as
+    it has neighbours itself. Ordering is by slug, so it's stable across builds;
+    links that reshuffle on every deploy read as churn to a crawler."""
+    same = sorted(
+        (q for q in products
+         if q["slug"] != p["slug"]
+         and (q.get("cat") == p.get("cat") or p.get("cat") in (q.get("cats") or ""))),
+        key=lambda q: q["slug"],
+    )
+    ring = sorted(products, key=lambda q: q["slug"])
+    idx = [q["slug"] for q in ring].index(p["slug"])
+
+    if len(same) >= n:
+        cat_ring = sorted(
+            (q for q in products if q.get("cat") == p.get("cat")), key=lambda q: q["slug"]
+        )
+        i = [q["slug"] for q in cat_ring].index(p["slug"])
+        return [cat_ring[(i + k) % len(cat_ring)] for k in range(1, n + 1)]
+
+    # Thin category: take everything in it, then continue around the full
+    # catalog from this product's position so the overflow spreads too.
+    picks = list(same)
+    k = 1
+    while len(picks) < n and k < len(ring):
+        cand = ring[(idx + k) % len(ring)]
+        if cand["slug"] != p["slug"] and cand not in picks:
+            picks.append(cand)
+        k += 1
+    return picks[:n]
+
+
+def related_html(p, products, cat_labels):
+    picks = related_for(p, products)
+    if not picks:
+        return ""
+    cards = []
+    for q in picks:
+        label = q.get("display") or q["name"]
+        if "·" in label:
+            label = q["name"]
+        cards.append(
+            '<a class="pd-related-card" href="%s.html">'
+            '<img src="assets/vials/NF-%s.webp?v=3" alt="" loading="lazy" aria-hidden="true">'
+            '<span><span class="n">%s</span><span class="s">%s</span></span></a>'
+            % (escape(q["slug"]), escape(q["slug"]), escape(label), escape(q.get("spec", "")))
+        )
+    heading = cat_labels.get(p.get("cat", ""), "the catalog")
+    return (
+        "<h2>More in %s</h2><div class=\"pd-related-grid\">%s</div>"
+        % (escape(heading), "".join(cards))
+    )
+
+
 def faq_jsonld(c):
     if not c.get("faqs"):
         return None
@@ -442,6 +522,9 @@ def main():
     products = parse_js_object_list(src, "PRODUCTS")
     content = parse_content_map(src)
 
+    index_path = os.path.join(ROOT, "index.html")
+    cat_labels = parse_cat_labels(open(index_path, encoding="utf-8").read())
+
     written = []
     for p in products:
         slug = p["slug"]
@@ -474,6 +557,10 @@ def main():
                 '<script type="application/ld+json">%s</script>'
                 % json.dumps(faq, ensure_ascii=False)
             )
+        head.append(
+            '<script type="application/ld+json">%s</script>'
+            % json.dumps(breadcrumb_jsonld(p, url, cat_labels), ensure_ascii=False)
+        )
         head.append("<script>window.__SLUG__=%s;</script>" % json.dumps(slug))
 
         page = src
@@ -505,6 +592,16 @@ def main():
             '<div id="pdContent">%s</div>' % prerendered_body(p, c),
             1,
         )
+        # Related compounds, outside #pdContent so the page's JS can't wipe them.
+        rel_before = page
+        page = page.replace(
+            '<nav id="pdRelated" class="pd-related" aria-label="Related compounds"></nav>',
+            '<nav id="pdRelated" class="pd-related" aria-label="Related compounds">%s</nav>'
+            % related_html(p, products, cat_labels),
+            1,
+        )
+        if page == rel_before:
+            sys.exit("product.html is missing the #pdRelated container")
 
         out = os.path.join(ROOT, "%s.html" % slug)
         open(out, "w", encoding="utf-8").write(page)

@@ -14,6 +14,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Product", "name": "SS-31 10mg vial", "sku": "ss31-10mg", "url": "https://novaflexusa.com/ss31-10mg.html", "image": "https://novaflexusa.com/assets/vials/NF-ss31-10mg.webp", "description": "Third-party tested. SS-31 (Elamipretide) is a mitochondria-targeted tetrapeptide, supplied as a consistent, high-purity reference material for in-vitro laboratory studies. For research use only — not for human or veterinary use.", "brand": {"@type": "Brand", "name": "NovaFlex Peptides"}, "category": "Laboratory research compound", "additionalProperty": [{"@type": "PropertyValue", "name": "Verified purity (HPLC + MS)", "value": "99.2%"}], "offers": {"@type": "Offer", "price": "85.00", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://novaflexusa.com/ss31-10mg.html", "seller": {"@type": "Organization", "name": "NovaFlex Peptides"}}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is SS-31 third-party tested?", "acceptedAnswer": {"@type": "Answer", "text": "Yes — every batch is verified by HPLC and mass spectrometry, with a batch COA on file."}}, {"@type": "Question", "name": "What is SS-31?", "acceptedAnswer": {"@type": "Answer", "text": "A mitochondria-targeted research peptide supplied strictly for in-vitro laboratory research — not for human or veterinary use."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "NovaFlex Peptides", "item": "https://novaflexusa.com/"}, {"@type": "ListItem", "position": 2, "name": "Peptides & Cofactors", "item": "https://novaflexusa.com/#catalog"}, {"@type": "ListItem", "position": 3, "name": "SS-31", "item": "https://novaflexusa.com/ss31-10mg.html"}]}</script>
 <script>window.__SLUG__="ss31-10mg";</script>
 
 <!-- The template itself must stay out of the index: it serves a placeholder
@@ -95,6 +96,20 @@
   .pd-chip b{color:var(--gold-bright);font-weight:600;}
   .pd-ship{margin-top:14px;font-family:'IBM Plex Mono';font-size:12px;letter-spacing:0.04em;color:var(--gold);display:flex;align-items:center;gap:7px;}
   .pd-ship .star{color:var(--gold-bright);font-size:11px;}
+
+  /* Related compounds. Each product page had exactly one inbound internal link
+     (the homepage grid); this gives every page several more and clusters the
+     catalog by research focus instead of leaving 25 pages hanging off one hub. */
+  .pd-related{display:block;margin-top:64px;padding-top:28px;border-top:1px solid var(--line);max-width:760px;}
+  .pd-related:empty{display:none;}
+  .pd-related h2{font-size:18px;color:var(--silver-bright);margin-bottom:16px;}
+  .pd-related-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;}
+  .pd-related-card{display:flex;align-items:center;gap:12px;padding:11px 13px;background:var(--bg-alt);
+    border:1px solid var(--line);border-radius:8px;transition:border-color .2s ease;}
+  .pd-related-card:hover{border-color:var(--gold);}
+  .pd-related-card img{width:34px;height:auto;flex:none;}
+  .pd-related-card .n{font-size:13.5px;font-weight:600;color:var(--silver-bright);line-height:1.25;}
+  .pd-related-card .s{font-family:'IBM Plex Mono';font-size:11px;color:var(--text-muted);margin-top:2px;}
 
   .pd-section{margin-top:56px;max-width:760px;}
   .pd-section h2{font-size:22px;color:var(--silver-bright);}
@@ -243,6 +258,13 @@
   <div class="wrap" id="pdRoot">
     <a class="pd-back" href="index.html#catalog">← All compounds</a>
     <div id="pdContent"><div class="pd-hero"><div class="pd-info"><h1 class="pd-name">SS-31</h1><div class="pd-sub"><span>10mg vial</span><span class="dot">•</span><span>99.2% purity</span></div><p class="pd-tagline">A mitochondria-targeted research peptide (Elamipretide).</p></div></div><section class="pd-section"><h2>What it is</h2><p>Third-party tested. SS-31 (Elamipretide) is a mitochondria-targeted tetrapeptide, supplied as a consistent, high-purity reference material for in-vitro laboratory studies. For research use only — not for human or veterinary use.</p></section><section class="pd-section"><h2>Specifications</h2><ul><li>Third-party tested (HPLC + MS)</li><li>99%+ verified purity</li><li>Consistent, lab-grade material</li><li>For in-vitro research use only</li><li>Batch COA on file</li><li>Fast domestic fulfillment</li></ul></section><section class="pd-section"><h2>Questions</h2><h3>Is SS-31 third-party tested?</h3><p>Yes — every batch is verified by HPLC and mass spectrometry, with a batch COA on file.</p><h3>What is SS-31?</h3><p>A mitochondria-targeted research peptide supplied strictly for in-vitro laboratory research — not for human or veterinary use.</p></section></div>
+    <!-- Filled per-product by tools/build-seo.py. Deliberately OUTSIDE
+         #pdContent: the page's JS rewrites that container's innerHTML on load,
+         so anything placed inside it would be visible to a crawler and then
+         vanish for a real visitor — which is the definition of cloaking. Here
+         it survives, so both see the same links. Empty on the template itself,
+         which is noindex anyway. -->
+    <nav id="pdRelated" class="pd-related" aria-label="Related compounds"><h2>More in Peptides &amp; Cofactors</h2><div class="pd-related-grid"><a class="pd-related-card" href="kisspeptin10-5mg.html"><img src="assets/vials/NF-kisspeptin10-5mg.webp?v=3" alt="" loading="lazy" aria-hidden="true"><span><span class="n">Kisspeptin-10</span><span class="s">5mg vial</span></span></a><a class="pd-related-card" href="nad-500mg.html"><img src="assets/vials/NF-nad-500mg.webp?v=3" alt="" loading="lazy" aria-hidden="true"><span><span class="n">NAD+</span><span class="s">500mg vial</span></span></a><a class="pd-related-card" href="pt141-5mg.html"><img src="assets/vials/NF-pt141-5mg.webp?v=3" alt="" loading="lazy" aria-hidden="true"><span><span class="n">PT-141</span><span class="s">10mg vial</span></span></a><a class="pd-related-card" href="selank-10mg.html"><img src="assets/vials/NF-selank-10mg.webp?v=3" alt="" loading="lazy" aria-hidden="true"><span><span class="n">Selank</span><span class="s">10mg vial</span></span></a></div></nav>
   </div>
 </main>
 

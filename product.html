@@ -85,6 +85,20 @@
   .pd-ship{margin-top:14px;font-family:'IBM Plex Mono';font-size:12px;letter-spacing:0.04em;color:var(--gold);display:flex;align-items:center;gap:7px;}
   .pd-ship .star{color:var(--gold-bright);font-size:11px;}
 
+  /* Related compounds. Each product page had exactly one inbound internal link
+     (the homepage grid); this gives every page several more and clusters the
+     catalog by research focus instead of leaving 25 pages hanging off one hub. */
+  .pd-related{display:block;margin-top:64px;padding-top:28px;border-top:1px solid var(--line);max-width:760px;}
+  .pd-related:empty{display:none;}
+  .pd-related h2{font-size:18px;color:var(--silver-bright);margin-bottom:16px;}
+  .pd-related-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;}
+  .pd-related-card{display:flex;align-items:center;gap:12px;padding:11px 13px;background:var(--bg-alt);
+    border:1px solid var(--line);border-radius:8px;transition:border-color .2s ease;}
+  .pd-related-card:hover{border-color:var(--gold);}
+  .pd-related-card img{width:34px;height:auto;flex:none;}
+  .pd-related-card .n{font-size:13.5px;font-weight:600;color:var(--silver-bright);line-height:1.25;}
+  .pd-related-card .s{font-family:'IBM Plex Mono';font-size:11px;color:var(--text-muted);margin-top:2px;}
+
   .pd-section{margin-top:56px;max-width:760px;}
   .pd-section h2{font-size:22px;color:var(--silver-bright);}
   .pd-section h2 .eyebrow{display:block;margin-bottom:8px;}
@@ -232,6 +246,13 @@
   <div class="wrap" id="pdRoot">
     <a class="pd-back" href="index.html#catalog">← All compounds</a>
     <div id="pdContent"></div>
+    <!-- Filled per-product by tools/build-seo.py. Deliberately OUTSIDE
+         #pdContent: the page's JS rewrites that container's innerHTML on load,
+         so anything placed inside it would be visible to a crawler and then
+         vanish for a real visitor — which is the definition of cloaking. Here
+         it survives, so both see the same links. Empty on the template itself,
+         which is noindex anyway. -->
+    <nav id="pdRelated" class="pd-related" aria-label="Related compounds"></nav>
   </div>
 </main>
 
