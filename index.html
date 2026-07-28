@@ -970,6 +970,8 @@
         <select class="auth-input" id="adState" required style="flex:1;"><option value="" disabled selected>State</option></select>
         <input class="auth-input" id="adPostal" placeholder="ZIP code" autocomplete="postal-code" inputmode="numeric" maxlength="10" required style="flex:1;">
       </div>
+      <input class="auth-input" id="adPhone" placeholder="Phone number" autocomplete="tel-national" inputmode="tel" maxlength="20" required style="margin-top:10px;">
+      <p style="font-size:12px;color:var(--text-muted);margin:7px 2px 0;">Required by the carrier for delivery — used for shipping only.</p>
       <button type="submit" class="btn btn-gold" id="adSubmit" style="width:100%;margin-top:18px;">Continue to payment →</button>
     </form>
     <div class="auth-msg" id="adMsg"></div>
@@ -2028,6 +2030,16 @@ async function submitOrder(shipping){
   }
 }
 
+// Mirrors normalizePhone() in the backend's routes/checkout.js. Kept in step by
+// hand because the storefront is static and can't import it; if one changes,
+// change both — a mismatch means the form accepts what checkout then rejects.
+function isUsPhone(raw){
+  const digits = String(raw||'').replace(/\D/g,'');
+  const n = (digits.length === 11 && digits.startsWith('1')) ? digits.slice(1) : digits;
+  if (n.length !== 10) return false;
+  return !'01'.includes(n[0]) && !'01'.includes(n[3]);
+}
+
 (function(){
   const f = document.getElementById('addrForm');
   if (f) f.addEventListener('submit', (e)=>{
@@ -2039,10 +2051,22 @@ async function submitOrder(shipping){
       city: document.getElementById('adCity').value.trim(),
       state: document.getElementById('adState').value,
       postal: document.getElementById('adPostal').value.trim(),
+      phone: document.getElementById('adPhone').value.trim(),
       country: 'US',
     };
-    if (!shipping.name || !shipping.line1 || !shipping.city || !shipping.state || !shipping.postal){
-      const m = document.getElementById('adMsg'); m.className='auth-msg err'; m.textContent='Please complete all required fields.'; return;
+    const m = document.getElementById('adMsg');
+    if (!shipping.name || !shipping.line1 || !shipping.city || !shipping.state || !shipping.postal || !shipping.phone){
+      m.className='auth-msg err'; m.textContent='Please complete all required fields.'; return;
+    }
+    // Check the phone here as well as server-side. The server is the authority,
+    // but a rejection there costs a round trip and lands the buyer back on a
+    // form they thought they had finished — at the last step before payment,
+    // which is the worst possible place to lose one.
+    if (!isUsPhone(shipping.phone)){
+      m.className='auth-msg err';
+      m.textContent='Enter a valid 10-digit U.S. phone number — the carrier requires one for delivery.';
+      document.getElementById('adPhone').focus();
+      return;
     }
     submitOrder(shipping);
   });
