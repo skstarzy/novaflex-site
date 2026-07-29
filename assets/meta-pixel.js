@@ -23,7 +23,7 @@
 
   // lets you confirm in the console which build a browser actually has, since
   // this file is cached hard by GitHub Pages
-  window.__nfPixel = { version: 2, active: !!PIXEL_ID };
+  window.__nfPixel = { version: 3, active: !!PIXEL_ID, capiDedup: true };
 
   if (!PIXEL_ID) return;
 
@@ -127,11 +127,16 @@
         if (!orderId || sessionStorage.getItem(dedupeKey)) return;
         sessionStorage.setItem(dedupeKey, '1');
       } catch (e) { /* private mode: accept the small double-count risk */ }
+      // eventID must match event_id from the server-side Conversions API in
+      // the backend's lib/metaCapi.js — Meta collapses the browser event and
+      // the server event into one only when event_name AND event id agree.
+      // Without this the same purchase is counted twice, which would make a
+      // losing campaign read as profitable.
       fbq('track', 'Purchase', {
         value: Number(total) || undefined,
         currency: 'USD',
         content_type: 'product'
-      });
+      }, { eventID: 'order_' + orderId });
     };
 
     var hookRender = function () {
