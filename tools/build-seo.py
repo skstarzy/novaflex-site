@@ -280,6 +280,9 @@ def parse_content_map(src):
         o = re.search(r'overview\s*:\s*"((?:[^"\\]|\\.)*)"', block)
         entry["tagline"] = t.group(1) if t else ""
         entry["overview"] = o.group(1) if o else ""
+        for field in ("analytical", "handling"):
+            m2 = re.search(r'%s\s*:\s*"((?:[^"\\]|\\.)*)"' % field, block)
+            entry[field] = m2.group(1) if m2 else ""
         b = re.search(r"benefits\s*:\s*\[(.*?)\]", block, re.S)
         entry["benefits"] = re.findall(r'"((?:[^"\\]|\\.)*)"', b.group(1)) if b else []
         f = re.search(r"faqs\s*:\s*\[(.*?)\]\s*\}", block, re.S)
@@ -503,10 +506,20 @@ def prerendered_body(p, c):
             '<section class="pd-section"><h2>What it is</h2><p>%s</p></section>'
             % escape(c["overview"])
         )
+    if c.get("analytical"):
+        parts.append(
+            '<section class="pd-section"><h2>What the testing shows</h2><p>%s</p></section>'
+            % escape(c["analytical"])
+        )
     if c.get("benefits"):
         lis = "".join("<li>%s</li>" % escape(b) for b in c["benefits"])
         parts.append(
             '<section class="pd-section"><h2>Specifications</h2><ul>%s</ul></section>' % lis
+        )
+    if c.get("handling"):
+        parts.append(
+            '<section class="pd-section"><h2>Storage &amp; reconstitution</h2><p>%s</p></section>'
+            % escape(c["handling"])
         )
     if c.get("faqs"):
         qs = "".join(
