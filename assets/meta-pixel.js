@@ -14,6 +14,7 @@
  *               build-seo.py already emits (so no per-page markup to maintain)
  *   AddToCart   by wrapping window.addToCart, not by editing the cart
  *   Purchase    on order-confirmed.html once the backend confirms 'paid'
+ *   CompleteRegistration  on a successful POST to /api/shop-account/register
  *
  * The wrapping approach matters: none of the store's own code changes, so a
  * mistake here can break tracking but cannot break checkout.
@@ -23,7 +24,7 @@
 
   // lets you confirm in the console which build a browser actually has, since
   // this file is cached hard by GitHub Pages
-  window.__nfPixel = { version: 3, active: !!PIXEL_ID, capiDedup: true };
+  window.__nfPixel = { version: 4, active: !!PIXEL_ID, capiDedup: true, registration: true };
 
   if (!PIXEL_ID) return;
 
@@ -114,6 +115,34 @@
   // depending on defer ordering — so try now, then again on DOM ready
   wrapCartFns();
   document.addEventListener('DOMContentLoaded', wrapCartFns);
+
+  /* ---- CompleteRegistration, by watching the register endpoint ----
+   * Signup is the real first conversion on this store, because pricing and
+   * batch documentation sit behind a researcher account. /register and /login
+   * are separate endpoints, so watching the URL fires this on genuine new
+   * accounts only and never on a returning user signing back in.
+   */
+  (function () {
+    var realFetch = window.fetch;
+    if (typeof realFetch !== 'function' || realFetch.__nfWrapped) return;
+    var wrapped = function (input) {
+      var url = typeof input === 'string' ? input : (input && input.url) || '';
+      var promise = realFetch.apply(this, arguments);
+      if (/\/api\/shop-account\/register/.test(url)) {
+        promise.then(function (res) {
+          // only a 2xx is an account that actually got created
+          if (res && res.ok) {
+            try { fbq('track', 'CompleteRegistration', { content_name: 'Researcher account' }); }
+            catch (e) {}
+          }
+          return res;
+        }).catch(function () { /* network errors are not conversions */ });
+      }
+      return promise;
+    };
+    wrapped.__nfWrapped = true;
+    window.fetch = wrapped;
+  })();
 
   /* ---- Purchase, on the confirmation page ---- */
   if (/order-confirmed/.test(location.pathname)) {

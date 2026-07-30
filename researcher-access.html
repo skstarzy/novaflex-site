@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Researcher Access — NovaFlex Peptides</title>
+<meta name="description" content="Lot pricing and batch documentation for verified researchers. 99%+ assayed purity, third-party tested by Janoshik, shipped same business day from Clayton, NC. Research use only.">
+<meta name="robots" content="noindex,follow">
+<link rel="canonical" href="https://novaflexusa.com/researcher-access.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Paid-traffic landing page.
+   *
+   * Why this page exists: ads were landing on the homepage, where a signed-out
+   * visitor sees "Sign in for price" on every card and cannot transact. Over the
+   * first 49 ad-driven sessions, zero reached a product page. The gate is
+   * deliberate, so this page sells the account instead of pretending it isn't
+   * there — registration is the real first conversion.
+   *
+   * noindex: this is an ad destination, not something that should compete with
+   * the homepage in organic search. */
+  :root{
+    --bg:#f7f4ee; --bg-alt:#ffffff; --bg-alt-2:#efeadf;
+    --line:rgba(30,24,10,0.12); --line-strong:rgba(30,24,10,0.22);
+    --silver:#4b4842; --silver-bright:#171410; --silver-dim:#6b675f;
+    --gold:#b08d2e; --gold-bright:#8a6a24; --gold-deep:#6f5518;
+    --text:#221f18; --text-muted:#55514a; --radius:2px; --maxw:1100px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--bg);color:var(--text);
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    line-height:1.6;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+
+  header{border-bottom:1px solid var(--line);background:var(--bg-alt);}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;padding-top:18px;padding-bottom:18px;}
+  .logo{height:34px;}
+  .header-note{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--gold-bright);
+  }
+
+  .hero{padding:64px 0 52px;text-align:center;}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:10px;
+    border:1px solid rgba(176,141,46,.45);border-radius:999px;padding:7px 18px;
+    font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;
+    letter-spacing:.22em;text-transform:uppercase;color:var(--gold-bright);
+    background:var(--bg-alt);
+  }
+  .eyebrow s{width:6px;height:6px;background:var(--gold);transform:rotate(45deg);text-decoration:none;}
+  h1{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;
+    font-size:clamp(34px,5.4vw,58px);line-height:1.08;letter-spacing:-.02em;
+    color:var(--silver-bright);margin:22px 0 16px;
+  }
+  h1 em{font-style:normal;color:var(--gold-bright);}
+  .lede{font-size:clamp(16px,2.1vw,19px);color:var(--text-muted);max-width:640px;margin:0 auto;}
+
+  .cta{
+    display:inline-block;margin-top:30px;
+    background:var(--silver-bright);color:#fff;text-decoration:none;
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;
+    padding:16px 40px;border-radius:var(--radius);
+    border:1px solid var(--silver-bright);
+    transition:background .15s ease;
+  }
+  .cta:hover{background:#000;}
+  .cta-note{
+    margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--silver-dim);
+  }
+
+  .trust{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:1px;background:var(--line);border:1px solid var(--line);
+    margin:8px 0 56px;
+  }
+  .trust div{background:var(--bg-alt);padding:22px 20px;text-align:center;}
+  .trust b{
+    display:block;font-family:'Space Grotesk',sans-serif;font-size:22px;
+    color:var(--silver-bright);margin-bottom:4px;
+  }
+  .trust span{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--silver-dim);
+  }
+
+  section{padding:0 0 56px;}
+  h2{
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(22px,3vw,30px);
+    color:var(--silver-bright);letter-spacing:-.01em;margin-bottom:8px;
+  }
+  .sub{color:var(--text-muted);margin-bottom:26px;max-width:620px;}
+
+  .unlocks{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;}
+  .unlocks article{
+    background:var(--bg-alt);border:1px solid var(--line);padding:24px;
+  }
+  .unlocks h3{
+    font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:600;
+    color:var(--silver-bright);margin-bottom:7px;
+  }
+  .unlocks p{font-size:14.5px;color:var(--text-muted);}
+
+  .why{background:var(--bg-alt);border:1px solid var(--line);padding:30px;}
+  .why p{color:var(--text-muted);max-width:760px;}
+  .why p + p{margin-top:12px;}
+
+  .range{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:8px;}
+  .range img{height:150px;width:auto;}
+
+  .closer{text-align:center;padding:8px 0 64px;}
+
+  footer{border-top:1px solid var(--line);background:var(--bg-alt);padding:26px 0 40px;}
+  .ruo{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--gold-bright);margin-bottom:10px;
+  }
+  footer p{font-size:12.5px;color:var(--silver-dim);max-width:820px;}
+  footer a{color:var(--silver-dim);}
+</style>
+
+<!-- Meta pixel — ID lives in assets/meta-pixel.js -->
+<script src="assets/meta-pixel.js" defer></script>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a href="/"><img class="logo" src="assets/logo-light.webp" alt="NovaFlex Peptides"></a>
+    <span class="header-note">Research Use Only</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="hero">
+    <span class="eyebrow"><s></s>Verified Researcher Access<s></s></span>
+    <h1>Lot pricing and batch documentation,<br><em>open to verified researchers</em></h1>
+    <p class="lede">
+      NovaFlex supplies research-use-only materials. Pricing, certificates of analysis and
+      batch documentation sit behind a researcher account — it takes under a minute, and
+      there is nothing to pay to create one.
+    </p>
+    <a class="cta" href="/?signup=1">Create your researcher account</a>
+    <div class="cta-note">Free · Under a minute · 20% off your first order with code XMAS</div>
+  </div>
+
+  <div class="trust">
+    <div><b>99%+</b><span>Assayed purity</span></div>
+    <div><b>Janoshik</b><span>Third-party tested</span></div>
+    <div><b>HPLC + MS</b><span>Every batch</span></div>
+    <div><b>Same day</b><span>Dispatch from NC</span></div>
+  </div>
+
+  <section>
+    <h2>What an account opens up</h2>
+    <p class="sub">Everything below is visible the moment you're signed in.</p>
+    <div class="unlocks">
+      <article>
+        <h3>Lot pricing</h3>
+        <p>Live pricing on every compound and size, including fusions and solvents.</p>
+      </article>
+      <article>
+        <h3>Batch documentation</h3>
+        <p>Certificates of analysis published on product pages, with HPLC purity and mass
+        spectrometry identity confirmation from Janoshik Analytical.</p>
+      </article>
+      <article>
+        <h3>Same-business-day dispatch</h3>
+        <p>Orders placed before cutoff ship the same business day from Clayton, North
+        Carolina. US addresses, tracked.</p>
+      </article>
+      <article>
+        <h3>Order history</h3>
+        <p>Past orders, lot references and reordering in one place.</p>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Why there's an account at all</h2>
+    <div class="why">
+      <p>
+        NovaFlex supplies compounds strictly for laboratory and in-vitro research. Access is
+        limited to qualified researchers aged 21 and over, and creating an account is where
+        that's confirmed — which is also why pricing isn't shown publicly.
+      </p>
+      <p>
+        It isn't a mailing list and it isn't a paywall. It's the record that the person
+        ordering research material has confirmed what it is and what it isn't for.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <h2>The range</h2>
+    <p class="sub">Structural peptides, IGF peptides, copper and melanocortin compounds,
+    research fusions, cofactors and laboratory solvents.</p>
+    <div class="range">
+      <img src="assets/vials/NF-tesa-10mg.webp" alt="NovaFlex research vial" loading="lazy">
+      <img src="assets/vials/NF-ghkcu-100mg.webp" alt="NovaFlex research vial" loading="lazy">
+      <img src="assets/vials/NF-nad-500mg.webp" alt="NovaFlex research vial" loading="lazy">
+      <img src="assets/vials/NF-tb500-5mg.webp" alt="NovaFlex research vial" loading="lazy">
+    </div>
+  </section>
+
+  <div class="closer">
+    <a class="cta" href="/?signup=1">Create your researcher account</a>
+    <div class="cta-note">20% off your first order · Code XMAS · Through August 7</div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="ruo">Research Use Only</div>
+    <p>
+      NovaFlex Peptides supplies Research Use Only (RUO) materials. Products are not for human
+      consumption, medical use, or clinical application. All compounds are intended solely for
+      laboratory, in-vitro, and scientific research. No statements have been evaluated by the FDA
+      and no therapeutic claims are made. Ensure all research complies with institutional and
+      legal standards. &nbsp;·&nbsp; <a href="/policies.html">Policies</a>
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>

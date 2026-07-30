@@ -2481,5 +2481,27 @@ function egSetMode(mode){
 // acknowledgement is still enforced in the register form.
 hideEnterGate();
 </script>
+<script>
+/* Paid landing pages (researcher-access.html) send their CTA here with ?signup=1.
+   New visitors meet the enter gate anyway, but anyone who dismissed it earlier
+   would otherwise land on a homepage with nothing to click — this makes the CTA
+   land for them too. */
+(function () {
+  if (new URLSearchParams(location.search).get('signup') !== '1') return;
+  document.addEventListener('DOMContentLoaded', function () {
+    setTimeout(function () {
+      try {
+        if (typeof shopAuthed === 'function' && shopAuthed()) return;
+        var gate = document.getElementById('gate');
+        if (gate && !gate.classList.contains('hidden')) return; // gate already asks
+        if (typeof setAuthMode === 'function' && typeof openAuthModal === 'function') {
+          setAuthMode('register');
+          openAuthModal();
+        }
+      } catch (e) {}
+    }, 450);
+  });
+})();
+</script>
 </body>
 </html>
