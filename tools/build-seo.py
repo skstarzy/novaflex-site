@@ -213,6 +213,78 @@ def inject_grid(src, grid_id, html):
     return src[:j] + MARK_START + html + MARK_END + src[k:]
 
 
+def write_llms(products, content, cat_labels):
+    """Emit /llms.txt — a curated, markdown map of the site for AI crawlers.
+
+    The emerging convention (llms.txt): a single markdown file at the site root
+    that hands a language model the site's key facts and links in a clean,
+    extractable form, instead of leaving it to reconstruct the site from HTML.
+    Adoption is still early and not every AI reader consumes it yet, so this is a
+    forward-looking, low-cost signal rather than a guaranteed channel — but for a
+    brand whose whole differentiator is documentation, a clean machine-readable
+    map is exactly on-message.
+
+    Generated from the same catalog as everything else so it can't drift. Every
+    line is a supply fact; nothing here says what a compound does to a person.
+    Uses display names, so the renamed compounds keep their house labels.
+    """
+    def label(p):
+        lb = p.get("display") or p["name"]
+        return p["name"] if "·" in lb else lb
+
+    lines = [
+        "# NovaFlex Peptides",
+        "",
+        "> NovaFlex Peptides is a US supplier of research-grade peptides and laboratory "
+        "supplies, sold strictly for in-vitro laboratory research (RUO). Every batch is "
+        "independently assayed by HPLC for purity and mass spectrometry for identity, and a "
+        "batch Certificate of Analysis ships with each order. Ships from Clayton, North "
+        "Carolina. Not for human or veterinary use.",
+        "",
+        "## What NovaFlex is",
+        "",
+        "- Research-use-only reference material for qualified researchers and laboratories, aged 21+.",
+        "- 25 compounds across structural peptides, IGF peptides, copper and melanocortin compounds, research fusions, cofactors, and laboratory solvents.",
+        "- Every lot: 99%+ assayed purity by HPLC, identity confirmed by mass spectrometry, batch Certificate of Analysis included. Independent analysis by Janoshik Analytical.",
+        "- Ships from Clayton, NC (USA), same business day before cutoff, tracked. Free US shipping over $249.",
+        "",
+        "## Guides and tools",
+        "",
+        "- [How to read a peptide Certificate of Analysis](%s/how-to-read-a-coa.html): what HPLC purity and mass-spec identity mean, and how to tell a real COA from a decorative one." % SITE,
+        "- [HPLC vs mass spectrometry](%s/hplc-vs-mass-spectrometry.html): what each analytical method proves about a peptide." % SITE,
+        "- [GLP-1, GIP and glucagon receptor agonists](%s/glp1-gip-glucagon-receptor-agonists.html): how single, dual and triple receptor agonists are distinguished in the research literature." % SITE,
+        "- [Peptide reconstitution calculator](%s/reconstitution-calculator.html): working concentration in mg/mL from vial mass and diluent volume." % SITE,
+        "",
+        "## Catalog (research use only)",
+        "",
+    ]
+    # group products by category, in a stable order
+    order = ["sizing", "igf", "structural", "copper-mc", "specialty", "fusions", "solvents"]
+    by_cat = {}
+    for p in products:
+        by_cat.setdefault(p.get("cat", ""), []).append(p)
+    for cat in [c for c in order if c in by_cat] + [c for c in by_cat if c not in order]:
+        lines.append("### %s" % cat_labels.get(cat, cat))
+        lines.append("")
+        for p in sorted(by_cat[cat], key=lambda p: label(p).lower()):
+            purity = " — %s HPLC purity" % p["purity"] if p.get("purity") else ""
+            lines.append("- [%s %s](%s/%s.html)%s" % (label(p), p.get("spec", ""), SITE, p["slug"], purity))
+        lines.append("")
+
+    lines += [
+        "## Compliance",
+        "",
+        "All materials are supplied solely for lawful laboratory research by qualified "
+        "professionals. Products are not drugs, food, or cosmetics and are not intended for "
+        "human or animal consumption, diagnosis, cure, mitigation, treatment, or prevention "
+        "of any disease. Sales are restricted to purchasers aged 21 or older acting on behalf "
+        "of a qualified laboratory, institution, or business entity.",
+        "",
+    ]
+    open(os.path.join(ROOT, "llms.txt"), "w", encoding="utf-8").write("\n".join(lines))
+    return sum(len(v) for v in by_cat.values())
+
+
 def build_index(index_path, product_products):
     src = open(index_path, encoding="utf-8").read()
     products = parse_index_products(src)
@@ -653,10 +725,12 @@ def main():
 
     # Last, because it needs the product pages to exist before it links to them.
     n_feat, n_cat = build_index(os.path.join(ROOT, "index.html"), products)
+    n_llms = write_llms(products, content, cat_labels)
 
     print("generated %d product pages" % len(written))
     print("sitemap.xml now lists %d URLs" % len(urls))
     print("index.html: pre-rendered %d featured + %d catalog cards" % (n_feat, n_cat))
+    print("llms.txt: mapped %d products + guides" % n_llms)
 
 
 if __name__ == "__main__":
