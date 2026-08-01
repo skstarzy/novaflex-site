@@ -369,7 +369,7 @@ function renderStackActive(d){
       '</div>'+
       '<div class="msg" id="stackMsg"></div>'+
     '</div>';
-  document.getElementById('stackEdit').addEventListener('click',()=>{ stackSel = (d.items||[]).map(prodKey); renderStackBuilder(d.ship); });
+  document.getElementById('stackEdit').addEventListener('click',()=>{ stackSel = (d.items||[]).map(prodKey); renderStackBuilder(d.ship, d.supporterCode); });
   const pauseBtn=document.getElementById('stackPause'); if(pauseBtn) pauseBtn.addEventListener('click',()=>setStackStatus('paused'));
   const resumeBtn=document.getElementById('stackResume'); if(resumeBtn) resumeBtn.addEventListener('click',()=>setStackStatus('active'));
   document.getElementById('stackCancel').addEventListener('click',()=>{ if(confirm('Cancel your Research Stack? This stops monthly billing and clears your stack.')) setStackStatus('cancelled'); });
@@ -384,9 +384,11 @@ async function setStackStatus(status){
   }catch(e){ if(msg){msg.className='msg err';msg.textContent=e.message;} }
 }
 
-function renderStackBuilder(existingShip){
+function renderStackBuilder(existingShip, existingCode){
   const el = document.getElementById('stackSection');
   const s = existingShip||{};
+  let supporterCode = (existingCode||'').trim().toUpperCase();
+  let supporterValid = !!supporterCode; // a stored code was valid when saved
   const prodRows = STACK_PRODUCTS.map(p=>{
     const k = prodKey(p);
     const checked = stackSel.includes(k) ? 'checked' : '';
@@ -398,7 +400,7 @@ function renderStackBuilder(existingShip){
     '<div class="panel" style="margin-top:8px;">'+
       '<p style="margin:0 0 4px;font-size:13.5px;color:var(--text-muted);">Pick <b style="color:var(--silver)">2 to 4 compounds</b>. Your stack renews on the 5th each month at <b style="color:var(--gold-bright)">10% off</b>.</p>'+
       '<div class="stack-picks" id="stackPicks">'+prodRows+'</div>'+
-      '<div id="stackEst" class="stack-est"></div>'+
+      '<div id="stackEst" class="stack-est"></div>'+'<div style="margin-top:14px;">'+'<input id="stSupporter" placeholder="Supporter code (optional)" maxlength="24" value="'+esc(supporterCode)+'" style="text-transform:uppercase;">'+'<div id="stSupMsg" style="font-size:12px;margin:5px 2px 0;color:var(--silver-dim);">Enter a creator\'s code to support them. Leave blank and 3% is added per compound.</div>'+'</div>'+
       '<h3 style="margin-top:22px;">Shipping address</h3>'+
       '<div class="stack-addr">'+
         '<input id="stName" placeholder="Full name" value="'+esc(s.name||'')+'">'+
@@ -420,9 +422,33 @@ function renderStackBuilder(existingShip){
     const sel = stackSel.map(k=>STACK_PRODUCTS.find(p=>prodKey(p)===k)).filter(Boolean);
     const sub = sel.reduce((a,p)=>a+p.price,0);
     const disc = Math.round(sub*0.10*100)/100;
-    document.getElementById('stackEst').innerHTML = sel.length? '<div class="krow"><span class="k">'+sel.length+' compound'+(sel.length>1?'s':'')+' · subtotal</span><span class="v">'+money(sub)+'</span></div><div class="krow"><span class="k">Stack discount (10%)</span><span class="v" style="color:var(--gold-bright)">−'+money(disc)+'</span></div><div class="krow"><span class="k">Per month (before shipping/tax)</span><span class="v">'+money(sub-disc)+'</span></div>' : '<p style="font-size:12.5px;color:var(--silver-dim);margin-top:8px;">Select 2–4 compounds to see your monthly price.</p>';
+    const surcharge = supporterValid ? 0 : Math.round(sub*0.03*100)/100;
+    const perMonth = Math.round((sub-disc+surcharge)*100)/100;
+    const est = document.getElementById('stackEst');
+    if(!sel.length){ est.innerHTML = '<p style="font-size:12.5px;color:var(--silver-dim);margin-top:8px;">Select 2–4 compounds to see your monthly price.</p>'; return; }
+    let rows = '<div class="krow"><span class="k">'+sel.length+' compound'+(sel.length>1?'s':'')+' · subtotal</span><span class="v">'+money(sub)+'</span></div>'
+      + '<div class="krow"><span class="k">Stack discount (10%)</span><span class="v" style="color:var(--gold-bright)">−'+money(disc)+'</span></div>';
+    if(surcharge>0){ rows += '<div class="krow"><span class="k">No supporter code (+3%)</span><span class="v">+'+money(surcharge)+'</span></div>'; }
+    else if(supporterValid){ rows += '<div class="krow"><span class="k">Supporter code '+esc(supporterCode)+'</span><span class="v" style="color:var(--gold-bright)">applied</span></div>'; }
+    rows += '<div class="krow"><span class="k">Per month (before shipping/tax)</span><span class="v">'+money(perMonth)+'</span></div>';
+    est.innerHTML = rows;
   }
   picks.addEventListener('change', refresh); refresh();
+  const supInput=document.getElementById('stSupporter'), supMsg=document.getElementById('stSupMsg');
+  let supTimer=null;
+  async function checkSupporter(){
+    const code=supInput.value.trim().toUpperCase(); supporterCode=code;
+    if(!code){ supporterValid=false; supMsg.style.color='var(--silver-dim)'; supMsg.textContent='Enter a creator\'s code to support them. Leave blank and 3% is added per compound.'; refresh(); return; }
+    supMsg.style.color='var(--silver-dim)'; supMsg.textContent='Checking…';
+    try{
+      const r=await fetch(API+'/api/supporter-code/validate?code='+encodeURIComponent(code)); const dd=await r.json();
+      supporterValid=!!dd.valid;
+      if(dd.valid){ supporterCode=dd.code; supInput.value=dd.code; supMsg.style.color='var(--gold-bright)'; supMsg.textContent='✓ Supporting '+dd.code+' — the 3% is waived.'; }
+      else { supMsg.style.color='var(--red,#c0392b)'; supMsg.textContent='That code is not valid. Leave blank to skip (3% added).'; }
+    }catch(e){ supporterValid=false; supMsg.style.color='var(--silver-dim)'; supMsg.textContent='Could not check the code right now.'; }
+    refresh();
+  }
+  supInput.addEventListener('input', ()=>{ clearTimeout(supTimer); supTimer=setTimeout(checkSupporter,400); });
   const stateSel=document.getElementById('stState'); if(s.state) stateSel.value=s.state;
   document.getElementById('stackSave').addEventListener('click', saveStack);
   const back=document.getElementById('stackBack'); if(back) back.addEventListener('click',renderStack);
@@ -441,7 +467,7 @@ async function saveStack(){
   if(!document.getElementById('stConsent').checked){ msg.className='msg err'; msg.textContent='Please authorize the monthly billing to start your stack.'; return; }
   const btn=document.getElementById('stackSave'); btn.disabled=true; const o=btn.textContent; btn.textContent='Saving…';
   try{
-    const r=await fetch(API+'/api/shop-account/stack',{method:'PUT',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token()},body:JSON.stringify({items:sel,ship,consent:true})});
+    const r=await fetch(API+'/api/shop-account/stack',{method:'PUT',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token()},body:JSON.stringify({items:sel,ship,consent:true,supporterCode:(val('stSupporter')||'').trim().toUpperCase()})});
     const d=await r.json(); if(!r.ok) throw new Error(d.error||'Could not save.');
     toast('Research Stack saved'); renderStack();
   }catch(e){ msg.className='msg err'; msg.textContent=e.message; btn.disabled=false; btn.textContent=o; }
