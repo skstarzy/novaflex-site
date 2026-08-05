@@ -11,6 +11,7 @@
 
 ## Guides and tools
 
+- [Guides and reference hub](https://novaflexusa.com/blog.html): index of everything below, and the page the site's Guides nav points to.
 - [How to read a peptide Certificate of Analysis](https://novaflexusa.com/how-to-read-a-coa.html): what HPLC purity and mass-spec identity mean, and how to tell a real COA from a decorative one.
 - [HPLC vs mass spectrometry](https://novaflexusa.com/hplc-vs-mass-spectrometry.html): what each analytical method proves about a peptide.
 - [GLP-1, GIP and glucagon receptor agonists](https://novaflexusa.com/glp1-gip-glucagon-receptor-agonists.html): how single, dual and triple receptor agonists are distinguished in the research literature.

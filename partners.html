@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Peptide Affiliate Program — Earn up to 25% | NovaFlex Peptides</title>
+<meta name="description" content="Join the NovaFlex Peptides affiliate program. Up to 25% commission, uncapped, no cost to join. Your own discount code, third-party tested research materials, and a COA with every lot. Apply in two minutes.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://novaflexusa.com/partners.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Peptide Affiliate Program — Earn up to 25% | NovaFlex Peptides">
+<meta property="og:description" content="Up to 25% commission, uncapped, no cost to join. Your own discount code and a COA with every lot. Apply in two minutes.">
+<meta property="og:url" content="https://novaflexusa.com/partners.html">
+<link rel="icon" href="assets/logo.webp?v=4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"NovaFlex Peptides Affiliate Program","url":"https://novaflexusa.com/partners.html","description":"Affiliate and creator partnership program for NovaFlex Peptides. Up to 25% commission, uncapped, no cost to join.","publisher":{"@type":"Organization","name":"NovaFlex Peptides","url":"https://novaflexusa.com"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How much does the NovaFlex affiliate program pay?","acceptedAnswer":{"@type":"Answer","text":"Commission is set per partner and runs up to 25% of the order total, uncapped. The rate depends on your audience and the channels you work in. Everyone who uses your code also receives a discount, so the code is worth sharing on its own terms."}},{"@type":"Question","name":"Does it cost anything to join?","acceptedAnswer":{"@type":"Answer","text":"No. There is no fee, no minimum sales requirement, and no exclusivity clause. You keep working with whoever else you work with."}},{"@type":"Question","name":"Do I need a large following to apply?","acceptedAnswer":{"@type":"Answer","text":"No. Audience size matters less than whether the audience trusts you. A small, engaged following in research, laboratory or scientific circles converts better than a large general one, and we approve on that basis."}},{"@type":"Question","name":"When and how do partners get paid?","acceptedAnswer":{"@type":"Answer","text":"Commission accrues on every paid order placed with your code and is tracked in your partner dashboard in real time. Payouts are issued on request once a balance has accrued, and every order attributed to your code is itemised so the figure is auditable."}},{"@type":"Question","name":"What can I say about the products?","acceptedAnswer":{"@type":"Answer","text":"NovaFlex supplies research-use-only materials, so partner content must stay with supply facts: purity, third-party testing, certificates of analysis, sourcing and shipping. Partners must not describe use in humans or animals, dosing, protocols or health outcomes. This rule is not negotiable and applies to every partner including us."}}]}</script>
+<style>
+  /* Public affiliate recruitment page.
+   *
+   * Why this page exists: the program was previously pitched only inside a
+   * homepage section, and the application itself sat behind the partner login —
+   * so an interested creator had to create an account before they could say they
+   * were interested. Meanwhile POST /api/affiliate-apply has always been public
+   * and rate-limited. This page removes the login from the path and gives the
+   * program something linkable that search can actually index.
+   *
+   * Indexable, unlike researcher-access.html: "peptide affiliate program" is a
+   * real query with real intent, and nothing on this domain was answering it. */
+  :root{
+    --bg:#f7f4ee; --bg-alt:#ffffff; --bg-alt-2:#efeadf;
+    --line:rgba(30,24,10,0.12); --line-strong:rgba(30,24,10,0.22);
+    --silver:#4b4842; --silver-bright:#171410; --silver-dim:#6b675f;
+    --gold:#b08d2e; --gold-bright:#8a6a24; --gold-deep:#6f5518;
+    --text:#221f18; --text-muted:#55514a; --radius:2px; --maxw:1100px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+  .narrow{max-width:760px;}
+  a{color:inherit;}
+  :focus-visible{outline:2px solid var(--gold-bright);outline-offset:2px;}
+
+  header{border-bottom:1px solid var(--line);background:var(--bg-alt);}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;}
+  .logo{height:34px;}
+  .header-note{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--gold-bright);}
+
+  .hero{padding:60px 0 40px;text-align:center;}
+  .eyebrow{display:inline-flex;align-items:center;gap:10px;
+    border:1px solid rgba(176,141,46,.45);border-radius:999px;padding:7px 18px;
+    font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;
+    letter-spacing:.22em;text-transform:uppercase;color:var(--gold-bright);background:var(--bg-alt);}
+  .eyebrow s{width:6px;height:6px;background:var(--gold);transform:rotate(45deg);text-decoration:none;}
+  h1{font-family:'Space Grotesk',sans-serif;font-weight:700;
+    font-size:clamp(32px,5.2vw,54px);line-height:1.08;letter-spacing:-.02em;
+    color:var(--silver-bright);margin:22px 0 16px;}
+  h1 em{font-style:normal;color:var(--gold-bright);}
+  .lede{font-size:clamp(16px,2.1vw,19px);color:var(--text-muted);max-width:640px;margin:0 auto;}
+  .cta{display:inline-block;margin-top:28px;background:var(--silver-bright);color:#fff;
+    text-decoration:none;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;
+    padding:16px 40px;border-radius:var(--radius);border:1px solid var(--silver-bright);
+    transition:background .15s ease;cursor:pointer;}
+  .cta:hover{background:#000;}
+  .cta-note{margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--silver-dim);}
+
+  .trust{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+    gap:1px;background:var(--line);border:1px solid var(--line);margin:44px 0 56px;}
+  .trust div{background:var(--bg-alt);padding:22px 20px;text-align:center;}
+  .trust b{display:block;font-family:'Space Grotesk',sans-serif;font-size:24px;
+    color:var(--silver-bright);margin-bottom:4px;}
+  .trust span{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--silver-dim);}
+
+  section{padding:0 0 56px;}
+  h2{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(22px,3vw,30px);
+    color:var(--silver-bright);letter-spacing:-.01em;margin-bottom:8px;}
+  .sub{color:var(--text-muted);margin-bottom:26px;max-width:640px;}
+
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;}
+  .steps article{background:var(--bg-alt);border:1px solid var(--line);padding:24px;position:relative;}
+  .steps .n{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.16em;
+    color:var(--gold-bright);margin-bottom:10px;}
+  .steps h3{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:600;
+    color:var(--silver-bright);margin-bottom:7px;}
+  .steps p{font-size:14.5px;color:var(--text-muted);}
+
+  .rules{background:var(--bg-alt);border:1px solid var(--line);padding:30px;}
+  .rules h3{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:600;
+    color:var(--silver-bright);margin:0 0 10px;}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:6px;}
+  .cols ul{list-style:none;}
+  .cols li{font-size:14.5px;color:var(--text-muted);padding:6px 0 6px 22px;position:relative;}
+  .cols li::before{position:absolute;left:0;top:6px;font-family:'IBM Plex Mono',monospace;font-size:13px;}
+  .yes li::before{content:"✓";color:var(--gold-bright);}
+  .no li::before{content:"✕";color:#a33;}
+  @media(max-width:640px){.cols{grid-template-columns:1fr;gap:14px;}}
+
+  /* Application form */
+  .apply{background:var(--bg-alt);border:1px solid var(--line-strong);padding:32px;}
+  .field{margin-bottom:16px;}
+  .field label{display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:6px;}
+  .field input,.field textarea{width:100%;padding:12px 14px;font-family:'Inter',sans-serif;
+    font-size:15.5px;color:var(--text);background:var(--bg);border:1px solid var(--line-strong);
+    border-radius:var(--radius);}
+  .field textarea{min-height:96px;resize:vertical;}
+  .field .hint{font-size:12.5px;color:var(--silver-dim);margin-top:5px;}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:640px){.row{grid-template-columns:1fr;gap:0;}}
+  .msg{margin-top:14px;font-size:14.5px;padding:12px 14px;border-radius:var(--radius);display:none;}
+  .msg.ok{display:block;background:#eef5ec;border:1px solid #b9d6b0;color:#2c5423;}
+  .msg.err{display:block;background:#f8eeee;border:1px solid #dcb6b6;color:#8a2b2b;}
+
+  details{border-top:1px solid var(--line);padding:16px 0;}
+  details summary{cursor:pointer;font-family:'Space Grotesk',sans-serif;font-weight:600;
+    font-size:16px;color:var(--silver-bright);list-style:none;}
+  details summary::-webkit-details-marker{display:none;}
+  details summary::after{content:"+";float:right;color:var(--gold-bright);font-weight:400;}
+  details[open] summary::after{content:"−";}
+  details p{margin-top:10px;font-size:14.5px;color:var(--text-muted);max-width:760px;}
+
+  footer{border-top:1px solid var(--line);background:var(--bg-alt);padding:26px 0 40px;margin-top:20px;}
+  .ruo{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--gold-bright);margin-bottom:10px;}
+  footer p{font-size:12.5px;color:var(--silver-dim);max-width:820px;}
+  footer a{color:var(--silver-dim);}
+</style>
+<script src="assets/meta-pixel.js" defer></script>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a href="/"><img class="logo" src="assets/logo-light.webp" alt="NovaFlex Peptides"></a>
+    <span class="header-note">Research Use Only</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="hero">
+    <span class="eyebrow"><s></s> Partner Program</span>
+    <h1>Get paid to send researchers <em>to a supplier that shows its work.</em></h1>
+    <p class="lede">Up to 25% commission, uncapped, on every order placed with your code — and a
+    real discount for the people who use it. No cost to join, no minimums, no exclusivity.</p>
+    <a class="cta" href="#apply">Apply in two minutes</a>
+    <div class="cta-note">No account needed · Reviewed within 48 hours</div>
+  </div>
+
+  <div class="trust">
+    <div><b>Up to 25%</b><span>Commission, uncapped</span></div>
+    <div><b>$0</b><span>Cost to join</span></div>
+    <div><b>Every lot</b><span>Third-party tested, COA</span></div>
+    <div><b>Clayton, NC</b><span>Ships same business day</span></div>
+  </div>
+
+  <section>
+    <h2>How it works</h2>
+    <p class="sub">Three steps, and the only one that takes any effort is the first.</p>
+    <div class="steps">
+      <article>
+        <div class="n">STEP 01</div>
+        <h3>Apply below</h3>
+        <p>Tell us who you are and where your audience is. No account, no upload, no call. We review
+        every application ourselves and reply within 48 hours either way.</p>
+      </article>
+      <article>
+        <div class="n">STEP 02</div>
+        <h3>Get your code</h3>
+        <p>Once approved you get a personal discount code and a partner dashboard login. Your rate
+        is set with you, based on your audience — not assigned from a table.</p>
+      </article>
+      <article>
+        <div class="n">STEP 03</div>
+        <h3>Earn on every order</h3>
+        <p>Commission accrues on every paid order placed with your code, itemised in your dashboard
+        so you can audit it. Uncapped, and it keeps paying on repeat orders.</p>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Who we approve</h2>
+    <p class="sub">Audience size matters less than whether your audience believes you. A small
+    engaged following in research, laboratory or scientific circles is worth more to us than a
+    large general one, and we approve on that basis.</p>
+    <div class="rules">
+      <h3>What partners can and cannot say</h3>
+      <p style="color:var(--text-muted);font-size:14.5px;max-width:760px;">
+      NovaFlex supplies research-use-only material, and that is the whole basis on which the
+      business is legally able to operate. Partner content has to stay on the same side of that
+      line we do. This is the one rule we do not bend on, and we would rather say so before you
+      apply than after you have made something.</p>
+      <div class="cols">
+        <ul class="yes">
+          <li>Assayed purity and how it was measured</li>
+          <li>Third-party testing, and who did it</li>
+          <li>Certificates of analysis, matched per lot</li>
+          <li>Sourcing, shipping and turnaround</li>
+          <li>Pricing and your discount code</li>
+          <li>How to evaluate any supplier's paperwork</li>
+        </ul>
+        <ul class="no">
+          <li>Any use in humans or animals</li>
+          <li>Dosing, amounts, schedules or protocols</li>
+          <li>Health, performance or cosmetic outcomes</li>
+          <li>Before-and-after results of any kind</li>
+          <li>Personal experience taking the material</li>
+          <li>Claims we could not put on our own site</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="apply">
+    <h2>Apply</h2>
+    <p class="sub">Two minutes, and you do not need an account. We read every one.</p>
+    <div class="apply">
+      <form id="applyForm" novalidate>
+        <div class="row">
+          <div class="field">
+            <label for="f-name">Your name</label>
+            <input id="f-name" name="name" type="text" autocomplete="name" required maxlength="120">
+          </div>
+          <div class="field">
+            <label for="f-email">Email</label>
+            <input id="f-email" name="email" type="email" autocomplete="email" required maxlength="200">
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label for="f-platform">Where you publish</label>
+            <input id="f-platform" name="platform" type="text" maxlength="200"
+                   placeholder="@handle, channel or site">
+          </div>
+          <div class="field">
+            <label for="f-audience">Audience size</label>
+            <input id="f-audience" name="audience" type="text" maxlength="120"
+                   placeholder="Rough number is fine">
+          </div>
+        </div>
+        <div class="field">
+          <label for="f-message">Anything else</label>
+          <textarea id="f-message" name="message" maxlength="1200"
+                    placeholder="Who follows you, and how you'd want to work with us."></textarea>
+          <div class="hint">Optional, but it is the part we actually read closely.</div>
+        </div>
+        <button class="cta" type="submit" id="submitBtn" style="margin-top:6px;">Submit application</button>
+        <div class="msg" id="formMsg" role="status" aria-live="polite"></div>
+      </form>
+    </div>
+  </section>
+
+  <section>
+    <h2>Questions</h2>
+    <details><summary>How much does it pay?</summary>
+      <p>Commission is set per partner and runs up to 25% of the order total, uncapped. The rate
+      depends on your audience and where you publish. Everyone who uses your code gets a discount
+      too, so the code is worth sharing on its own merits rather than being a pure ask.</p></details>
+    <details><summary>Does it cost anything, and is it exclusive?</summary>
+      <p>No fee, no minimum sales requirement, and no exclusivity. Keep working with whoever else
+      you work with.</p></details>
+    <details><summary>Do I need a big following?</summary>
+      <p>No. We would rather have five hundred people who trust you than fifty thousand who scroll
+      past. Approval is based on fit and credibility, not follower count.</p></details>
+    <details><summary>How do payouts work?</summary>
+      <p>Commission accrues on every paid order placed with your code and appears in your partner
+      dashboard in real time, itemised per order so the total is auditable. Payouts are issued on
+      request once a balance has accrued.</p></details>
+    <details><summary>What exactly can I say about the products?</summary>
+      <p>Supply facts only — purity, testing, certificates, sourcing, shipping, price. Nothing about
+      use in humans or animals, no dosing or protocols, and no health or performance outcomes. That
+      constraint applies to our own marketing identically, so we are not asking anything of partners
+      we do not do ourselves.</p></details>
+    <details><summary>I'm already a partner. Where do I log in?</summary>
+      <p>Your dashboard is at <a href="team.html">the partner portal</a>, where you can grab your
+      code and track commission.</p></details>
+  </section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="ruo">Research Use Only</div>
+    <p>
+      NovaFlex Peptides supplies Research Use Only (RUO) materials. Products are not for human
+      consumption, medical use, or clinical application. All compounds are intended solely for
+      laboratory, in-vitro, and scientific research. No statements have been evaluated by the FDA
+      and no therapeutic claims are made. Ensure all research complies with institutional and
+      legal standards. &nbsp;·&nbsp; <a href="/policies.html">Policies</a>
+      &nbsp;·&nbsp; <a href="team.html">Partner login</a>
+    </p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var API = 'https://api.novaflexusa.com/api';
+  var form = document.getElementById('applyForm');
+  var btn = document.getElementById('submitBtn');
+  var msg = document.getElementById('formMsg');
+
+  function say(kind, text) { msg.className = 'msg ' + kind; msg.textContent = text; }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = form.name.value.trim();
+    var email = form.email.value.trim();
+    // Validate here rather than relying on the endpoint to reject: a rate-limited
+    // public form should not spend one of its attempts on a blank field.
+    if (!name || !email || email.indexOf('@') < 1) {
+      say('err', 'Please add your name and a valid email.');
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    fetch(API + '/affiliate-apply', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        platform: form.platform.value.trim(),
+        audience: form.audience.value.trim(),
+        message: form.message.value.trim()
+      })
+    }).then(function (r) {
+      if (r.ok) {
+        form.style.display = 'none';
+        say('ok', 'Got it — thanks. We read every application ourselves and will reply to ' +
+                  email + ' within 48 hours either way.');
+      } else if (r.status === 429) {
+        say('err', 'That is a few too many attempts from this connection. Try again in a little while, or email support@novaflexusa.com.');
+        btn.disabled = false; btn.textContent = 'Submit application';
+      } else {
+        say('err', 'Something went wrong sending that. Email support@novaflexusa.com and we will pick it up from there.');
+        btn.disabled = false; btn.textContent = 'Submit application';
+      }
+    }).catch(function () {
+      say('err', 'Could not reach the server. Check your connection, or email support@novaflexusa.com.');
+      btn.disabled = false; btn.textContent = 'Submit application';
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
