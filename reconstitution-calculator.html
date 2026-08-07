@@ -229,6 +229,13 @@
   .calc-cta p{margin-top:7px;font-size:14px;line-height:1.65;color:var(--text-muted);}
   .calc-cta a{display:inline-block;margin-top:13px;color:var(--gold-bright);font-weight:600;font-size:14px;}
   @media (max-width:780px){ .calc-grid{grid-template-columns:1fr;} }
+
+  .shareRow{margin-top:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .shareBtn{font-family:'Inter',sans-serif;font-size:13.5px;padding:8px 15px;border-radius:5px;
+    cursor:pointer;background:var(--bg-alt,#fff);color:var(--text,#221f18);
+    border:1px solid var(--line-strong,rgba(30,24,10,.22));}
+  .shareBtn:hover{border-color:var(--gold,#b08d2e);color:var(--gold-bright,#8a6a24);}
+  .shareMsg{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gold-bright,#8a6a24);}
 </style>
 
 <!-- Meta pixel — ID lives in assets/meta-pixel.js -->
@@ -291,11 +298,19 @@
           <label for="target">Target aliquot mass <span style="text-transform:none;letter-spacing:0">(optional)</span></label>
           <div class="fld-in"><input id="target" type="number" min="0" step="any" value="0.5" inputmode="decimal"><span class="unit">mg</span></div>
         </div>
+        <div class="fld" style="margin-bottom:0;">
+          <label for="wantConc">Or solve for a concentration <span style="text-transform:none;letter-spacing:0">(optional)</span></label>
+          <div class="fld-in"><input id="wantConc" type="number" min="0" step="any" placeholder="e.g. 5" inputmode="decimal"><span class="unit">mg/mL</span></div>
+        </div>
       </div>
 
       <div class="out">
         <div class="k">Working concentration</div>
         <div class="big" id="conc">5.00<small>mg/mL</small></div>
+        <div class="shareRow">
+          <button type="button" id="nf-permalink" class="shareBtn">Copy a link to this calculation</button>
+          <span id="nf-shareMsg" class="shareMsg"></span>
+        </div>
         <div class="out-rows" id="rows"></div>
         <div class="ruo-note">For research use only — not for human or veterinary use. This tool performs
         arithmetic on values you supply and is provided for laboratory preparation and record-keeping. It is not
@@ -436,5 +451,46 @@
 })();
 </script>
 
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var fire = function(el){ if (el) el.dispatchEvent(new Event('input', {bubbles:true})); };
+
+  // Reverse solve. Every competing calculator does mass + volume -> mg/mL.
+  // None answer the question people actually arrive with: "I want this
+  // concentration, how much diluent?" It writes into the volume field so the
+  // whole readout recalculates from one source of truth.
+  var want = $('wantConc');
+  if (want) want.addEventListener('input', function(){
+    var mass = parseFloat($('mass').value), c = parseFloat(want.value);
+    if (mass > 0 && c > 0){ $('vol').value = +(mass / c).toFixed(4); fire($('vol')); }
+  });
+
+  // Restore from the query string so a shared link opens filled in.
+  try {
+    var q = new URLSearchParams(location.search), any = false;
+    ['mass','vol','target'].forEach(function(k){
+      var v = q.get(k);
+      if (v !== null && $(k)) { $(k).value = v; any = true; }
+    });
+    if (any) fire($('mass'));
+  } catch(e){}
+
+  // The point of the share button: a tool nobody can cite gets no citations.
+  var btn = $('nf-permalink'), msg = $('nf-shareMsg');
+  if (btn) btn.addEventListener('click', function(){
+    var p = new URLSearchParams();
+    ['mass','vol','target'].forEach(function(k){
+      var el = $(k); if (el && el.value) p.set(k, el.value);
+    });
+    var url = location.origin + location.pathname + (p.toString() ? '?' + p : '');
+    var show = function(t){ msg.textContent = t; setTimeout(function(){ msg.textContent=''; }, 4000); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(function(){ show('Link copied'); }, function(){ show(url); });
+    } else show(url);
+  });
+})();
+</script>
 </body>
 </html>
