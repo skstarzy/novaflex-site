@@ -468,6 +468,19 @@ def product_jsonld(p, c, url):
             else "https://schema.org/InStock",
             "url": url,
             "seller": {"@type": "Organization", "name": BRAND},
+            # Shipping terms are stated on policies.html: $9.95 flat under $249,
+            # free at $249+. Encoding them lets a result show delivery cost
+            # rather than making the shopper click to find out.
+            "shippingDetails": [
+                {"@type": "OfferShippingDetails",
+                 "shippingRate": {"@type": "MonetaryAmount", "value": 9.95, "currency": "USD"},
+                 "shippingDestination": {"@type": "DefinedRegion", "addressCountry": "US"}},
+                {"@type": "OfferShippingDetails",
+                 "shippingRate": {"@type": "MonetaryAmount", "value": 0, "currency": "USD"},
+                 "shippingDestination": {"@type": "DefinedRegion", "addressCountry": "US"},
+                 "eligibleTransactionVolume": {"@type": "PriceSpecification",
+                                               "price": 249, "priceCurrency": "USD"}},
+            ],
         }
     return data
 
