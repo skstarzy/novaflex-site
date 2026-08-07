@@ -25,9 +25,8 @@ SITE = "https://novaflexusa.com"
 
 TITLE = "Guides &amp; Reference | NovaFlex Peptides"
 TITLE_PLAIN = "Guides & Reference | NovaFlex Peptides"
-DESC = ("Plain-English reference for anyone sourcing research peptides: how to read a Certificate "
-        "of Analysis, what HPLC and mass spectrometry each prove, how receptor agonists are "
-        "classified, and a free reconstitution calculator. Research use only.")
+DESC = ("Plain-English guides for sourcing research peptides: how to read a Certificate of "
+        "Analysis, what HPLC and mass spec each prove, and a reconstitution calculator.")
 
 # Grouped because the grouping is true, not decorative: two pieces teach you to
 # audit a supplier's paperwork, one explains how a class of compounds is

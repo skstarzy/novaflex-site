@@ -396,9 +396,14 @@ def title_for(p):
     # ~60 characters a result actually displays and got the brand truncated. The
     # purity figure is the differentiator worth the space; COA is covered in the
     # description and on the page.
-    if purity:
-        return "%s — %s Purity | %s" % (head, purity, BRAND)
-    return "%s — Lab Supply | %s" % (head, BRAND)
+    # Long compound names (CJC-1295 + Ipamorelin) push past the ~60 characters a
+    # result displays, which truncates the brand off the end. Drop to the short
+    # brand for those rather than losing it entirely.
+    full = "%s — %s Purity | %s" % (head, purity, BRAND) if purity else "%s — Lab Supply | %s" % (head, BRAND)
+    if len(full) > 60:
+        short = "NovaFlex"
+        full = "%s — %s Purity | %s" % (head, purity, short) if purity else "%s | %s" % (head, short)
+    return full
 
 
 def description_for(p, c):
