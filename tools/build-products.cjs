@@ -66,7 +66,7 @@ function buildPage(p, snap) {
   const product = {
     "@context": "https://schema.org",
     "@type": "Product",
-    "name": (p.seoName || p.name) + ' ' + p.spec,
+    "name": (p.seoName || p.name) + ' ' + p.spec,   // matches seoLabel() in product.html
     "category": snap.category,
     "image": img,
     "brand": { "@type": "Brand", "name": "NovaFlex Peptides" },
@@ -87,7 +87,7 @@ function buildPage(p, snap) {
       { "@type": "ListItem", "position": 1, "name": "Home",          "item": `${ORIGIN}/` },
       { "@type": "ListItem", "position": 2, "name": "Catalog",       "item": `${ORIGIN}/#catalog` },
       { "@type": "ListItem", "position": 3, "name": snap.category,   "item": `${ORIGIN}/#catalog` },
-      { "@type": "ListItem", "position": 4, "name": p.display || p.name, "item": url }
+      { "@type": "ListItem", "position": 4, "name": p.seoName || p.name, "item": url }
     ]
   };
 
