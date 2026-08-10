@@ -1846,7 +1846,9 @@ function productCard(p){
   const priceHTML = shopAuthed()
     ? `<span class="prod-price">$${p.price.toFixed(2)}</span>`
     : `<span class="prod-price locked" onclick="openAuthModal()">Sign in for price</span>`;
-  const href = `product.html?slug=${p.slug}`;
+  // Static, indexable page per product — see tools/build-products.cjs.
+  // product.html?slug=X still resolves and canonicals here.
+  const href = `/products/${p.slug}/`;
   return `
   <div class="prod-card${p.soldOut ? ' is-soldout' : ''}" data-cat="${p.cat}" data-slug="${p.slug}">
     <div class="prod-media">
