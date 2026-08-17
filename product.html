@@ -154,19 +154,10 @@
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
   /* age gate */
-  #ageGate{position:fixed;inset:0;background:rgba(4,4,6,0.94);z-index:100;display:flex;padding:24px;overflow-y:auto;}
-  #ageGate.hidden{display:none;}
-  .gate-card{margin:auto;background:var(--bg-alt);border:1px solid var(--line-strong);border-radius:14px;padding:32px 28px;max-width:420px;text-align:center;}
+      .gate-card{margin:auto;background:var(--bg-alt);border:1px solid var(--line-strong);border-radius:14px;padding:32px 28px;max-width:420px;text-align:center;}
   .gate-card img{width:88px;margin:0 auto 18px;}
   .gate-card h2{font-size:20px;color:var(--silver-bright);}
-  .gate-card p{margin-top:12px;font-size:13px;color:var(--text-muted);line-height:1.6;}
-  .gate-checks{margin-top:22px;display:flex;flex-direction:column;gap:14px;text-align:left;}
-  .gate-check{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--silver);line-height:1.5;}
-  .gate-check input{margin-top:2px;accent-color:var(--gold);width:15px;height:15px;flex-shrink:0;}
-  .gate-card .btn-gold{width:100%;justify-content:center;margin-top:22px;}
-  .gate-leave{margin-top:14px;font-size:12px;color:var(--text-muted);}
-  .gate-leave a{color:var(--gold);text-decoration:underline;}
-  /* researcher account modal */
+  .gate-card p{margin-top:12px;font-size:13px;color:var(--text-muted);line-height:1.6;}  .gate-card .btn-gold{width:100%;justify-content:center;margin-top:22px;}  /* researcher account modal */
   #authModal{position:fixed;inset:0;z-index:200;background:rgba(4,4,6,0.94);display:none;align-items:center;justify-content:center;padding:24px;overflow-y:auto;}
   #authModal.open{display:flex;}
   #authModal .gate-card{position:relative;}
@@ -193,19 +184,12 @@
 </head>
 <body>
 
-<div id="ageGate" class="hidden">
-  <div class="gate-card">
-    <img src="assets/logo.webp?v=4" alt="NovaFlex Peptides">
-    <h2>Before you enter</h2>
-    <p>NovaFlex Peptides supplies compounds strictly for laboratory and research use only (RUO). Access is limited to qualified researchers. Please confirm the following to continue.</p>
-    <div class="gate-checks">
-      <label class="gate-check"><input type="checkbox" id="g1"> I certify that I am at least 21 years of age.</label>
-      <label class="gate-check"><input type="checkbox" id="g2"> I am a qualified researcher, or purchasing on behalf of a research institution, strictly for laboratory research. I understand these compounds are for research use only — not for human or veterinary consumption.</label>
-    </div>
-    <button class="btn btn-gold" id="gateEnter">Enter Site</button>
-    <div class="gate-leave">Not a researcher? <a href="https://www.google.com">Please leave this site.</a></div>
-  </div>
-</div>
+<!-- The interstitial age gate lived here. It was the weaker of two gates: the
+     homepage carries a full researcher sign-in wall with the same 21+ and RUO
+     attestations, and clearing either one sets the same localStorage flag. Two
+     different gates on one site read as an oversight rather than as rigour, so
+     the checkbox variant went. Purchase is still gated — pricing and add-to-cart
+     both route through the sign-in modal below. -->
 
 <div id="authModal" role="dialog" aria-modal="true">
   <div class="gate-card">
@@ -550,25 +534,10 @@ function render(){
   } catch(e){}
 }
 
-// ---- age gate ----
-function initGate(){
-  const gate = document.getElementById('ageGate');
-  if (localStorage.getItem('nf_gate_ok') === '1'){ gate.classList.add('hidden'); return; }
-  gate.classList.remove('hidden');
-  document.getElementById('gateEnter').addEventListener('click', () => {
-    if (document.getElementById('g1').checked && document.getElementById('g2').checked){
-      try { localStorage.setItem('nf_gate_ok','1'); } catch(e){}
-      gate.classList.add('hidden');
-    } else {
-      alert('Please confirm both statements to enter.');
-    }
-  });
-}
 
 loadCart();
 renderCount();
 render();
-initGate();
 </script>
 </body>
 </html>
