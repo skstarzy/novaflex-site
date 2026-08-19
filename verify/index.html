@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Researcher Verification — For Research Use Only | NovaFlex Peptides</title>
+<meta name="description" content="For Research Use Only — not for human or veterinary use. Access to NovaFlex Peptides is restricted to qualified researchers who acknowledge the research-use-only restriction.">
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#f7f4ee">
+<link rel="canonical" href="https://novaflexusa.com/verify">
+<link rel="icon" href="../assets/logo.webp?v=4">
+
+<!--
+  The researcher gate, at a stable URL that can be handed to a payment
+  processor's underwriting team.
+
+  This page exists because /verify was submitted for review and returned 404.
+  The reviewer loaded an error page, found no RUO language on it, and correctly
+  recorded it as "no gate at all". The homepage gate was real the whole time —
+  it was simply not at the address anyone was told to check.
+
+  Two rules govern this file:
+
+  1. Every word of the restriction is in the SERVED HTML. Nothing here is
+     injected by JavaScript. An underwriter loading this URL with scripts
+     disabled, or a crawler that does not execute them, must still see the full
+     research-use-only statement and the acknowledgement it asks for. That is
+     the exact failure this page is fixing, so it must not be reintroduced.
+
+  2. The acknowledgement gates the action. The continue button is disabled
+     until all three boxes are ticked, and it is disabled in the markup rather
+     than by script, so it is closed by default even if JS never runs.
+-->
+
+<style>
+  :root{
+    --bg:#f7f4ee; --bg-alt:#ffffff; --line:rgba(30,24,10,0.12); --line-strong:rgba(30,24,10,0.22);
+    --silver:#4b4842; --silver-bright:#171410; --silver-dim:#8c887f;
+    --gold:#b08d2e; --gold-bright:#8a6a24; --gold-deep:#6f5518;
+    --text:#221f18; --text-muted:#6b675f;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;line-height:1.6;
+    min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px 20px;}
+  .card{max-width:600px;width:100%;background:var(--bg-alt);border:1px solid var(--line-strong);
+    border-radius:14px;padding:38px 34px;}
+  .logo{height:40px;width:auto;display:block;margin:0 auto 24px;}
+  .ruo-flag{background:#171410;color:#f5efdf;border-radius:8px;padding:16px 18px;text-align:center;margin-bottom:24px;}
+  .ruo-flag b{display:block;font-size:15px;color:#e8c766;letter-spacing:.01em;}
+  .ruo-flag span{display:block;margin-top:6px;font-size:13px;color:#cfcabd;line-height:1.6;}
+  h1{font-size:22px;margin:0 0 14px;color:var(--silver-bright);letter-spacing:-.01em;
+    font-family:'Space Grotesk',Helvetica,Arial,sans-serif;}
+  p{margin:0 0 14px;font-size:14px;color:var(--text-muted);}
+  .checks{margin:22px 0 0;display:flex;flex-direction:column;gap:14px;
+    border-top:1px solid var(--line);padding-top:22px;}
+  .check{display:flex;gap:11px;align-items:flex-start;font-size:13.5px;color:var(--silver);line-height:1.55;}
+  .check input{margin-top:3px;width:16px;height:16px;flex-shrink:0;accent-color:var(--gold);}
+  .btn{display:block;width:100%;margin-top:24px;padding:14px;border-radius:6px;border:1px solid var(--silver-bright);
+    background:var(--silver-bright);color:#fff;font-size:15px;font-weight:600;cursor:pointer;
+    font-family:'Space Grotesk',Helvetica,Arial,sans-serif;text-align:center;text-decoration:none;}
+  .btn:hover{background:#000;}
+  .btn:disabled{opacity:.4;cursor:not-allowed;background:var(--silver-dim);border-color:var(--silver-dim);}
+  .leave{margin-top:16px;text-align:center;font-size:12.5px;color:var(--text-muted);}
+  .leave a{color:var(--gold-bright);}
+  .legal{margin-top:24px;padding-top:20px;border-top:1px solid var(--line);
+    font-size:11.5px;line-height:1.65;color:var(--silver-dim);}
+  .legal a{color:var(--silver-dim);}
+  :focus-visible{outline:2px solid var(--gold-bright);outline-offset:2px;}
+</style>
+</head>
+<body>
+<main class="card">
+  <img class="logo" src="../assets/logo.webp?v=4" alt="NovaFlex Peptides">
+
+  <div class="ruo-flag">
+    <b>For Research Use Only — Not for human or veterinary use.</b>
+    <span>Products sold by NovaFlex LLC are laboratory research materials. They are not drugs,
+    not dietary supplements, and are not intended to diagnose, cure, mitigate, treat, or prevent
+    any disease or condition.</span>
+  </div>
+
+  <h1>Researcher verification</h1>
+
+  <p>Access to pricing, certificates of analysis and ordering is restricted to qualified
+  researchers. By creating an account you confirm you are a qualified researcher and will use
+  these products only for in-vitro laboratory research.</p>
+
+  <p>Please confirm all three statements below to continue. This acknowledgement is required
+  before an account can be created and before any order can be placed.</p>
+
+  <form id="verifyForm" class="checks" action="../index.html" method="get">
+    <label class="check">
+      <input type="checkbox" id="c1" required>
+      <span>I am at least <b>21 years of age</b>.</span>
+    </label>
+    <label class="check">
+      <input type="checkbox" id="c2" required>
+      <span>I am a <b>qualified researcher</b>, or I am purchasing on behalf of a legitimate
+      business, institution, or private research organization, and I have the training and
+      authority to handle, store and dispose of research materials lawfully and safely.</span>
+    </label>
+    <label class="check">
+      <input type="checkbox" id="c3" required>
+      <span>I understand these products are supplied <b>For Research Use Only and are not for
+      human or veterinary use</b>. I will not use them in or on humans or animals, compound them
+      for patient use, dispense them as medication, or resell them for consumer use.</span>
+    </label>
+
+    <button class="btn" id="continueBtn" type="submit" disabled>
+      Confirm and continue
+    </button>
+  </form>
+
+  <div class="leave">Not a qualified researcher?
+    <a href="https://www.google.com" rel="nofollow">Please leave this site.</a>
+  </div>
+
+  <div class="legal">
+    NovaFlex LLC, doing business as NovaFlex Peptides · 120 N. Tech Dr., Suite 102, Clayton, NC 27520 ·
+    <a href="tel:+19193337234">(919) 333-7234</a> ·
+    <a href="mailto:support@novaflexusa.com">support@novaflexusa.com</a><br>
+    Sales are restricted to purchasers aged 21 or older acting on behalf of a qualified laboratory,
+    institution, or business entity engaged in lawful research. All accounts are subject to
+    verification and order screening.
+    <a href="../policies.html">Terms, Privacy, Shipping &amp; Refund policies</a>.
+  </div>
+</main>
+
+<script>
+  // Progressive enhancement only. The button ships disabled in the markup, so
+  // with scripts off the gate stays closed rather than falling open — the copy
+  // above is served HTML and does not depend on any of this.
+  (function(){
+    var boxes = ['c1','c2','c3'].map(function(id){ return document.getElementById(id); });
+    var btn = document.getElementById('continueBtn');
+    function sync(){ btn.disabled = !boxes.every(function(b){ return b.checked; }); }
+    boxes.forEach(function(b){ b.addEventListener('change', sync); });
+    sync();
+    document.getElementById('verifyForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      if (btn.disabled) return;
+      // Records the acknowledgement so the storefront gate does not ask twice.
+      try { localStorage.setItem('nf_gate_ok','1'); } catch(err){}
+      window.location.href = '../index.html';
+    });
+  })();
+</script>
+</body>
+</html>

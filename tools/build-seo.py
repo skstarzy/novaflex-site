@@ -57,20 +57,12 @@ STATIC_PAGES = [
     ("/", "1.0", "weekly"),
     ("/policies.html", "0.3", "yearly"),
     ("/team.html", "0.4", "monthly"),
-    # The guides hub. Carries the nav's "Guides" link on every page, so it is
-    # the entry point crawlers reach the reference pages through — two of them
-    # previously had a single inbound link each and were effectively orphaned.
-    ("/blog.html", "0.7", "monthly"),
-    # Linkable asset: free tools are what earn backlinks, which is the thing
-    # this domain most lacks. Higher priority than the policy pages.
-    ("/reconstitution-calculator.html", "0.7", "monthly"),
-    ("/how-to-read-a-coa.html", "0.7", "monthly"),
+    # The guides hub, the calculator and the reference pages were unpublished
+    # for payment-processor compliance (21 CFR 201.128 intended use). They are
+    # deliberately absent from the sitemap; the originals are in _unpublished/.
     # Recruitment landing page. "peptide affiliate program" is a real query
     # with real intent and nothing on this domain answered it before.
     ("/partners.html", "0.7", "monthly"),
-
-    ("/glp1-gip-glucagon-receptor-agonists.html", "0.7", "monthly"),
-    ("/hplc-vs-mass-spectrometry.html", "0.7", "monthly"),
 ]
 
 
@@ -256,14 +248,10 @@ def write_llms(products, content, cat_labels):
         "- Every lot: 99%+ assayed purity by HPLC, identity confirmed by mass spectrometry, batch Certificate of Analysis included. Independent analysis by Janoshik Analytical.",
         "- Ships from Clayton, NC (USA), same business day before cutoff, tracked. Free US shipping over $249.",
         "",
-        "## Guides and tools",
-        "",
-        "- [Guides and reference hub](%s/blog.html): index of everything below, and the page the site's Guides nav points to." % SITE,
-        "- [How to read a peptide Certificate of Analysis](%s/how-to-read-a-coa.html): what HPLC purity and mass-spec identity mean, and how to tell a real COA from a decorative one." % SITE,
-        "- [HPLC vs mass spectrometry](%s/hplc-vs-mass-spectrometry.html): what each analytical method proves about a peptide." % SITE,
-        "- [GLP-1, GIP and glucagon receptor agonists](%s/glp1-gip-glucagon-receptor-agonists.html): how single, dual and triple receptor agonists are distinguished in the research literature." % SITE,
-        "- [Peptide reconstitution calculator](%s/reconstitution-calculator.html): working concentration in mg/mL from vial mass and diluent volume." % SITE,
-        "",
+        # The guides and calculator were unpublished for payment-processor
+        # compliance. This file exists to be read by AI crawlers, so leaving the
+        # links here would keep pointing them at preparation material that the
+        # rest of the site no longer serves.
         "## Catalog (research use only)",
         "",
     ]
