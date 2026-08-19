@@ -605,7 +605,7 @@ def prerendered_body(p, c):
         )
     if c.get("handling"):
         parts.append(
-            '<section class="pd-section"><h2>Storage &amp; reconstitution</h2><p>%s</p></section>'
+            '<section class="pd-section"><h2>Storage</h2><p>%s</p></section>'
             % escape(c["handling"])
         )
     if c.get("faqs"):

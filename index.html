@@ -1123,7 +1123,7 @@
         <div class="cat-tile reveal" data-filter="solvents">
           <div class="tick"></div>
           <h3>Laboratory Solvents</h3>
-          <p>Sterile reconstitution solvents supplied for laboratory professionals only.</p>
+          <p>Sterile laboratory solvents supplied for laboratory professionals only.</p>
           <span class="go">2 items →</span>
         </div>
         <div class="cat-tile reveal" data-filter="All" style="background:linear-gradient(135deg,#f9f2e4,#ffffff);border-color:var(--gold-deep);">
@@ -1279,7 +1279,7 @@
             <li>CU+ · BP+ · TB+ fusion architecture</li>
             <li>70mg per vial — lyophilized powder</li>
             <li>Verified at 99.2%+ purity</li>
-            <li>One-step reconstitution protocol</li>
+            <li>Three compounds in a single vial</li>
           </ul>
           <div id="spotlightBuy"></div>
         </div>
@@ -1650,14 +1650,14 @@ function renderDrawer(){
         <div class="drawer-item-price">$${(i.price*i.qty).toFixed(2)}</div>
       </div>`;
     }).join('');
-    // Add-on nudge: offer BAC Water (reconstitution solvent) unless it's already in the order.
+    // Add-on nudge: offer BAC Water (laboratory solvent) unless it's already in the order.
     const hasSolvent = cart.some(i => i.name === 'Bacteriostatic Water');
     const nudge = hasSolvent ? '' : `
       <div class="cart-nudge">
         <img src="assets/vials/NF-solvent-3ml.webp?v=3" alt="BAC Water" loading="lazy">
         <div class="cart-nudge-info">
           <div class="cart-nudge-title">Add BAC Water?</div>
-          <div class="cart-nudge-sub">Sterile reconstitution solvent — pairs with lyophilized reference materials. Lab use only.</div>
+          <div class="cart-nudge-sub">Sterile laboratory solvent — pairs with lyophilized reference materials. Lab use only.</div>
         </div>
         <button class="cart-nudge-add" onclick="addSolvent()">+ 3ml · $10</button>
       </div>`;
