@@ -177,12 +177,23 @@
     .nav-links{display:none;}
     .pd-benefits{grid-template-columns:1fr;}
   }
+
+  /* Ordering-paused banner. Sits above the nav so it is the first thing read,
+     rather than a surprise at the point of clicking a dead button. */
+  .pause-bar{background:#171410;color:#f5efdf;font-size:13.5px;line-height:1.55;
+    padding:11px 20px;text-align:center;border-bottom:1px solid rgba(176,141,46,.5);}
+  .pause-bar b{color:#e8c766;}
+  .pause-bar a{color:#e8c766;text-decoration:underline;text-underline-offset:2px;}
+  .pd-paused{margin-top:6px;padding:14px 16px;border:1px solid var(--line-strong);
+    border-radius:8px;background:var(--bg-alt);color:var(--text-muted);font-size:13.5px;line-height:1.6;}
 </style>
 
 <!-- Meta pixel — ID lives in assets/meta-pixel.js -->
 <script src="assets/meta-pixel.js" defer></script>
 </head>
 <body>
+<div class="pause-bar"><b>Ordering paused.</b> We&rsquo;re updating the site and have temporarily stopped taking new orders. The catalog and lab reports remain available. Orders already placed are unaffected &mdash; questions to <a href="mailto:support@novaflexusa.com">support@novaflexusa.com</a>.</div>
+
 
 <!-- The interstitial age gate lived here. It was the weaker of two gates: the
      homepage carries a full researcher sign-in wall with the same 21+ and RUO
@@ -291,6 +302,25 @@
 <script>
 const CHECKOUT_API_URL = 'https://api.novaflexusa.com/api/checkout';
 
+/**
+ * Ordering paused while the site is rebuilt to compliance standards.
+ *
+ * Set to false to restore; nothing else has been deleted, so turning it back on
+ * is a one-word change. Everything that can put an item in the cart funnels
+ * through addToCart(), and the drawer is the only route to submitOrder(), so
+ * guarding those two closes every path without touching the cart, pricing or
+ * account code.
+ *
+ * Deliberately does NOT touch pay.html. There were 33 orders sitting pending
+ * with live pay links when this went up, several of them hours old. Someone who
+ * has already committed to a purchase and is midway through paying should be
+ * able to finish; stranding them is a worse customer experience than the
+ * confusion this is meant to prevent.
+ */
+const ORDERING_PAUSED = true;
+const PAUSE_NOTICE = 'Ordering is temporarily paused while we update the site. The catalog and lab reports stay available, and orders already placed are unaffected. Questions: support@novaflexusa.com';
+function pauseNotice(){ if (typeof showToast === 'function') showToast(PAUSE_NOTICE); else alert(PAUSE_NOTICE); }
+
 const PRODUCTS = [
   {slug:"nv3rt-10mg", name:"NV-3RT", display:"NV-3RT", spec:"10mg vial", cat:"sizing", price:80, purity:"99.4%"},
   {slug:"nv2tz-10mg", name:"NV-2TZ", display:"NV-2TZ", spec:"10mg vial", cat:"sizing", price:65, purity:"99.3%"},
@@ -384,6 +414,7 @@ function showToast(msg){
 }
 
 function addCurrentToCart(p){
+  if (ORDERING_PAUSED){ pauseNotice(); return; }
   loadCart();
   const ex = cart.find(i => i.name === p.name && i.spec === p.spec);
   if (ex) ex.qty += 1; else cart.push({name:p.name, spec:p.spec, price:p.price, qty:1, display:p.display||undefined});
@@ -483,7 +514,7 @@ function render(){
 
   const buyHTML = p.soldOut
     ? '<span class="pd-soldtag">Sold out</span>'
-    : '<button class="btn btn-gold" id="addBtn">Add to Research Order →</button>';
+    : (ORDERING_PAUSED ? '<div class="pd-paused">Ordering is temporarily paused while we update the site.</div>' : '<button class="btn btn-gold" id="addBtn">Add to Research Order →</button>');
 
   const faqHTML = (c.faqs || []).map(f =>
     '<div class="pd-faq-item"><div class="pd-faq-q">'+escapeHtml(f.q)+'</div><div class="pd-faq-a">'+escapeHtml(f.a)+'</div></div>').join('');
