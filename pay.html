@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Complete Payment — NovaFlex Peptides</title>
+<title>Complete Payment — NovaFlex</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#f7f4ee">
 <link rel="icon" href="assets/logo.webp?v=4">
@@ -63,7 +63,7 @@
 <header class="nav">
   <div class="nav-inner">
     <a href="index.html" class="brand">
-      <img src="assets/logo.webp?v=4" alt="NovaFlex Peptides">
+      <img src="assets/logo.webp?v=4" alt="NovaFlex">
       <span class="brand-text">NOVA<span class="flex">FLEX</span></span>
     </a>
     <div class="nav-right"><a href="index.html#cart">← Back to cart</a></div>
@@ -92,7 +92,7 @@
 const API = 'https://api.novaflexusa.com';
 const params = new URLSearchParams(location.search);
 const orderId = params.get('order');
-const payToken = params.get('t'); // secure token from an emailed stack pay link
+const payToken = params.get('t'); // secure token from an emailed standing-order pay link
 const money = (n) => '$' + Number(n).toFixed(2);
 const errEl = document.getElementById('err');
 const payBtn = document.getElementById('pay-btn');

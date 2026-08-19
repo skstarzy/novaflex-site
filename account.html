@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Account — NovaFlex Peptides</title>
-<meta name="description" content="Your NovaFlex Peptides account — rewards points, order history, and account settings.">
+<title>My Account — NovaFlex</title>
+<meta name="description" content="Your NovaFlex account — rewards points, order history, and account settings.">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#f7f4ee">
 <link rel="icon" href="assets/logo.webp?v=4">
@@ -120,10 +120,6 @@
   @media(max-width:560px){.stack-picks{grid-template-columns:1fr;}}
   @media(max-width:640px){.acct-grid{grid-template-columns:1fr;}}
 
-  .partner-cta{margin-top:34px;border:1px dashed var(--line-strong);border-radius:12px;padding:20px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
-  .partner-cta p{margin:0;font-size:13.5px;color:var(--text-muted);line-height:1.6;max-width:520px;}
-  .partner-cta b{color:var(--silver-bright);}
-
   footer{border-top:1px solid var(--line);padding:26px 0;margin-top:40px;}
   .foot-inner{max-width:var(--maxw);margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--text-muted);}
   .foot-inner a{color:var(--silver-dim);}
@@ -139,7 +135,7 @@
 <header class="nav">
   <div class="nav-inner">
     <a href="index.html" class="brand">
-      <img src="assets/logo.webp?v=4" alt="NovaFlex Peptides">
+      <img src="assets/logo.webp?v=4" alt="NovaFlex">
       <span class="brand-text">NOVA<span class="flex">FLEX</span></span>
     </a>
     <div class="nav-right"><a href="index.html">← Back to shop</a></div>
@@ -154,9 +150,9 @@
 
 <footer>
   <div class="foot-inner">
-    <span>© 2026 NovaFlex Peptides · My Account</span>
+    <span>© 2026 NovaFlex · My Account</span>
     <a href="mailto:support@novaflexusa.com">support@novaflexusa.com</a>
-    <a href="partners.html">Partner Program &mdash; earn up to 25%</a>
+    
   </div>
 </footer>
 <div class="toast" id="toast"></div>
@@ -297,83 +293,13 @@ function renderDashboard(d){
         '<div class="msg" id="pwMsg"></div>'+
       '</div>'+
     '</div>'+
-    '<div class="partner-cta">'+
-      '<p><b>Want to earn as a partner?</b> Refer researchers and earn commission on every order. Membership is reviewed — apply to the team and we\'ll be in touch.</p>'+
-      '<a class="btn btn-ghost" href="team.html">Apply to the team →</a>'+
-    '</div>';
-
-  document.getElementById('logoutBtn').addEventListener('click',()=>{ clearToken(); showLogin(); });
-  document.getElementById('pwForm').addEventListener('submit', changePassword);
-  renderStack();
-}
-
-// ---------------- Research Stack ----------------
-const STACK_PRODUCTS = [
-  {name:"NV-3RT",display:"NV-3RT",spec:"10mg vial"},
-  {name:"NV-2TZ",display:"NV-2TZ",spec:"10mg vial"},
-  {name:"NV-1CG",display:"NV-1CG",spec:"10mg vial"},
-  {name:"NV-4TS",display:"NV-4TS",spec:"10mg vial"},
-  {name:"NV-4MC",display:"NV-4MC",spec:"10mg vial"},
-  {name:"NV-4IG",display:"NV-4IG",spec:"1mg vial"},
-  {name:"BP+",display:"BP+",spec:"5mg vial"},
-  {name:"TB+",display:"TB+",spec:"5mg vial"},
-  {name:"KP+",display:"KP+",spec:"10mg vial"},
-  {name:"CU+",display:"CU+",spec:"100mg vial"},
-  {name:"MT-1",display:"MT-1",spec:"10mg vial"},
-  {name:"NV-5SX",display:"NV-5SX",spec:"5mg vial"},
-  {name:"NV-5SL",display:"NV-5SL",spec:"10mg vial"},
-  {name:"NV-5KS",display:"NV-5KS",spec:"5mg vial"},
-  {name:"NAD+",display:"NAD+",spec:"500mg vial"},
-  {name:"NV-6SS",display:"NV-6SS",spec:"10mg vial"},
-  {name:"NV-6PT",display:"NV-6PT",spec:"10mg vial"},
-  {name:"Glow Blend",display:"CU+ · BP+ · TB+",spec:"70mg vial"},
-  {name:"Klow Blend",display:"KP+ · CU+ · BP+ · TB+",spec:"80mg vial"},
-  {name:"Wolverine Stack",display:"BP+ · TB+",spec:"10mg vial"},
-  {name:"NV-4CI",display:"NV-4CI",spec:"5/5 blend vial"},
-];
-const US_STATES = ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY','DC'];
-const prodKey = (p) => p.name + '||' + p.spec;
-let stackSel = [];  // array of prodKey while building
-
-async function renderStack(){
-  const el = document.getElementById('stackSection'); if(!el) return;
-  el.innerHTML = '<h2 class="sec">Research Stack</h2><div class="empty">Loading your stack…</div>';
-  let d;
-  try { const r = await fetch(API+'/api/shop-account/stack',{headers:{Authorization:'Bearer '+token()}}); d = await r.json(); if(!r.ok) throw 0; }
-  catch(e){ el.innerHTML = '<h2 class="sec">Research Stack</h2><div class="empty">Could not load your stack.</div>'; return; }
-  if(d.status==='active'||d.status==='paused'){ renderStackActive(d); }
-  else { renderStackBuilder(); }
-}
-
-function renderStackActive(d){
-  const el = document.getElementById('stackSection');
-  const items = (d.items||[]).map(i=>{
-    const p = STACK_PRODUCTS.find(x=>x.name===i.name&&x.spec===i.spec);
-    return '<li>'+esc((p&&p.display)||i.name)+' <span style="color:var(--silver-dim)">'+esc(i.spec)+'</span></li>';
-  }).join('');
-  const est = d.estimate||{};
-  const paused = d.status==='paused';
-  el.innerHTML =
-    '<h2 class="sec">Research Stack '+(paused?'<span class="pill pending" style="margin-left:6px;">Paused</span>':'<span class="pill paid" style="margin-left:6px;">Active</span>')+'</h2>'+
-    '<div class="panel" style="margin-top:8px;">'+
-      '<p style="margin:0 0 12px;font-size:13.5px;color:var(--text-muted);">Your custom stack renews on the <b style="color:var(--silver)">5th of each month</b> at 10% off. We\'ll email a one-click pay link when it\'s ready. '+(paused?'Billing is paused.':'')+'</p>'+
-      '<ul style="margin:0 0 14px;padding-left:18px;font-size:14px;color:var(--silver);line-height:1.8;">'+items+'</ul>'+
-      '<div class="krow"><span class="k">Subtotal</span><span class="v">'+money(est.subtotal||0)+'</span></div>'+
-      '<div class="krow"><span class="k">Stack discount (10%)</span><span class="v" style="color:var(--gold-bright)">−'+money(est.discount||0)+'</span></div>'+
-      '<div class="krow"><span class="k">Per month (before shipping/tax)</span><span class="v">'+money(est.afterDiscount||0)+'</span></div>'+
-      '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">'+
-        '<button class="btn btn-ghost" id="stackEdit">Edit stack</button>'+
-        (paused
-          ? '<button class="btn btn-ghost" id="stackResume">Resume</button>'
-          : '<button class="btn btn-ghost" id="stackPause">Pause</button>')+
-        '<button class="btn btn-ghost" id="stackCancel" style="border-color:rgba(224,132,132,.4);color:#e08484;">Cancel stack</button>'+
-      '</div>'+
+    
       '<div class="msg" id="stackMsg"></div>'+
     '</div>';
   document.getElementById('stackEdit').addEventListener('click',()=>{ stackSel = (d.items||[]).map(prodKey); renderStackBuilder(d.ship, d.supporterCode); });
   const pauseBtn=document.getElementById('stackPause'); if(pauseBtn) pauseBtn.addEventListener('click',()=>setStackStatus('paused'));
   const resumeBtn=document.getElementById('stackResume'); if(resumeBtn) resumeBtn.addEventListener('click',()=>setStackStatus('active'));
-  document.getElementById('stackCancel').addEventListener('click',()=>{ if(confirm('Cancel your Research Stack? This stops monthly billing and clears your stack.')) setStackStatus('cancelled'); });
+  document.getElementById('stackCancel').addEventListener('click',()=>{ if(confirm('Cancel your Standing Order? This stops monthly billing and clears your selection.')) setStackStatus('cancelled'); });
 }
 
 async function setStackStatus(status){
@@ -381,7 +307,7 @@ async function setStackStatus(status){
   try{
     const r=await fetch(API+'/api/shop-account/stack/status',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token()},body:JSON.stringify({status})});
     const d=await r.json(); if(!r.ok) throw new Error(d.error||'Failed.');
-    toast('Stack updated'); renderStack();
+    toast('Standing Order updated'); renderStack();
   }catch(e){ if(msg){msg.className='msg err';msg.textContent=e.message;} }
 }
 
@@ -397,7 +323,7 @@ function renderStackBuilder(existingShip, existingCode){
   }).join('');
   const stateOpts = '<option value="" disabled '+(s.state?'':'selected')+'>State</option>'+US_STATES.map(x=>'<option '+(s.state===x?'selected':'')+'>'+x+'</option>').join('');
   el.innerHTML =
-    '<h2 class="sec">Build your Research Stack</h2>'+
+    '<h2 class="sec">Build your Standing Order</h2>'+
     '<div class="panel" style="margin-top:8px;">'+
       '<p style="margin:0 0 4px;font-size:13.5px;color:var(--text-muted);">Pick <b style="color:var(--silver)">2 to 4 compounds</b>. Your stack renews on the 5th each month at <b style="color:var(--gold-bright)">10% off</b>.</p>'+
       '<div class="stack-picks" id="stackPicks">'+prodRows+'</div>'+
@@ -428,7 +354,7 @@ function renderStackBuilder(existingShip, existingCode){
     const est = document.getElementById('stackEst');
     if(!sel.length){ est.innerHTML = '<p style="font-size:12.5px;color:var(--silver-dim);margin-top:8px;">Select 2–4 compounds to see your monthly price.</p>'; return; }
     let rows = '<div class="krow"><span class="k">'+sel.length+' compound'+(sel.length>1?'s':'')+' · subtotal</span><span class="v">'+money(sub)+'</span></div>'
-      + '<div class="krow"><span class="k">Stack discount (10%)</span><span class="v" style="color:var(--gold-bright)">−'+money(disc)+'</span></div>';
+      + '<div class="krow"><span class="k">Standing Order discount (10%)</span><span class="v" style="color:var(--gold-bright)">−'+money(disc)+'</span></div>';
     if(surcharge>0){ rows += '<div class="krow"><span class="k">No supporter code (+3%)</span><span class="v">+'+money(surcharge)+'</span></div>'; }
     else if(supporterValid){ rows += '<div class="krow"><span class="k">Supporter code '+esc(supporterCode)+'</span><span class="v" style="color:var(--gold-bright)">applied</span></div>'; }
     rows += '<div class="krow"><span class="k">Per month (before shipping/tax)</span><span class="v">'+money(perMonth)+'</span></div>';
@@ -465,12 +391,12 @@ async function saveStack(){
   // form would post, the server would reject, and a subscriber trying to fix
   // exactly this would be bounced with no idea which field was wrong.
   if(!isUsPhone(ship.phone)){ msg.className='msg err'; msg.textContent='Enter a valid 10-digit U.S. phone number — the carrier requires one for delivery.'; document.getElementById('stPhone').focus(); return; }
-  if(!document.getElementById('stConsent').checked){ msg.className='msg err'; msg.textContent='Please authorize the monthly billing to start your stack.'; return; }
+  if(!document.getElementById('stConsent').checked){ msg.className='msg err'; msg.textContent='Please authorize the monthly billing to start your Standing Order.'; return; }
   const btn=document.getElementById('stackSave'); btn.disabled=true; const o=btn.textContent; btn.textContent='Saving…';
   try{
     const r=await fetch(API+'/api/shop-account/stack',{method:'PUT',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token()},body:JSON.stringify({items:sel,ship,consent:true,supporterCode:(val('stSupporter')||'').trim().toUpperCase()})});
     const d=await r.json(); if(!r.ok) throw new Error(d.error||'Could not save.');
-    toast('Research Stack saved'); renderStack();
+    toast('Standing Order saved'); renderStack();
   }catch(e){ msg.className='msg err'; msg.textContent=e.message; btn.disabled=false; btn.textContent=o; }
 }
 function isUsPhone(raw){

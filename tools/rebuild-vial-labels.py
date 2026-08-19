@@ -51,11 +51,18 @@ VIALS = os.path.join(ROOT, "assets", "vials")
 ORIGINAL = os.path.join(VIALS, "_original")
 
 # Glass silhouette, from an alpha scan of the source renders (all 450x798).
-Y0, Y1 = 446, 668            # the stretch the composited boxes occupy
+Y0, Y1 = 421, 668            # composited boxes, plus the PEPTIDES line above them
+# Y0 was 446, which cleared the boxes only. The brand on the label read
+# "NOVAFLEX PEPTIDES" and the business dropped the second word, so the band now
+# starts at 421 and swallows that line too. The NOVAFLEX wordmark sits at
+# y=386-414 and is deliberately left alone; measured from an alpha/brightness
+# scan of the source render, not guessed.
 EDGE_A, EDGE_B = 440, 670    # rows the taper was measured on
 L_A, R_A = 53.0, 358.0
 L_B, R_B = 71.0, 377.0
-DONOR_RANGE = (282, 444)     # label rows above the first box
+DONOR_RANGE = (290, 380)     # clean label rows above the wordmark
+# Pulled back from (282, 444): that range ran through the PEPTIDES line, and
+# tiling a row of faint letter antialiasing streaks it down the whole vial.
 DONOR_N = 14                 # how many of the flattest to median together
 STRIP_W = 305
 
@@ -202,10 +209,11 @@ def catalog():
         if "slug" not in d:
             continue
         label = d.get("display") or d["name"]
-        # Blends put their components in `display`, which is far too long to set
-        # on a vial; the house name is what's on the physical label anyway.
-        if "·" in label:
-            label = d["name"]
+        # Multi-component vials list their components in `display`. That used to
+        # fall back to the house name, but those names ("Wolverine Stack",
+        # "Glow Blend") are the branded wording being removed from the storefront,
+        # so the components are now what goes on the label. set_type auto-fits,
+        # so the four-component vial still holds its margins.
         dose = d.get("spec", "").replace(" vial", "").upper().replace("MG", " MG").replace("ML", " ML")
         out.append((d["slug"], label, " ".join(dose.split()), d.get("purity")))
     return out

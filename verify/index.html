@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Researcher Verification — For Research Use Only | NovaFlex Peptides</title>
-<meta name="description" content="For Research Use Only — not for human or veterinary use. Access to NovaFlex Peptides is restricted to qualified researchers who acknowledge the research-use-only restriction.">
+<title>Researcher Verification — For Research Use Only | NovaFlex</title>
+<meta name="description" content="For Research Use Only — not for human or veterinary use. Access to NovaFlex is restricted to qualified researchers who acknowledge the research-use-only restriction.">
 <meta name="robots" content="noindex, follow">
 <meta name="theme-color" content="#f7f4ee">
 <link rel="canonical" href="https://novaflexusa.com/verify">
@@ -79,7 +79,7 @@
 </head>
 <body>
 <main class="card">
-  <img class="logo" src="../assets/logo.webp?v=4" alt="NovaFlex Peptides">
+  <img class="logo" src="../assets/logo.webp?v=4" alt="NovaFlex">
 
   <div class="ruo-flag">
     <b>For Research Use Only — Not for human or veterinary use.</b>
@@ -96,7 +96,7 @@
 
   <p>Please confirm all three statements below to continue. This acknowledgement is required of every visitor, and creating an account records your acceptance against it with a timestamp.</p>
 
-  <p><strong>Pricing, certificates of analysis and ordering require a researcher account.</strong> Prices are served only to a signed-in account and are not published on the site. You may browse compounds and specifications as a guest.</p>
+  <p><strong>Pricing, certificates of analysis and ordering require a researcher account.</strong> Prices are served only to a signed-in account and are not published on the site. An account is required to browse the catalog.</p>
 
   <form id="verifyForm" class="checks" action="../index.html" method="get">
     <label class="check">
@@ -123,15 +123,7 @@
       Sign in to an existing account
     </button>
 
-    <!-- Guest fallback.
-         An account is the intended route and the only one that unlocks pricing:
-         /api/shop-catalog requires a token, so a guest session is never sent a
-         price at all. The fallback exists because a login-only wall makes the
-         catalog invisible to search engines, which cannot create accounts.
-         The attestation above gates every route, guest included. -->
-    <button class="btn btn-quiet" id="guestBtn" type="button" disabled>
-      Continue as guest &mdash; browse without pricing
-    </button>
+
   </form>
 
   <div class="leave">Not a qualified researcher?
@@ -139,7 +131,7 @@
   </div>
 
   <div class="legal">
-    NovaFlex LLC, doing business as NovaFlex Peptides · 120 N. Tech Dr., Suite 102, Clayton, NC 27520 ·
+    NovaFlex LLC, doing business as NovaFlex · 120 N. Tech Dr., Suite 102, Clayton, NC 27520 ·
     <a href="tel:+19193337234">(919) 333-7234</a> ·
     <a href="mailto:support@novaflexusa.com">support@novaflexusa.com</a><br>
     Sales are restricted to purchasers aged 21 or older acting on behalf of a qualified laboratory,
@@ -155,20 +147,20 @@
   // restriction above is served HTML that does not depend on any of this.
   (function(){
     var boxes = ['c1','c2','c3'].map(function(id){ return document.getElementById(id); });
-    var btns  = ['createBtn','signinBtn','guestBtn'].map(function(id){ return document.getElementById(id); });
+    var btns  = ['createBtn','signinBtn'].map(function(id){ return document.getElementById(id); });
     function attested(){ return boxes.every(function(b){ return b.checked; }); }
     function sync(){ var ok = attested(); btns.forEach(function(b){ b.disabled = !ok; }); }
     boxes.forEach(function(b){ b.addEventListener('change', sync); });
     sync();
 
     // Records the acknowledgement locally so the storefront gate does not ask a
-    // second time. This is the guest-side record only; a real account stores a
+    // second time. A real account additionally stores a
     // timestamped acceptance server-side against the account row at signup.
     function pass(dest){
       if (!attested()) return;
       try {
         localStorage.setItem('nf_gate_ok','1');
-        localStorage.setItem('nf_guest_attested_at', new Date().toISOString());
+        localStorage.setItem('nf_attested_at', new Date().toISOString());
       } catch(e){}
       window.location.href = dest;
     }
@@ -176,7 +168,6 @@
       e.preventDefault(); pass('../index.html#create-account');
     });
     document.getElementById('signinBtn').addEventListener('click', function(){ pass('../index.html#sign-in'); });
-    document.getElementById('guestBtn').addEventListener('click',  function(){ pass('../index.html'); });
   })();
 </script>
 </body>

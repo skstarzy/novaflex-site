@@ -50,7 +50,7 @@ from html import escape
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = "https://novaflexusa.com"
-BRAND = "NovaFlex Peptides"
+BRAND = "NovaFlex"
 
 # Pages that aren't products but belong in the sitemap.
 STATIC_PAGES = [
@@ -60,9 +60,9 @@ STATIC_PAGES = [
     # The guides hub, the calculator and the reference pages were unpublished
     # for payment-processor compliance (21 CFR 201.128 intended use). They are
     # deliberately absent from the sitemap; the originals are in _unpublished/.
-    # Recruitment landing page. "peptide affiliate program" is a real query
-    # with real intent and nothing on this domain answered it before.
-    ("/partners.html", "0.7", "monthly"),
+    # partners.html was the affiliate recruitment page; it is unpublished and
+    # redirects to careers, which is what belongs in a public sitemap now.
+    ("/careers.html", "0.4", "monthly"),
 ]
 
 
@@ -110,8 +110,14 @@ def parse_cat_labels(src):
     return dict(re.findall(r'"([\w-]+)"\s*:\s*"([^"]*)"', m.group(1))) if m else {}
 
 
-def parse_featured_names(src):
-    m = re.search(r"const FEATURED_NAMES = \[(.*?)\];", src, re.S)
+def parse_featured_slugs(src):
+    """Featured tiles are chosen by slug.
+
+    They used to be matched by name, which broke the moment the multi-component
+    vials stopped being called "Klow Blend": a stale entry does not error, the
+    tile just silently vanishes from the grid. Slugs are the one identifier on a
+    product that has not changed through any of the renaming."""
+    m = re.search(r"const FEATURED_SLUGS = \[(.*?)\];", src, re.S)
     return re.findall(r'"([^"]*)"', m.group(1)) if m else []
 
 
@@ -157,7 +163,7 @@ def static_card(p, cat_labels):
         else '<button class="add-btn" onclick="openAuthModal()">Sign in</button>'
     )
     price = '<span class="prod-price locked" onclick="openAuthModal()">Sign in for price</span>'
-    alt = "%s %s — NovaFlex Peptides" % (label, p.get("spec", ""))
+    alt = "%s %s — NovaFlex" % (label, p.get("spec", ""))
 
     return (
         '<div class="prod-card%s" data-cat="%s" data-slug="%s">'
@@ -233,9 +239,9 @@ def write_llms(products, content, cat_labels):
         return p["name"] if "·" in lb else lb
 
     lines = [
-        "# NovaFlex Peptides",
+        "# NovaFlex",
         "",
-        "> NovaFlex Peptides is a US supplier of research-grade peptides and laboratory "
+        "> NovaFlex is a US supplier of research-grade compounds and laboratory "
         "supplies, sold strictly for in-vitro laboratory research (RUO). Every batch is "
         "independently assayed by HPLC for purity and mass spectrometry for identity, and a "
         "batch Certificate of Analysis ships with each order. Ships from Clayton, North "
@@ -244,7 +250,7 @@ def write_llms(products, content, cat_labels):
         "## What NovaFlex is",
         "",
         "- Research-use-only reference material for qualified researchers and laboratories, aged 21+.",
-        "- 25 compounds across structural peptides, IGF peptides, copper and melanocortin compounds, research fusions, cofactors, and laboratory solvents.",
+        "- 25 compounds across structural compounds, IGF compounds, copper and melanocortin compounds, multi-component vials, cofactors, and laboratory solvents.",
         "- Every lot: 99%+ assayed purity by HPLC, identity confirmed by mass spectrometry, batch Certificate of Analysis included. Independent analysis by Janoshik Analytical.",
         "- Ships from Clayton, NC (USA), same business day before cutoff, tracked. Free US shipping over $249.",
         "",
@@ -286,7 +292,7 @@ def build_index(index_path, product_products):
     src = open(index_path, encoding="utf-8").read()
     products = parse_index_products(src)
     cat_labels = parse_cat_labels(src)
-    featured_names = parse_featured_names(src)
+    featured_slugs = parse_featured_slugs(src)
 
     problems = check_catalog_drift(products, product_products)
     if problems:
@@ -295,15 +301,13 @@ def build_index(index_path, product_products):
             + "\n  ".join(problems)
         )
 
-    # Mirrors renderFeatured(): match on name or "name spec", cap at 8.
-    featured = [
-        p
-        for p in products
-        if any(
-            n in ("%s %s" % (p["name"], p.get("spec", ""))) or p["name"] == n
-            for n in featured_names
-        )
-    ][:8]
+    # Mirrors renderFeatured(): resolve each slug in the order it is listed, so
+    # the pre-rendered grid matches what the page's own JS draws.
+    by_slug = {p["slug"]: p for p in products}
+    featured = [by_slug[sl] for sl in featured_slugs if sl in by_slug][:8]
+    missing = [sl for sl in featured_slugs if sl not in by_slug]
+    if missing:
+        sys.exit("FEATURED_SLUGS names products that do not exist: %s" % ", ".join(missing))
 
     # Mirrors renderCatalog("All","az") — the default view on page load.
     catalog = sorted(products, key=lambda p: (p.get("display") or p["name"]).lower())
@@ -485,7 +489,7 @@ def breadcrumb_jsonld(p, url, cat_labels):
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
         "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "NovaFlex Peptides", "item": SITE + "/"},
+            {"@type": "ListItem", "position": 1, "name": "NovaFlex", "item": SITE + "/"},
             {"@type": "ListItem", "position": 2, "name": cat, "item": SITE + "/#catalog"},
             {"@type": "ListItem", "position": 3, "name": label, "item": url},
         ],
@@ -665,7 +669,7 @@ def main():
 
         page = src
         # Replace the generic head tags with the product-specific ones.
-        page = page.replace("<title>NovaFlex Peptides</title>", "\n".join(head), 1)
+        page = page.replace("<title>NovaFlex</title>", "\n".join(head), 1)
         # The template carries noindex so it can't rank as a duplicate of
         # whichever product it happens to load. The generated pages are the ones
         # meant to be found, so they get the indexable directive back.
@@ -681,7 +685,7 @@ def main():
                 "pages would inherit noindex and drop out of the index"
             )
         page = re.sub(
-            r'<meta name="description" content="Research-grade peptide details[^"]*">',
+            r'<meta name="description" content="Research-grade compound details[^"]*">',
             "",
             page,
             count=1,

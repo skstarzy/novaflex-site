@@ -1,11 +1,11 @@
-# NovaFlex Peptides
+# NovaFlex
 
-> NovaFlex Peptides is a US supplier of research-grade peptides and laboratory supplies, sold strictly for in-vitro laboratory research (RUO). Every batch is independently assayed by HPLC for purity and mass spectrometry for identity, and a batch Certificate of Analysis ships with each order. Ships from Clayton, North Carolina. Not for human or veterinary use.
+> NovaFlex is a US supplier of research-grade compounds and laboratory supplies, sold strictly for in-vitro laboratory research (RUO). Every batch is independently assayed by HPLC for purity and mass spectrometry for identity, and a batch Certificate of Analysis ships with each order. Ships from Clayton, North Carolina. Not for human or veterinary use.
 
 ## What NovaFlex is
 
 - Research-use-only reference material for qualified researchers and laboratories, aged 21+.
-- 25 compounds across structural peptides, IGF peptides, copper and melanocortin compounds, research fusions, cofactors, and laboratory solvents.
+- 25 compounds across structural compounds, IGF compounds, copper and melanocortin compounds, multi-component vials, cofactors, and laboratory solvents.
 - Every lot: 99%+ assayed purity by HPLC, identity confirmed by mass spectrometry, batch Certificate of Analysis included. Independent analysis by Janoshik Analytical.
 - Ships from Clayton, NC (USA), same business day before cutoff, tracked. Free US shipping over $249.
 
@@ -17,13 +17,13 @@
 - [NV-2TZ 10mg vial](https://novaflexusa.com/nv2tz-10mg.html) — 99.3% HPLC purity
 - [NV-3RT 10mg vial](https://novaflexusa.com/nv3rt-10mg.html) — 99.4% HPLC purity
 
-### IGF Peptides
+### IGF Compounds
 
 - [NV-4IG 1mg vial](https://novaflexusa.com/nv4ig-1mg.html) — 99.0% HPLC purity
 - [NV-4MC 10mg vial](https://novaflexusa.com/nv4mc-10mg.html) — 99.1% HPLC purity
 - [NV-4TS 10mg vial](https://novaflexusa.com/nv4ts-10mg.html) — 99.5% HPLC purity
 
-### Structural Peptides
+### Structural Compounds
 
 - [BP+ 5mg vial](https://novaflexusa.com/bpplus-5mg.html) — 99.3% HPLC purity
 - [KP+ 10mg vial](https://novaflexusa.com/kpplus-10mg.html) — 99.0% HPLC purity
@@ -35,7 +35,7 @@
 - [CU+ 50mg vial](https://novaflexusa.com/cuplus-50mg.html) — 99.2% HPLC purity
 - [MT-1 10mg vial](https://novaflexusa.com/mt1-10mg.html) — 99.0% HPLC purity
 
-### Peptides & Cofactors
+### Compounds & Cofactors
 
 - [NAD+ 500mg vial](https://novaflexusa.com/nad-500mg.html) — 99.1% HPLC purity
 - [NV-5KS 5mg vial](https://novaflexusa.com/nv5ks-5mg.html) — 99.0% HPLC purity
@@ -44,18 +44,18 @@
 - [NV-6PT 10mg vial](https://novaflexusa.com/nv6pt-5mg.html) — 99.0% HPLC purity
 - [NV-6SS 10mg vial](https://novaflexusa.com/nv6ss-10mg.html) — 99.2% HPLC purity
 
-### Research Fusions
+### Multi-component
 
-- [Glow Blend 70mg vial](https://novaflexusa.com/glow-70mg.html) — 99.2% HPLC purity
-- [Klow Blend 80mg vial](https://novaflexusa.com/klow-80mg.html) — 99.2% HPLC purity
+- [BP+ · TB+ 10mg vial](https://novaflexusa.com/wolverine-10mg.html) — 99.1% HPLC purity
+- [BP+ · TB+ 20mg vial](https://novaflexusa.com/wolverine-20mg.html) — 99.1% HPLC purity
+- [CU+ · BP+ · TB+ 70mg vial](https://novaflexusa.com/glow-70mg.html) — 99.2% HPLC purity
+- [KP+ · CU+ · BP+ · TB+ 80mg vial](https://novaflexusa.com/klow-80mg.html) — 99.2% HPLC purity
 - [NV-4CI 5/5 fusion vial](https://novaflexusa.com/nv4ci-5-5.html) — 99.2% HPLC purity
-- [Wolverine Stack 10mg vial](https://novaflexusa.com/wolverine-10mg.html) — 99.1% HPLC purity
-- [Wolverine Stack 20mg vial](https://novaflexusa.com/wolverine-20mg.html) — 99.1% HPLC purity
 
 ### Laboratory Solvents
 
-- [BAC Water 3ml vial](https://novaflexusa.com/solvent-3ml.html)
-- [BAC Water 10ml vial](https://novaflexusa.com/solvent-10ml.html)
+- [Water 3ml vial](https://novaflexusa.com/solvent-3ml.html)
+- [Water 10ml vial](https://novaflexusa.com/solvent-10ml.html)
 
 ## Compliance
 

@@ -1,4 +1,4 @@
-# NovaFlex Peptides — crawler policy
+# NovaFlex — crawler policy
 #
 # AI training / scraping / answer-engine crawlers are disallowed below.
 # Anthropic's Claude bots are explicitly ALLOWED.
