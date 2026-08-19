@@ -62,6 +62,13 @@
     font-family:'Space Grotesk',Helvetica,Arial,sans-serif;text-align:center;text-decoration:none;}
   .btn:hover{background:#000;}
   .btn:disabled{opacity:.4;cursor:not-allowed;background:var(--silver-dim);border-color:var(--silver-dim);}
+  .btn-secondary{margin-top:10px;background:transparent;color:var(--silver-bright);border-color:var(--line-strong);}
+  .btn-secondary:hover{background:var(--bg);border-color:var(--gold-bright);}
+  .btn-secondary:disabled{background:transparent;color:var(--silver-dim);}
+  .btn-quiet{margin-top:14px;background:transparent;color:var(--text-muted);border-color:transparent;
+    font-size:13px;font-weight:500;text-decoration:underline;text-underline-offset:3px;padding:8px;}
+  .btn-quiet:hover{background:transparent;color:var(--silver-bright);}
+  .btn-quiet:disabled{background:transparent;border-color:transparent;color:var(--silver-dim);}
   .leave{margin-top:16px;text-align:center;font-size:12.5px;color:var(--text-muted);}
   .leave a{color:var(--gold-bright);}
   .legal{margin-top:24px;padding-top:20px;border-top:1px solid var(--line);
@@ -87,8 +94,9 @@
   researchers. By creating an account you confirm you are a qualified researcher and will use
   these products only for in-vitro laboratory research.</p>
 
-  <p>Please confirm all three statements below to continue. This acknowledgement is required
-  before an account can be created and before any order can be placed.</p>
+  <p>Please confirm all three statements below to continue. This acknowledgement is required of every visitor, and creating an account records your acceptance against it with a timestamp.</p>
+
+  <p><strong>Pricing, certificates of analysis and ordering require a researcher account.</strong> Prices are served only to a signed-in account and are not published on the site. You may browse compounds and specifications as a guest.</p>
 
   <form id="verifyForm" class="checks" action="../index.html" method="get">
     <label class="check">
@@ -108,8 +116,21 @@
       for patient use, dispense them as medication, or resell them for consumer use.</span>
     </label>
 
-    <button class="btn" id="continueBtn" type="submit" disabled>
-      Confirm and continue
+    <button class="btn" id="createBtn" type="submit" disabled>
+      Create a researcher account
+    </button>
+    <button class="btn btn-secondary" id="signinBtn" type="button" disabled>
+      Sign in to an existing account
+    </button>
+
+    <!-- Guest fallback.
+         An account is the intended route and the only one that unlocks pricing:
+         /api/shop-catalog requires a token, so a guest session is never sent a
+         price at all. The fallback exists because a login-only wall makes the
+         catalog invisible to search engines, which cannot create accounts.
+         The attestation above gates every route, guest included. -->
+    <button class="btn btn-quiet" id="guestBtn" type="button" disabled>
+      Continue as guest &mdash; browse without pricing
     </button>
   </form>
 
@@ -129,22 +150,33 @@
 </main>
 
 <script>
-  // Progressive enhancement only. The button ships disabled in the markup, so
-  // with scripts off the gate stays closed rather than falling open — the copy
-  // above is served HTML and does not depend on any of this.
+  // Progressive enhancement only. All three buttons ship disabled in the markup,
+  // so with scripts off the gate stays shut rather than falling open, and the
+  // restriction above is served HTML that does not depend on any of this.
   (function(){
     var boxes = ['c1','c2','c3'].map(function(id){ return document.getElementById(id); });
-    var btn = document.getElementById('continueBtn');
-    function sync(){ btn.disabled = !boxes.every(function(b){ return b.checked; }); }
+    var btns  = ['createBtn','signinBtn','guestBtn'].map(function(id){ return document.getElementById(id); });
+    function attested(){ return boxes.every(function(b){ return b.checked; }); }
+    function sync(){ var ok = attested(); btns.forEach(function(b){ b.disabled = !ok; }); }
     boxes.forEach(function(b){ b.addEventListener('change', sync); });
     sync();
+
+    // Records the acknowledgement locally so the storefront gate does not ask a
+    // second time. This is the guest-side record only; a real account stores a
+    // timestamped acceptance server-side against the account row at signup.
+    function pass(dest){
+      if (!attested()) return;
+      try {
+        localStorage.setItem('nf_gate_ok','1');
+        localStorage.setItem('nf_guest_attested_at', new Date().toISOString());
+      } catch(e){}
+      window.location.href = dest;
+    }
     document.getElementById('verifyForm').addEventListener('submit', function(e){
-      e.preventDefault();
-      if (btn.disabled) return;
-      // Records the acknowledgement so the storefront gate does not ask twice.
-      try { localStorage.setItem('nf_gate_ok','1'); } catch(err){}
-      window.location.href = '../index.html';
+      e.preventDefault(); pass('../index.html#create-account');
     });
+    document.getElementById('signinBtn').addEventListener('click', function(){ pass('../index.html#sign-in'); });
+    document.getElementById('guestBtn').addEventListener('click',  function(){ pass('../index.html'); });
   })();
 </script>
 </body>

@@ -882,6 +882,14 @@
   .pause-bar a{color:#e8c766;text-decoration:underline;text-underline-offset:2px;}
   .pd-paused{margin-top:6px;padding:14px 16px;border:1px solid var(--line-strong);
     border-radius:8px;background:var(--bg-alt);color:var(--text-muted);font-size:13.5px;line-height:1.6;}
+
+  .eg-guest{margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.14);}
+  .eg-or{position:relative;text-align:center;margin-bottom:14px;}
+  .eg-or span{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:#8c887f;}
+  .eg-guest .eg-check{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;line-height:1.5;margin-bottom:14px;}
+  .eg-guest .eg-check input{margin-top:2px;width:15px;height:15px;flex-shrink:0;accent-color:#b08d2e;}
+  .eg-guest .btn{width:100%;justify-content:center;}
+  .eg-guest .btn:disabled{opacity:.4;cursor:not-allowed;}
 </style>
 
 <!-- Meta pixel — ID lives in assets/meta-pixel.js -->
@@ -926,11 +934,31 @@
         <form id="egForm" autocomplete="on">
           <input class="eg-input" type="email" id="egEmail" placeholder="you@lab.com" autocomplete="email" required>
           <input class="eg-input" type="password" id="egPassword" placeholder="Password (min 8 characters)" autocomplete="current-password" required>
-          <div class="signup-perk" id="egPerk"><span class="sp-star">✦</span><span><b>Create an account and get <span class="sp-n">100</span> Research Credits</b> — worth <span class="sp-v">$5</span> off your first order.</span></div>
+          <div class="signup-perk" id="egPerk"><span class="sp-star">✦</span><span><b>Registered researcher account benefit</b> &mdash; <span class="sp-n">100</span> account credits (<span class="sp-v">$5</span> USD value) toward eligible research-material orders. <a href="policies.html#promotions" style="color:inherit;text-decoration:underline;">Terms apply.</a></span></div>
           <label class="eg-check" id="egRuoRow" style="display:none;"><input type="checkbox" id="egRuo"> I am at least 21 and a qualified researcher (or purchasing for a research institution). I understand all products are for in-vitro research use only — not for human or veterinary use.</label>
           <button type="submit" class="btn btn-gold" id="egSubmit">Sign in →</button>
         </form>
         <div class="eg-msg" id="egMsg"></div>
+
+        <!-- Guest path.
+             An account is the route we want people to take, and it is the only
+             one that unlocks pricing. But a login-only wall makes the catalog
+             invisible to search engines, which cannot create accounts, so there
+             has to be a way past it. The attestation below is the floor: nobody
+             reaches the catalog, as a guest or otherwise, without confirming
+             age and research use. Guests browse compounds and specifications;
+             prices come from an authenticated endpoint and are never sent to
+             a session that has not signed in. -->
+        <div class="eg-guest">
+          <div class="eg-or"><span>or continue without an account</span></div>
+          <label class="eg-check">
+            <input type="checkbox" id="egGuestRuo">
+            <span>I am at least 21 and a qualified researcher, or purchasing on behalf of a
+            research institution. I understand all products are for in-vitro research use only
+            &mdash; not for human or veterinary use.</span>
+          </label>
+          <button type="button" class="btn btn-ghost" id="egGuestBtn" disabled>Browse as guest &mdash; pricing hidden</button>
+        </div>
         <div class="eg-fine">21+ · Qualified researchers only. By continuing you confirm you are at least 21 years of age and that products are acquired solely for lawful in-vitro research use. See our <a href="policies.html#terms">Terms</a> and <a href="policies.html#privacy">Privacy Policy</a>.</div>
       </div>
     </div>
@@ -950,7 +978,7 @@
     <form id="authForm" autocomplete="on">
       <input class="auth-input" type="email" id="authEmail" placeholder="you@lab.com" autocomplete="email" required>
       <input class="auth-input" type="password" id="authPassword" placeholder="Password (min 8 characters)" autocomplete="current-password" required>
-      <div class="signup-perk" id="authPerk"><span class="sp-star">✦</span><span><b>Create an account and get <span class="sp-n">100</span> Research Credits</b> — worth <span class="sp-v">$5</span> off your first order.</span></div>
+      <div class="signup-perk" id="authPerk"><span class="sp-star">✦</span><span><b>Registered researcher account benefit</b> &mdash; <span class="sp-n">100</span> account credits (<span class="sp-v">$5</span> USD value) toward eligible research-material orders. <a href="policies.html#promotions" style="color:inherit;text-decoration:underline;">Terms apply.</a></span></div>
       <label class="gate-check" id="authRuoRow" style="margin-top:14px;display:none;"><input type="checkbox" id="authRuo"> I am a qualified researcher and accept that all products are for research use only — not for human or veterinary use.</label>
       <button type="submit" class="btn btn-gold" id="authSubmit" style="width:100%;margin-top:18px;">Log in</button>
     </form>
@@ -1161,7 +1189,7 @@
           <div class="rstack-card">
             <span class="rstack-tag">Standard order</span>
             <div class="rstack-code">NOVA10</div>
-            <p>10% off your <b>first order</b> — one time only.</p>
+            <p>10% on a <b>first order</b>, single use. <a href="policies.html#promotions" style="color:inherit;text-decoration:underline;">Terms</a>.</p>
           </div>
           <div class="rstack-card featured">
             <span class="rstack-tag gold">Research Stack</span>
@@ -1463,31 +1491,31 @@ function pauseNotice(){ if (typeof showToast === 'function') showToast(PAUSE_NOT
 
 // ---------------- Product data ----------------
 const PRODUCTS = [
-  {name:"NV-3RT", display:"NV-3RT", spec:"10mg vial", cat:"sizing", price:80, purity:"99.4%", badge:"bestseller", slug:"nv3rt-10mg"},
-  {name:"NV-2TZ", display:"NV-2TZ", spec:"10mg vial", cat:"sizing", price:65, purity:"99.3%", slug:"nv2tz-10mg"},
-  {name:"NV-1CG", spec:"10mg vial", cat:"sizing", price:110, purity:"99.2%", slug:"nv1cg-10mg"},
-  {name:"NV-4TS", spec:"10mg vial", cat:"igf", price:115, purity:"99.5%", badge:"bestseller", slug:"nv4ts-10mg"},
-  {name:"NV-4MC", spec:"10mg vial", cat:"igf", price:50, purity:"99.1%", badge:"new", slug:"nv4mc-10mg"},
-  {name:"NV-4IG", spec:"1mg vial", cat:"igf", price:75, purity:"99.0%", slug:"nv4ig-1mg"},
-  {name:"BP+", display:"BP+", spec:"5mg vial", cat:"structural", price:40, purity:"99.3%", slug:"bpplus-5mg"},
-  {name:"TB+", spec:"5mg vial", cat:"structural", price:55, purity:"99.1%", slug:"tbplus-5mg"},
-  {name:"KP+", spec:"10mg vial", cat:"structural", price:45, purity:"99.0%", slug:"kpplus-10mg"},
-  {name:"CU+", spec:"50mg vial", cat:"copper-mc", price:42, purity:"99.2%", slug:"cuplus-50mg", soldOut:true},
-  {name:"CU+", spec:"100mg vial", cat:"copper-mc", price:58, purity:"99.2%", badge:"bestseller", slug:"cuplus-100mg"},
-  {name:"MT-1", display:"MT-1", spec:"10mg vial", cat:"copper-mc", price:45, purity:"99.0%", badge:"bestseller", slug:"mt1-10mg"},
-  {name:"NV-5SX", spec:"5mg vial", cat:"specialty", price:40, purity:"99.1%", slug:"nv5sx-5mg"},
-  {name:"NV-5SL", spec:"10mg vial", cat:"specialty", price:55, purity:"99.0%", slug:"nv5sl-10mg"},
-  {name:"NV-5KS", spec:"5mg vial", cat:"specialty", price:55, purity:"99.0%", slug:"nv5ks-5mg"},
-  {name:"NAD+", spec:"500mg vial", cat:"specialty", price:60, purity:"99.1%", slug:"nad-500mg"},
-  {name:"NV-6SS", spec:"10mg vial", cat:"specialty", price:85, purity:"99.2%", slug:"nv6ss-10mg"},
-  {name:"NV-6PT", spec:"10mg vial", cat:"specialty", price:55, purity:"99.0%", slug:"nv6pt-5mg"},
-  {name:"Glow Blend", display:"CU+ · BP+ · TB+", spec:"70mg vial", cat:"fusions", cats:["copper-mc"], price:130, purity:"99.2%", slug:"glow-70mg"},
-  {name:"Klow Blend", display:"KP+ · CU+ · BP+ · TB+", spec:"80mg vial", cat:"fusions", cats:["copper-mc"], price:135, purity:"99.2%", slug:"klow-80mg"},
-  {name:"Wolverine Stack", display:"BP+ · TB+", spec:"10mg vial", cat:"fusions", cats:["structural"], price:75, purity:"99.1%", slug:"wolverine-10mg"},
-  {name:"Wolverine Stack", display:"BP+ · TB+", spec:"20mg vial", cat:"fusions", cats:["structural"], price:115, purity:"99.1%", slug:"wolverine-20mg"},
-  {name:"NV-4CI", spec:"5/5 fusion vial", cat:"fusions", cats:["igf"], price:88, purity:"99.2%", slug:"nv4ci-5-5"},
-  {name:"Bacteriostatic Water", display:"BAC Water", seoName:"BAC Water", spec:"3ml vial", cat:"solvents", price:10, slug:"solvent-3ml"},
-  {name:"Bacteriostatic Water", display:"BAC Water", seoName:"BAC Water", spec:"10ml vial", cat:"solvents", price:20, slug:"solvent-10ml"},
+  {name:"NV-3RT", display:"NV-3RT", spec:"10mg vial", cat:"sizing", purity:"99.4%", badge:"bestseller", slug:"nv3rt-10mg"},
+  {name:"NV-2TZ", display:"NV-2TZ", spec:"10mg vial", cat:"sizing", purity:"99.3%", slug:"nv2tz-10mg"},
+  {name:"NV-1CG", spec:"10mg vial", cat:"sizing", purity:"99.2%", slug:"nv1cg-10mg"},
+  {name:"NV-4TS", spec:"10mg vial", cat:"igf", purity:"99.5%", badge:"bestseller", slug:"nv4ts-10mg"},
+  {name:"NV-4MC", spec:"10mg vial", cat:"igf", purity:"99.1%", badge:"new", slug:"nv4mc-10mg"},
+  {name:"NV-4IG", spec:"1mg vial", cat:"igf", purity:"99.0%", slug:"nv4ig-1mg"},
+  {name:"BP+", display:"BP+", spec:"5mg vial", cat:"structural", purity:"99.3%", slug:"bpplus-5mg"},
+  {name:"TB+", spec:"5mg vial", cat:"structural", purity:"99.1%", slug:"tbplus-5mg"},
+  {name:"KP+", spec:"10mg vial", cat:"structural", purity:"99.0%", slug:"kpplus-10mg"},
+  {name:"CU+", spec:"50mg vial", cat:"copper-mc", purity:"99.2%", slug:"cuplus-50mg", soldOut:true},
+  {name:"CU+", spec:"100mg vial", cat:"copper-mc", purity:"99.2%", badge:"bestseller", slug:"cuplus-100mg"},
+  {name:"MT-1", display:"MT-1", spec:"10mg vial", cat:"copper-mc", purity:"99.0%", badge:"bestseller", slug:"mt1-10mg"},
+  {name:"NV-5SX", spec:"5mg vial", cat:"specialty", purity:"99.1%", slug:"nv5sx-5mg"},
+  {name:"NV-5SL", spec:"10mg vial", cat:"specialty", purity:"99.0%", slug:"nv5sl-10mg"},
+  {name:"NV-5KS", spec:"5mg vial", cat:"specialty", purity:"99.0%", slug:"nv5ks-5mg"},
+  {name:"NAD+", spec:"500mg vial", cat:"specialty", purity:"99.1%", slug:"nad-500mg"},
+  {name:"NV-6SS", spec:"10mg vial", cat:"specialty", purity:"99.2%", slug:"nv6ss-10mg"},
+  {name:"NV-6PT", spec:"10mg vial", cat:"specialty", purity:"99.0%", slug:"nv6pt-5mg"},
+  {name:"Glow Blend", display:"CU+ · BP+ · TB+", spec:"70mg vial", cat:"fusions", cats:["copper-mc"], purity:"99.2%", slug:"glow-70mg"},
+  {name:"Klow Blend", display:"KP+ · CU+ · BP+ · TB+", spec:"80mg vial", cat:"fusions", cats:["copper-mc"], purity:"99.2%", slug:"klow-80mg"},
+  {name:"Wolverine Stack", display:"BP+ · TB+", spec:"10mg vial", cat:"fusions", cats:["structural"], purity:"99.1%", slug:"wolverine-10mg"},
+  {name:"Wolverine Stack", display:"BP+ · TB+", spec:"20mg vial", cat:"fusions", cats:["structural"], purity:"99.1%", slug:"wolverine-20mg"},
+  {name:"NV-4CI", spec:"5/5 fusion vial", cat:"fusions", cats:["igf"], purity:"99.2%", slug:"nv4ci-5-5"},
+  {name:"Bacteriostatic Water", display:"BAC Water", seoName:"BAC Water", spec:"3ml vial", cat:"solvents", slug:"solvent-3ml"},
+  {name:"Bacteriostatic Water", display:"BAC Water", seoName:"BAC Water", spec:"10ml vial", cat:"solvents", slug:"solvent-10ml"},
 ];
 
 // Neutral display labels for catalog categories. Internal keys (data-filter,
@@ -2297,7 +2325,7 @@ renderFeatured();
         "image":"https://novaflexusa.com/assets/vials/NF-"+p.slug+".webp",
         "brand":{"@type":"Brand","name":"NovaFlex Peptides"},
         "url":"https://novaflexusa.com/#catalog",
-        "offers":{"@type":"Offer","price":p.price.toFixed(2),"priceCurrency":"USD","availability":p.soldOut?"https://schema.org/OutOfStock":"https://schema.org/InStock","url":"https://novaflexusa.com/#catalog"}
+        "offers":(typeof p.price==="number"?{"@type":"Offer","price":p.price.toFixed(2),"priceCurrency":"USD","availability":p.soldOut?"https://schema.org/OutOfStock":"https://schema.org/InStock","url":"https://novaflexusa.com/#catalog"}:undefined)
       }
     };})
   };
@@ -2320,11 +2348,46 @@ let currentCatFilter = "All";
 let currentSort = "az";
 function sortProducts(list){
   const arr = list.slice();
-  if(currentSort==='plh') arr.sort((a,b)=> a.price - b.price);
-  else if(currentSort==='phl') arr.sort((a,b)=> b.price - a.price);
+  if(currentSort==='plh') arr.sort((a,b)=> (a.price||0) - (b.price||0));
+  else if(currentSort==='phl') arr.sort((a,b)=> (b.price||0) - (a.price||0));
   else if(currentSort==='az') arr.sort((a,b)=> (a.display||a.name).localeCompare(b.display||b.name));
   return arr;
 }
+var PRICING_BASE = API_BASE;
+
+/**
+ * Pricing is deliberately not shipped in this file.
+ *
+ * The storefront is static, so "hide the price until sign-in" used to mean
+ * rendering it and covering it up — the number was in the HTML for anyone who
+ * viewed source. A payment-processor review reads that as no gate at all, and
+ * they are right: the data had already been delivered.
+ *
+ * Prices now come from /api/shop-catalog, which requires a researcher account
+ * token. Names, specs and purity stay in the page: they carry house codes, name
+ * no compound, make no claim, and keeping them crawlable is what leaves the
+ * site visible to search at all.
+ *
+ * Note the server is authoritative on price at checkout regardless — these
+ * values are for display, and an order is priced from the database.
+ */
+async function loadPricing(){
+  var tok=null; try { tok = localStorage.getItem('nf_shop_token'); } catch(e){}
+  if (!tok) return false;
+  try {
+    var res = await fetch(PRICING_BASE + '/api/shop-catalog', { headers: { Authorization: 'Bearer ' + tok } });
+    if (!res.ok) return false;
+    var d = await res.json();
+    var by = {};
+    (d.products || []).forEach(function(p){ by[p.name + '|' + p.spec] = p; });
+    PRODUCTS.forEach(function(p){
+      var m = by[p.name + '|' + p.spec];
+      if (m) { p.price = m.price; if (m.soldOut) p.soldOut = true; }
+    });
+    return true;
+  } catch(e){ return false; }
+}
+
 function renderCatalog(cat, sort){
   if(cat!==undefined && cat!==null) currentCatFilter = cat;
   if(sort!==undefined && sort!==null) currentSort = sort;
@@ -2332,6 +2395,8 @@ function renderCatalog(cat, sort){
   document.getElementById('catalogGrid').innerHTML = sortProducts(base).map(productCard).join('');
 }
 renderCatalog("All","az");
+// Prices arrive after sign-in, so re-render once they land.
+loadPricing().then(function(ok){ if (ok) renderCatalog(); });
 updateSpotlightGate();
 // If a stored session has expired, drop it so pricing re-locks correctly.
 (async function(){
@@ -2458,6 +2523,35 @@ document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
 // blocks the site; a valid session (shop token) lets you straight through.
 const enterGate = document.getElementById('enterGate');
 let egMode = 'login';
+// /verify sends people here with an intent in the hash. Honour it so choosing
+// "create an account" on the gate page does not dump you on a login form.
+(function(){
+  try {
+    var h = (location.hash || '').toLowerCase();
+    if (h === '#create-account') egMode = 'register';
+  } catch(e){}
+})();
+
+
+// Guest entry. The button ships disabled and only the attestation enables it,
+// so the floor holds even though this path deliberately does not require an
+// account. Pricing is unaffected: it comes from an authenticated endpoint, so a
+// guest session simply never receives it.
+(function(){
+  var box = document.getElementById('egGuestRuo');
+  var btn = document.getElementById('egGuestBtn');
+  if (!box || !btn) return;
+  box.addEventListener('change', function(){ btn.disabled = !box.checked; });
+  btn.addEventListener('click', function(){
+    if (!box.checked) return;
+    try {
+      localStorage.setItem('nf_gate_ok','1');
+      localStorage.setItem('nf_guest_attested_at', new Date().toISOString());
+    } catch(e){}
+    hideEnterGate();
+  });
+})();
+
 function showEnterGate(){ if(enterGate){ enterGate.classList.remove('hidden'); document.body.style.overflow='hidden'; } }
 function hideEnterGate(){ if(enterGate){ enterGate.classList.add('hidden'); document.body.style.overflow=''; } }
 // Pull the real numbers once, so the offer copy always matches lib/credits.js.
@@ -2487,6 +2581,7 @@ function egSetMode(mode){
 }
 (function(){
   const form=document.getElementById('egForm'); if(!form) return;
+  try { if ((location.hash||'').toLowerCase()==='#create-account') egSetMode('register'); } catch(e){}
   form.addEventListener('submit', async function(e){
     e.preventDefault();
     const email=document.getElementById('egEmail').value.trim();
