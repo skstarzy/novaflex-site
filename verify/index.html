@@ -158,10 +158,11 @@
     // timestamped acceptance server-side against the account row at signup.
     function pass(dest){
       if (!attested()) return;
-      try {
-        localStorage.setItem('nf_gate_ok','1');
-        localStorage.setItem('nf_attested_at', new Date().toISOString());
-      } catch(e){}
+      // Records the attestation only. It deliberately does NOT set any flag that
+      // lets the storefront gate open: ticking three boxes is not an account,
+      // and an earlier version of this page let a visitor straight into the
+      // catalog because it wrote a "gate cleared" key on the way through.
+      try { localStorage.setItem('nf_attested_at', new Date().toISOString()); } catch(e){}
       window.location.href = dest;
     }
     document.getElementById('verifyForm').addEventListener('submit', function(e){

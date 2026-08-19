@@ -2544,12 +2544,27 @@ function egSetMode(mode){
     } catch(err){ msg.className='eg-msg err'; msg.textContent='Could not reach the server. Please try again.'; btn.disabled=false; btn.textContent=orig; }
   });
 })();
-// First open: show the gate unless a session is already stored.
-// Deliberately NOT shown on arrival. Ad and search traffic gets to read the
-// catalog, lab reports and FAQ first; the gate opens on demand from any
-// "Sign in for price" control. Prices stay hidden either way, and the RUO
-// acknowledgement is still enforced in the register form.
-hideEnterGate();
+/**
+ * First open: the gate blocks until a session exists.
+ *
+ * This used to call hideEnterGate() unconditionally so ad and search traffic
+ * could read the catalog before being asked for anything. That is no longer the
+ * position — an account is required before the catalog is reachable — and the
+ * old behaviour meant the gate rendered and then immediately hid itself, so it
+ * was present in the markup while gating nothing.
+ *
+ * Arriving from /verify with #create-account or #sign-in opens the gate in that
+ * mode rather than dropping the visitor into the catalog.
+ */
+(function(){
+  if (shopAuthed()) { hideEnterGate(); return; }
+  try {
+    var h = (location.hash || '').toLowerCase();
+    if (h === '#create-account') egSetMode('register');
+    else if (h === '#sign-in') egSetMode('login');
+  } catch(e){}
+  showEnterGate();
+})();
 </script>
 <script>
 /* Paid landing pages (researcher-access.html) send their CTA here with ?signup=1.
