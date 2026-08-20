@@ -410,7 +410,9 @@ function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt
 // Stripe's website checklist asks for the currency to be explicit: "Listing
 // only the currency symbol may not be enough". Every price a buyer reads
 // goes through here, so the code is appended once rather than at each site.
-const money = (n) => '$' + Number(n).toFixed(2) + ' USD';
+// Returns null when the price is not known yet — signed in but the catalog
+// fetch has not returned. Callers must handle that rather than printing $NaN.
+const money = (n) => (typeof n === 'number' && isFinite(n)) ? ('$' + Number(n).toFixed(2) + ' USD') : null;
 
 // ---- shared cart (localStorage, same key as the store) ----
 const CART_KEY = 'nf_cart';
@@ -579,10 +581,10 @@ function render(){
         '<h1 class="pd-name">'+escapeHtml(p.display || p.name)+'</h1>'+
         '<div class="pd-sub"><span>'+escapeHtml(p.spec)+'</span>'+(p.purity?'<span class="dot">•</span><span>'+p.purity+' purity</span>':'')+'</div>'+
         '<p class="pd-tagline">'+escapeHtml(c.tagline)+'</p>'+
-        '<div class="pd-buy">'+(shopAuthed()?('<span class="pd-price">'+money(p.price)+'</span>'+buyHTML):'<button class="btn btn-gold" onclick="openAuthModal()">Sign in to view pricing</button>')+'</div>'+
+        '<div class="pd-buy">'+(shopAuthed()?('<span class="pd-price">'+(money(p.price)||'Loading…')+'</span>'+buyHTML):'<button class="btn btn-gold" onclick="openAuthModal()">Sign in to view pricing</button>')+'</div>'+
         // Only shown alongside a visible price — quoting an earn figure next to
         // a hidden price just raises a question we haven't answered yet.
-        (shopAuthed() ? '<div class="pd-credits"><span class="pd-credits-n">+'+creditsFor(p.price)+'</span>'+
+        (shopAuthed() && typeof p.price === 'number' ? '<div class="pd-credits"><span class="pd-credits-n">+'+creditsFor(p.price)+'</span>'+
           '<span class="pd-credits-t">Research Credits with this order<b>100 credits = $5 off your next one</b></span></div>' : '')+
         '<div class="pd-ship"><span class="star">✦</span> Research use only · $0 U.S. shipping on orders $249+</div>'+
         '<div class="pd-trust">'+
@@ -608,7 +610,7 @@ function render(){
     const ld = {"@context":"https://schema.org","@type":"Product","name":(p.seoName||p.name)+' '+p.spec,"category":catLabel(p.cat),
       "image":"https://novaflexusa.com/assets/vials/NF-"+p.slug+".webp","brand":{"@type":"Brand","name":"NovaFlex"},
       "description":c.overview,
-      "offers":{"@type":"Offer","price":p.price.toFixed(2),"priceCurrency":"USD","availability":p.soldOut?"https://schema.org/OutOfStock":"https://schema.org/InStock","url":location.href}};
+      "offers":(typeof p.price==="number"?{"@type":"Offer","price":p.price.toFixed(2),"priceCurrency":"USD","availability":p.soldOut?"https://schema.org/OutOfStock":"https://schema.org/InStock","url":location.href}:undefined)};
     const s = document.createElement('script'); s.type='application/ld+json'; s.textContent = JSON.stringify(ld);
     document.head.appendChild(s);
   } catch(e){}
