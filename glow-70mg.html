@@ -189,13 +189,6 @@
     .nav-links{display:none;}
     .pd-benefits{grid-template-columns:1fr;}
   }
-
-  /* Ordering-paused banner. Sits above the nav so it is the first thing read,
-     rather than a surprise at the point of clicking a dead button. */
-  .pause-bar{background:#171410;color:#f5efdf;font-size:13.5px;line-height:1.55;
-    padding:11px 20px;text-align:center;border-bottom:1px solid rgba(176,141,46,.5);}
-  .pause-bar b{color:#e8c766;}
-  .pause-bar a{color:#e8c766;text-decoration:underline;text-underline-offset:2px;}
   .pd-paused{margin-top:6px;padding:14px 16px;border:1px solid var(--line-strong);
     border-radius:8px;background:var(--bg-alt);color:var(--text-muted);font-size:13.5px;line-height:1.6;}
 </style>
@@ -314,19 +307,16 @@
 const CHECKOUT_API_URL = 'https://api.novaflexusa.com/api/checkout';
 
 /**
- * Ordering paused while the site is rebuilt to compliance standards.
+ * Kill switch for the buying path.
  *
- * Set to false to restore; nothing else has been deleted, so turning it back on
- * is a one-word change. Everything that can put an item in the cart funnels
- * through addToCart(), and the drawer is the only route to submitOrder(), so
- * guarding those two closes every path without touching the cart, pricing or
- * account code.
+ * false = the store takes orders. Set to true and every route into the cart
+ * closes at once: add-to-cart, the drawer and the product-page buy button all
+ * funnel through the two guards below, so one word shuts the store without
+ * deleting anything.
  *
- * Deliberately does NOT touch pay.html. There were 33 orders sitting pending
- * with live pay links when this went up, several of them hours old. Someone who
- * has already committed to a purchase and is midway through paying should be
- * able to finish; stranding them is a worse customer experience than the
- * confusion this is meant to prevent.
+ * It was true for several days while SolRUO credentials in the environment had
+ * gone stale and no payment could complete. Leave the mechanism here; it earned
+ * its place.
  */
 const ORDERING_PAUSED = false;
 const PAUSE_NOTICE = 'Ordering is temporarily paused while we update the site. The catalog and lab reports stay available, and orders already placed are unaffected. Questions: support@novaflexusa.com';
