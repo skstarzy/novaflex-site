@@ -204,7 +204,6 @@
 <script src="assets/meta-pixel.js" defer></script>
 </head>
 <body>
-<div class="pause-bar"><b>Ordering paused.</b> We&rsquo;re updating the site and have temporarily stopped taking new orders. The catalog and lab reports remain available. Orders already placed are unaffected &mdash; questions to <a href="mailto:support@novaflexusa.com">support@novaflexusa.com</a>.</div>
 
 
 <!-- The interstitial age gate lived here. It was the weaker of two gates: the
@@ -329,7 +328,7 @@ const CHECKOUT_API_URL = 'https://api.novaflexusa.com/api/checkout';
  * able to finish; stranding them is a worse customer experience than the
  * confusion this is meant to prevent.
  */
-const ORDERING_PAUSED = true;
+const ORDERING_PAUSED = false;
 const PAUSE_NOTICE = 'Ordering is temporarily paused while we update the site. The catalog and lab reports stay available, and orders already placed are unaffected. Questions: support@novaflexusa.com';
 function pauseNotice(){ if (typeof showToast === 'function') showToast(PAUSE_NOTICE); else alert(PAUSE_NOTICE); }
 
