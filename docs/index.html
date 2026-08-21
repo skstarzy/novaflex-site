@@ -1555,8 +1555,8 @@ const PRODUCTS = [
   {name:"BP+ · TB+", display:"BP+ · TB+", spec:"10mg vial", cat:"fusions", cats:["structural"], purity:"99.1%", slug:"wolverine-10mg"},
   {name:"BP+ · TB+", display:"BP+ · TB+", spec:"20mg vial", cat:"fusions", cats:["structural"], purity:"99.1%", slug:"wolverine-20mg"},
   {name:"NV-4CI", spec:"5/5 fusion vial", cat:"fusions", cats:["igf"], purity:"99.2%", slug:"nv4ci-5-5"},
-  {name:"Bacteriostatic Water", display:"Water", seoName:"Water", spec:"3ml vial", cat:"solvents", slug:"solvent-3ml"},
-  {name:"Bacteriostatic Water", display:"Water", seoName:"Water", spec:"10ml vial", cat:"solvents", slug:"solvent-10ml"},
+  {name:"Water", display:"Water", seoName:"Water", spec:"3ml vial", cat:"solvents", slug:"solvent-3ml"},
+  {name:"Water", display:"Water", seoName:"Water", spec:"10ml vial", cat:"solvents", slug:"solvent-10ml"},
 ];
 
 // Neutral display labels for catalog categories. Internal keys (data-filter,
@@ -1723,7 +1723,9 @@ function renderDrawer(){
       </div>`;
     }).join('');
     // Add-on nudge: offer the solvent unless it's already in the order.
-    const hasSolvent = cart.some(i => i.name === 'Bacteriostatic Water');
+    // Both spellings: a cart saved before the solvent was renamed still carries
+    // the old name, and offering it again would add a second one.
+    const hasSolvent = cart.some(i => i.name === 'Water' || i.name === 'Bacteriostatic Water');
     const nudge = hasSolvent ? '' : `
       <div class="cart-nudge">
         <img src="assets/vials/NF-solvent-3ml.webp?v=3" alt="Water 3ml vial" loading="lazy">
@@ -1741,7 +1743,7 @@ function renderDrawer(){
 // Cart add-on: the 3ml solvent. The argument is the DATABASE name, not the
 // storefront's - checkout resolves the product by it - so it stays as-is while
 // every string a customer reads says "Water".
-function addSolvent(){ addToCart('Bacteriostatic Water', '3ml vial', 10); }
+function addSolvent(){ addToCart('Water', '3ml vial', 10); }
 
 // Force-empty the entire cart.
 function clearCart(){
