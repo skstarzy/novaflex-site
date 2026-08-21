@@ -10,7 +10,7 @@ schedule rather than ours.
 Bing matters here beyond Bing's own traffic share. It backs ChatGPT's search
 results, and robots.txt now lets OAI-SearchBot through, so getting these pages
 into Bing's index is what makes them eligible to be cited in an assistant's
-answer to "which peptide suppliers publish a COA".
+answer to "which research compound suppliers publish a COA".
 
 Google does not participate in IndexNow and never has. Google discovery still
 depends on the sitemap plus the internal links, which is why the catalog grid

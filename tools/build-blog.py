@@ -23,9 +23,9 @@ DONOR = os.path.join(ROOT, "hplc-vs-mass-spectrometry.html")
 OUT = os.path.join(ROOT, "blog.html")
 SITE = "https://novaflexusa.com"
 
-TITLE = "Guides &amp; Reference | NovaFlex Peptides"
-TITLE_PLAIN = "Guides & Reference | NovaFlex Peptides"
-DESC = ("Plain-English guides for sourcing research peptides: how to read a Certificate of "
+TITLE = "Guides &amp; Reference | NovaFlex"
+TITLE_PLAIN = "Guides & Reference | NovaFlex"
+DESC = ("Plain-English guides for sourcing research compounds: how to read a Certificate of "
         "Analysis, what HPLC and mass spec each prove, and a reconstitution calculator.")
 
 # Grouped because the grouping is true, not decorative: two pieces teach you to
@@ -36,7 +36,7 @@ SECTIONS = [
      "The two documents any supplier should be able to hand you, and how to tell a real one from a decorative one.",
      [
         ("how-to-read-a-coa.html",
-         "How to read a peptide Certificate of Analysis",
+         "How to read a Certificate of Analysis",
          "What the purity figure actually measures, why identity is a separate question, and how to spot a certificate that was designed rather than produced.",
          "Guide"),
         ("hplc-vs-mass-spectrometry.html",
@@ -56,7 +56,7 @@ SECTIONS = [
      "Free, no account required.",
      [
         ("reconstitution-calculator.html",
-         "Peptide reconstitution calculator",
+         "Reconstitution calculator",
          "Enter vial mass and diluent volume for working concentration in mg/mL, plus the aliquot volume for any target mass.",
          "Calculator"),
      ]),
@@ -108,7 +108,7 @@ def jsonld():
             )
     blog = ('{"@context":"https://schema.org","@type":"Blog","name":"NovaFlex Guides & Reference",'
             '"description":"%s","url":"%s/blog.html",'
-            '"publisher":{"@type":"Organization","name":"NovaFlex Peptides","url":"%s/"}}'
+            '"publisher":{"@type":"Organization","name":"NovaFlex","url":"%s/"}}'
             % (DESC.replace('"', "'"), SITE, SITE))
     lst = ('{"@context":"https://schema.org","@type":"ItemList","itemListElement":[%s]}'
            % ",".join(items))

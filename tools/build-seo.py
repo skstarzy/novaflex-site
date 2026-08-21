@@ -3,7 +3,7 @@
 Generates the crawlable surface of the storefront.
 
 Why this exists: every compound used to live at product.html?slug=<x>, which
-served ONE static <title> ("NovaFlex Peptides") and one boilerplate meta
+served ONE static <title> ("NovaFlex") and one boilerplate meta
 description for all 25 products, with the real per-product values written by
 JavaScript after load. Google will eventually render that, but until it does
 the whole catalog looks like duplicates of a single page — which is about the
