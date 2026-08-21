@@ -162,5 +162,9 @@ Disallow: /
 User-agent: *
 Content-Signal: search=yes, ai-train=no
 Allow: /
+# The confirmation landing page carries a one-account token in its query string.
+# The token can only mark an address confirmed - it is not a session and cannot
+# be exchanged for one - but there is no reason for it to sit in a crawl log.
+Disallow: /verify-email.html
 
 Sitemap: https://novaflexusa.com/sitemap.xml

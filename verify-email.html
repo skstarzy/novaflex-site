@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confirm your email — NovaFlex</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f7f4ee">
+<link rel="icon" href="assets/logo.webp?v=4">
+<!--
+  Landing page for the confirmation link mailed at signup.
+
+  noindex because the URL carries a one-account token in its query string, and
+  because there is nothing here worth a search result. The token can only mark
+  one address confirmed - it is not a session and cannot be exchanged for one -
+  so a link that ends up in a crawler's logs grants nothing beyond confirming an
+  address that person already controls.
+-->
+<style>
+  :root{--bg:#f7f4ee;--bg-alt:#fff;--line:rgba(30,24,10,0.12);--line-strong:rgba(30,24,10,0.22);
+    --silver-bright:#171410;--silver-dim:#8c887f;--gold-bright:#8a6a24;--text:#221f18;--text-muted:#6b675f;}
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);line-height:1.6;
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+    min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px 20px;}
+  .card{max-width:520px;width:100%;background:var(--bg-alt);border:1px solid var(--line-strong);
+    border-radius:14px;padding:38px 34px;text-align:center;}
+  .logo{height:38px;width:auto;display:block;margin:0 auto 22px;}
+  h1{font-size:21px;margin:0 0 12px;color:var(--silver-bright);
+    font-family:'Space Grotesk',Helvetica,Arial,sans-serif;}
+  p{margin:0 0 16px;font-size:14px;color:var(--text-muted);}
+  .btn{display:inline-block;margin-top:8px;padding:13px 26px;border-radius:6px;
+    background:var(--silver-bright);color:#fff;font-size:15px;font-weight:600;
+    text-decoration:none;font-family:'Space Grotesk',Helvetica,Arial,sans-serif;}
+  .btn:hover{background:#000;}
+  .legal{margin-top:26px;padding-top:18px;border-top:1px solid var(--line);
+    font-size:11.5px;line-height:1.65;color:var(--silver-dim);}
+  .legal a{color:var(--silver-dim);}
+</style>
+</head>
+<body>
+<main class="card">
+  <img class="logo" src="assets/logo.webp?v=4" alt="NovaFlex">
+  <h1 id="title">Confirming your email…</h1>
+  <p id="body">One moment.</p>
+  <a class="btn" id="cta" href="index.html" hidden>Continue to the catalog</a>
+
+  <div class="legal">
+    NovaFlex LLC · 120 N. Tech Dr., Suite 102, Clayton, NC 27520 ·
+    <a href="tel:+19193337234">(919) 333-7234</a><br>
+    For Research Use Only — not for human or veterinary use.
+  </div>
+</main>
+
+<script>
+(function(){
+  var API = 'https://api.novaflexusa.com';
+  var title=document.getElementById('title'), body=document.getElementById('body'), cta=document.getElementById('cta');
+  var token=new URLSearchParams(location.search).get('t');
+
+  function done(h, p, showCta){
+    title.textContent=h; body.textContent=p; cta.hidden=!showCta;
+  }
+  if(!token){ done('That link is incomplete', 'Please open the confirmation link exactly as it appears in the email.', false); return; }
+
+  fetch(API+'/api/shop-account/verify-email',{
+    method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({token:token})
+  }).then(function(r){ return r.json().then(function(d){ return {ok:r.ok, d:d}; }); })
+   .then(function(res){
+     if(res.ok) done('Email confirmed', 'Thank you. Your researcher account is confirmed and catalog search is now available to you.', true);
+     else done('That link did not work', (res.d && res.d.error) || 'It may have expired. Sign in and request a new one from the catalog page.', true);
+   })
+   .catch(function(){
+     done('Could not reach the server', 'Please try the link again in a moment.', false);
+   });
+})();
+</script>
+</body>
+</html>

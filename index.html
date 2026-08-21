@@ -889,6 +889,41 @@
   .ask-btn:hover{background:#000;}
   .ask-btn:disabled{opacity:.45;cursor:not-allowed;}
   .ask-hint{margin-top:9px;font-size:12.5px;color:var(--silver-dim);}
+  .ask-verify{margin-top:12px;padding:14px 16px;background:var(--bg-alt);
+    border:1px solid var(--line-strong);border-radius:8px;font-size:13.5px;
+    color:var(--text-muted);line-height:1.6;}
+  .ask-verify[hidden]{display:none;}
+  .ask-verify strong{display:block;color:var(--silver-bright);font-size:14px;margin-bottom:3px;}
+  /* Each part on its own line. The button is inline-level, so without this it
+     tucks itself onto the end of the sentence above it. */
+  .ask-verify > span{display:block;}
+  .ask-verify-btn{margin-top:10px;background:var(--silver-bright);color:#fff;border:none;
+    border-radius:6px;padding:8px 15px;font-size:13px;font-weight:600;cursor:pointer;}
+  .ask-verify-btn:hover{background:#000;}
+  .ask-verify-btn:disabled{opacity:.5;cursor:default;}
+  .ask-verify-msg{display:block;margin-top:8px;font-size:12.5px;color:var(--gold-bright);}
+  /* Header search. The toggle ships hidden and is revealed by the same
+     signed-in + enabled check that reveals the catalog panel. */
+  .nav-search-btn{display:flex;align-items:center;justify-content:center;
+    background:none;border:none;color:var(--silver);cursor:pointer;padding:6px;border-radius:6px;}
+  .nav-search-btn:hover{color:var(--gold-bright);background:rgba(30,24,10,0.05);}
+  .nav-search-btn[hidden]{display:none;}
+  .navsearch{border-top:1px solid var(--line);background:var(--bg-alt);
+    box-shadow:0 10px 24px rgba(30,24,10,0.07);}
+  .navsearch[hidden]{display:none;}
+  .navsearch-inner{max-width:1240px;margin:0 auto;padding:16px 40px 18px;}
+  .navsearch .ask-out{max-height:min(56vh,420px);overflow-y:auto;}
+  /* One row at every width. The shared .ask-row wraps by design in the catalog
+     panel, which has the full column to itself; here wrapping dropped the close
+     button onto a second line and collapsed its height. */
+  .navsearch .ask-row{flex-wrap:nowrap;}
+  .navsearch .ask-input{min-width:0;}
+  .navsearch-close{flex:none;align-self:stretch;background:none;border:1px solid var(--line-strong);
+    color:var(--silver-dim);border-radius:6px;padding:0 11px;cursor:pointer;
+    display:flex;align-items:center;}
+  .navsearch-close:hover{color:var(--silver-bright);border-color:var(--gold-bright);}
+  #navSearchLink[hidden]{display:none;}
+  @media(max-width:900px){ .navsearch-inner{padding:14px 18px 16px;} }
   .ask-out{display:none;margin-top:16px;padding:16px 18px;background:var(--bg-alt);
     border:1px solid var(--line);border-left:2px solid var(--gold);border-radius:0 8px 8px 0;}
   .ask-out.show{display:block;}
@@ -1024,12 +1059,32 @@
       <a href="careers.html">Careers</a>
     </nav>
     <div class="nav-cta">
+      <button type="button" class="nav-search-btn" id="navSearchBtn" aria-label="Search the catalog" aria-expanded="false" aria-controls="navSearch" hidden>
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M16.5 16.5L21 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
       <button type="button" class="cart-btn" aria-label="Open your order"><span>Order</span><span class="cart-count" id="cartCount">0</span></button>
       <a href="account.html" class="btn btn-ghost">Account</a>
       <a href="#catalog" class="btn btn-gold">Browse Catalog</a>
       <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
       </button>
+    </div>
+  </div>
+  <!-- Lives inside the sticky header rather than floating over the page: it
+       inherits the header's stacking context, so it cannot end up behind the
+       nav at one scroll position and in front of it at another. -->
+  <div class="navsearch" id="navSearch" hidden>
+    <div class="navsearch-inner">
+      <div class="ask-row">
+        <input class="ask-input" id="navAskInput" type="text" autocomplete="off"
+               placeholder="Search by product code, vial size or purity">
+        <button class="ask-btn" id="navAskBtn" type="button">Search</button>
+        <button class="navsearch-close" id="navAskClose" type="button" aria-label="Close search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="ask-hint">Specifications, documentation and your own orders. No advice on use.</div>
+      <div class="ask-out" id="navAskOut"><div class="ask-answer" id="navAskAnswer"></div><div class="ask-hits" id="navAskHits"></div></div>
     </div>
   </div>
   <div class="mobile-menu" id="mobileMenu">
@@ -1042,6 +1097,7 @@
     <a href="#contact">Contact</a>
     <a href="careers.html">Careers</a>
     <a href="account.html">Account</a>
+    <a href="#" id="navSearchLink" aria-expanded="false" aria-controls="navSearch" hidden>Search</a>
   </div>
 </header>
 
@@ -1291,6 +1347,12 @@
           <button class="ask-btn" id="askBtn" type="button">Search</button>
         </div>
         <div class="ask-hint">Search by product code, vial size or purity — or ask about your own orders. Specifications and documentation only.</div>
+        <div class="ask-verify" id="askVerify" hidden>
+          <strong>Confirm your email to use search.</strong>
+          <span>We sent a confirmation link when you created your account. Search is limited to confirmed researcher accounts.</span>
+          <button type="button" class="ask-verify-btn" id="askVerifyBtn">Resend the link</button>
+          <span class="ask-verify-msg" id="askVerifyMsg"></span>
+        </div>
         <div class="ask-out" id="askOut"><div class="ask-answer" id="askAnswer"></div><div class="ask-hits" id="askHits"></div></div>
       </div>
       <div class="filter-row" id="filterRow"></div>
@@ -1646,9 +1708,9 @@ function renderDrawer(){
       const imgSrc = prod ? `assets/vials/NF-${prod.slug}.webp?v=3` : '';
       return `
       <div class="drawer-item">
-        <div class="drawer-item-media"><img src="${imgSrc}" alt="${i.display || i.name}" loading="lazy"></div>
+        <div class="drawer-item-media"><img src="${imgSrc}" alt="${(prod && prod.display) || i.display || i.name}" loading="lazy"></div>
         <div class="drawer-item-info">
-          <div class="drawer-item-name">${i.display || i.name}</div>
+          <div class="drawer-item-name">${(prod && prod.display) || i.display || i.name}</div>
           <div class="drawer-item-spec">${i.spec}</div>
           <div class="drawer-item-controls">
             <button class="qty-btn" onclick="changeQty('${i.name}','${i.spec}',-1)">−</button>
@@ -1660,13 +1722,13 @@ function renderDrawer(){
         <div class="drawer-item-price">$${(i.price*i.qty).toFixed(2)}</div>
       </div>`;
     }).join('');
-    // Add-on nudge: offer BAC Water (laboratory solvent) unless it's already in the order.
+    // Add-on nudge: offer the solvent unless it's already in the order.
     const hasSolvent = cart.some(i => i.name === 'Bacteriostatic Water');
     const nudge = hasSolvent ? '' : `
       <div class="cart-nudge">
-        <img src="assets/vials/NF-solvent-3ml.webp?v=3" alt="BAC Water" loading="lazy">
+        <img src="assets/vials/NF-solvent-3ml.webp?v=3" alt="Water 3ml vial" loading="lazy">
         <div class="cart-nudge-info">
-          <div class="cart-nudge-title">Add BAC Water?</div>
+          <div class="cart-nudge-title">Add Water?</div>
           <div class="cart-nudge-sub">Sterile laboratory solvent — pairs with lyophilized reference materials. Lab use only.</div>
         </div>
         <button class="cart-nudge-add" onclick="addSolvent()">+ 3ml · $10</button>
@@ -1676,7 +1738,9 @@ function renderDrawer(){
   updateDrawerTotals();
 }
 
-// Cart add-on: BAC Water 3ml (internal name matches the DB product for checkout).
+// Cart add-on: the 3ml solvent. The argument is the DATABASE name, not the
+// storefront's - checkout resolves the product by it - so it stays as-is while
+// every string a customer reads says "Water".
 function addSolvent(){ addToCart('Bacteriostatic Water', '3ml vial', 10); }
 
 // Force-empty the entire cart.
@@ -2386,6 +2450,10 @@ async function loadPricing(){
     if (!res.ok) return false;
     var d = await res.json();
     window.__nfSearchEnabled = !!(d.search && d.search.enabled);
+    // 'off' | 'needs_verification' | 'on'. The middle state is why this is not
+    // a boolean: an account that has not confirmed its address gets a prompt,
+    // not a search box that refuses every query it is given.
+    window.__nfSearchState = (d.search && d.search.state) || (d.search && d.search.enabled ? 'on' : 'off');
     if (typeof window.nfSyncAskVisibility === 'function') window.nfSyncAskVisibility();
     var by = {};
     (d.products || []).forEach(function(p){ by[p.name + '|' + p.spec] = p; });
@@ -2399,53 +2467,136 @@ async function loadPricing(){
 
 
 // ---- Catalog assistant ----
-// Requires a signed-in account: the endpoint is authenticated, so the control
-// is hidden rather than shown-and-failing for a signed-out visitor.
+// Two mounts, one implementation: the panel in the catalog section and the
+// compact one in the header. They were not duplicated on purpose - the render
+// step escapes untrusted-shaped strings and validates the slug before it
+// becomes an href, and a second copy of that is a second place to forget it.
+//
+// Requires a signed-in account: the endpoint is authenticated, so both controls
+// are hidden rather than shown-and-failing for a signed-out visitor.
 (function(){
-  var input=document.getElementById('askInput'), btn=document.getElementById('askBtn');
-  var out=document.getElementById('askOut'), ans=document.getElementById('askAnswer'), hits=document.getElementById('askHits');
-  var wrap=document.querySelector('.ask');
-  if(!input||!btn||!wrap) return;
+  function esc(v){ return String(v==null?'':v).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+
+  // One in-flight search at a time across BOTH mounts. They share an account
+  // and therefore a rate limit, so letting the header and the catalog box fire
+  // together only spends two of fifteen requests a minute to answer once.
+  var busy=false;
+
+  function mount(ids){
+    var input=document.getElementById(ids.input), btn=document.getElementById(ids.btn);
+    var out=document.getElementById(ids.out), ans=document.getElementById(ids.answer), hits=document.getElementById(ids.hits);
+    if(!input||!btn||!out||!ans||!hits) return null;
+
+    async function ask(){
+      var q=input.value.trim();
+      if(!q||busy) return;
+      busy=true; btn.disabled=true; btn.textContent='…';
+      out.classList.add('show'); ans.textContent='Searching…'; hits.innerHTML='';
+      try{
+        var tok=null; try{ tok=localStorage.getItem(SHOP_TKEY); }catch(e){}
+        var res=await fetch(SHOP_API+'/api/search',{
+          method:'POST',
+          headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok},
+          body:JSON.stringify({q:q})
+        });
+        var d=await res.json().catch(function(){return {};});
+        if(!res.ok){ ans.textContent = d.error || 'Search is unavailable right now.'; return; }
+        ans.textContent = d.answer || '';
+        hits.innerHTML = (d.products||[]).map(function(p){
+          var slug = /^[a-z0-9-]+$/i.test(String(p.slug||'')) ? p.slug : null;
+          var href = slug ? (slug+'.html') : '#catalog';
+          return '<a class="ask-hit" href="'+href+'">'+esc(p.name)+' <span>'+esc(p.spec)+'</span></a>';
+        }).join('');
+      }catch(e){
+        ans.textContent='Could not reach the server. Please try again.';
+      }finally{
+        busy=false; btn.disabled=false; btn.textContent='Search';
+      }
+    }
+    btn.addEventListener('click', ask);
+    input.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); ask(); } });
+    return { ask:ask, input:input, out:out, ans:ans, hits:hits };
+  }
+
+  mount({input:'askInput', btn:'askBtn', out:'askOut', answer:'askAnswer', hits:'askHits'});
+  var nav = mount({input:'navAskInput', btn:'navAskBtn', out:'navAskOut', answer:'navAskAnswer', hits:'navAskHits'});
+
+  // ---- header panel ----
+  var panel=document.getElementById('navSearch');
+  var toggles=[document.getElementById('navSearchBtn'), document.getElementById('navSearchLink')].filter(Boolean);
+  var closeBtn=document.getElementById('navAskClose');
+
+  function openPanel(){
+    if(!panel) return;
+    panel.hidden=false;
+    toggles.forEach(function(t){ t.setAttribute('aria-expanded','true'); });
+    if(nav) nav.input.focus();
+  }
+  function closePanel(){
+    if(!panel) return;
+    panel.hidden=true;
+    toggles.forEach(function(t){ t.setAttribute('aria-expanded','false'); });
+  }
+  toggles.forEach(function(t){
+    t.addEventListener('click', function(e){ e.preventDefault(); panel.hidden ? openPanel() : closePanel(); });
+  });
+  if(closeBtn) closeBtn.addEventListener('click', closePanel);
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closePanel(); });
+  document.addEventListener('click', function(e){
+    if(!panel || panel.hidden) return;
+    if(panel.contains(e.target)) return;
+    if(toggles.some(function(t){ return t.contains(e.target); })) return;
+    closePanel();
+  });
+  // A result link leaves the page anyway, but closing first means the back
+  // button does not land the visitor on a page with a stale panel open.
+  if(panel) panel.addEventListener('click', function(e){
+    if(e.target.closest && e.target.closest('.ask-hit')) closePanel();
+  });
 
   // applyPricingGate() is what runs after a successful sign-in, so hang the
   // visibility toggle off it rather than inventing an event nothing fires.
   // Two conditions, not one: signed in AND the server says this account can
   // use it. The control shipped before the feature was switched on, so
   // "signed in" alone would show a dead box to every customer.
+  var verifyBox=document.getElementById('askVerify');
+  var verifyBtn=document.getElementById('askVerifyBtn');
+  var verifyMsg=document.getElementById('askVerifyMsg');
+  var askRow=document.querySelector('.ask .ask-row');
+  var askHint=document.querySelector('.ask > .ask-hint');
+
+  if(verifyBtn) verifyBtn.addEventListener('click', async function(){
+    verifyBtn.disabled=true; verifyMsg.textContent='Sending…';
+    try{
+      var tok=null; try{ tok=localStorage.getItem(SHOP_TKEY); }catch(e){}
+      var r=await fetch(SHOP_API+'/api/shop-account/resend-verification',{
+        method:'POST', headers:{'Authorization':'Bearer '+tok}
+      });
+      verifyMsg.textContent = r.ok
+        ? 'Sent. Check your inbox, and your spam folder.'
+        : 'Could not send that just now. Please try again shortly.';
+    }catch(e){ verifyMsg.textContent='Could not reach the server. Please try again.'; }
+    setTimeout(function(){ verifyBtn.disabled=false; }, 30000);
+  });
+
   function syncVisibility(){
-    wrap.style.display = (shopAuthed() && window.__nfSearchEnabled === true) ? '' : 'none';
+    var state = shopAuthed() ? (window.__nfSearchState || 'off') : 'off';
+    var wrap=document.querySelector('.ask');
+    // The catalog panel is shown for 'on' AND for 'needs_verification' - in the
+    // second case it carries the prompt instead of the input, which is the only
+    // way the person ever finds out why search is missing.
+    if(wrap) wrap.style.display = (state==='off') ? 'none' : '';
+    if(askRow)  askRow.style.display  = (state==='on') ? '' : 'none';
+    if(askHint) askHint.style.display = (state==='on') ? '' : 'none';
+    if(verifyBox) verifyBox.hidden = (state !== 'needs_verification');
+    // The header control is for confirmed accounts only. An icon that opens a
+    // panel saying "you cannot use this" is worse than no icon.
+    toggles.forEach(function(t){ t.hidden = (state !== 'on'); });
+    if(state !== 'on') closePanel();
   }
   syncVisibility();
   window.nfSyncAskVisibility = syncVisibility;
-
-  var busy=false;
-  async function ask(){
-    var q=input.value.trim();
-    if(!q||busy) return;
-    busy=true; btn.disabled=true; btn.textContent='…';
-    out.classList.add('show'); ans.textContent='Searching…'; hits.innerHTML='';
-    try{
-      var tok=null; try{ tok=localStorage.getItem(SHOP_TKEY); }catch(e){}
-      var res=await fetch(SHOP_API+'/api/search',{
-        method:'POST',
-        headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok},
-        body:JSON.stringify({q:q})
-      });
-      var d=await res.json().catch(function(){return {};});
-      if(!res.ok){ ans.textContent = d.error || 'Search is unavailable right now.'; return; }
-      ans.textContent = d.answer || '';
-      hits.innerHTML = (d.products||[]).map(function(p){
-        var href = p.slug ? (p.slug+'.html') : '#catalog';
-        return '<a class="ask-hit" href="'+href+'">'+p.name+' <span>'+p.spec+'</span></a>';
-      }).join('');
-    }catch(e){
-      ans.textContent='Could not reach the server. Please try again.';
-    }finally{
-      busy=false; btn.disabled=false; btn.textContent='Search';
-    }
-  }
-  btn.addEventListener('click', ask);
-  input.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); ask(); } });
 })();
 
 function renderCatalog(cat, sort){
