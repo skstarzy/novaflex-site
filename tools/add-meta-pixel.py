@@ -18,7 +18,11 @@ import pathlib
 import re
 import sys
 
-ROOT = pathlib.Path(__file__).resolve().parent.parent
+# The published site lives in docs/ so that GitHub Pages serves only what is
+# meant to be public. Build tooling and drafts sit beside it in the repo and
+# are never deployed - which is the bug this layout exists to prevent, after
+# tools/ and _unpublished/ turned out to be readable at novaflexusa.com.
+ROOT = pathlib.Path(__file__).resolve().parent.parent / "docs"
 MARKER = "assets/meta-pixel.js"
 TAG = '<script src="assets/meta-pixel.js" defer></script>'
 LINE = f"\n<!-- Meta pixel — ID lives in assets/meta-pixel.js -->\n{TAG}\n"

@@ -18,8 +18,15 @@ them. Only the <main> is new, plus a small block of grid CSS.
 import os, re
 
 # Repo-relative so this keeps working if the checkout moves.
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DONOR = os.path.join(ROOT, "hplc-vs-mass-spectrometry.html")
+# The published site lives in docs/ so that GitHub Pages serves only what is
+# meant to be public. Build tooling and drafts sit beside it in the repo and
+# are never deployed - which is the bug this layout exists to prevent, after
+# tools/ and _unpublished/ turned out to be readable at novaflexusa.com.
+REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.path.join(REPO, "docs")
+# The articles are drafts and are deliberately not published; the donor for the
+# blog template is read from there rather than from the live site.
+DONOR = os.path.join(REPO, "drafts", "hplc-vs-mass-spectrometry.html")
 OUT = os.path.join(ROOT, "blog.html")
 SITE = "https://novaflexusa.com"
 
