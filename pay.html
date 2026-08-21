@@ -113,6 +113,9 @@ function renderSummary(b){
   if (b && typeof b.subtotal === 'number'){
     rows.push('<div class="row"><span>Subtotal</span><span class="v">'+money(b.subtotal)+'</span></div>');
     if (b.discountAmount > 0) rows.push('<div class="row"><span>Discount</span><span class="v">−'+money(b.discountAmount)+'</span></div>');
+    // Named, not folded silently into the subtotal. Someone who was emailed this
+    // offer should be able to see on the payment page that they got it.
+    if (b.bogoDiscount > 0) rows.push('<div class="row"><span>Buy 2, get 1 free</span><span class="v">−'+money(b.bogoDiscount)+'</span></div>');
     rows.push('<div class="row'+(b.shippingFee > 0 ? '' : ' free')+'"><span>Shipping</span><span class="v">'+(b.shippingFee > 0 ? money(b.shippingFee) : 'FREE')+'</span></div>');
     if (b.taxAmount > 0) rows.push('<div class="row"><span>Sales tax</span><span class="v">'+money(b.taxAmount)+'</span></div>');
   }
