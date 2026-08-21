@@ -2385,6 +2385,8 @@ async function loadPricing(){
     var res = await fetch(PRICING_BASE + '/api/shop-catalog', { headers: { Authorization: 'Bearer ' + tok } });
     if (!res.ok) return false;
     var d = await res.json();
+    window.__nfSearchEnabled = !!(d.search && d.search.enabled);
+    if (typeof window.nfSyncAskVisibility === 'function') window.nfSyncAskVisibility();
     var by = {};
     (d.products || []).forEach(function(p){ by[p.name + '|' + p.spec] = p; });
     PRODUCTS.forEach(function(p){
@@ -2407,7 +2409,12 @@ async function loadPricing(){
 
   // applyPricingGate() is what runs after a successful sign-in, so hang the
   // visibility toggle off it rather than inventing an event nothing fires.
-  function syncVisibility(){ wrap.style.display = shopAuthed() ? '' : 'none'; }
+  // Two conditions, not one: signed in AND the server says this account can
+  // use it. The control shipped before the feature was switched on, so
+  // "signed in" alone would show a dead box to every customer.
+  function syncVisibility(){
+    wrap.style.display = (shopAuthed() && window.__nfSearchEnabled === true) ? '' : 'none';
+  }
   syncVisibility();
   window.nfSyncAskVisibility = syncVisibility;
 
