@@ -240,6 +240,10 @@ async function doAuth(e){
 let stackSel = [];
 let STACK_PRODUCTS = [];
 
+// The shipping-address state dropdown. Removed by the same rewrite and still
+// referenced by the builder's address form.
+const US_STATES = ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY','DC'];
+
 // Same key the storefront uses to match a catalog row: name and size together,
 // because several products exist in more than one vial size.
 function prodKey(p){ return p.name + '|' + p.spec; }
