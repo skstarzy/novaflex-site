@@ -225,6 +225,38 @@ async function doAuth(e){
 }
 
 // ---------- DASHBOARD ----------
+/**
+ * State and helpers for the standing-order builder.
+ *
+ * These three were removed by the login-gate rewrite on 19 August while every
+ * caller was left in place, so the page threw on load for anyone signed in and
+ * reported it as "Couldn't reach the server" — on a request that had returned
+ * 200. Restored here.
+ *
+ * The catalog is fetched rather than hardcoded: prices are only served to a
+ * signed-in account, and a duplicated product list on this page would be one
+ * more thing to keep in step with the storefront.
+ */
+let stackSel = [];
+let STACK_PRODUCTS = [];
+
+// Same key the storefront uses to match a catalog row: name and size together,
+// because several products exist in more than one vial size.
+function prodKey(p){ return p.name + '|' + p.spec; }
+
+async function loadStackProducts(){
+  if (STACK_PRODUCTS.length) return STACK_PRODUCTS;
+  try {
+    const r = await fetch(API + '/api/shop-catalog', { headers: { Authorization: 'Bearer ' + token() } });
+    if (!r.ok) return STACK_PRODUCTS;
+    const d = await r.json();
+    STACK_PRODUCTS = (d.products || [])
+      .filter(function(p){ return !p.soldOut; })
+      .map(function(p){ return { name: p.name, display: p.name, spec: p.spec, price: p.price }; });
+  } catch (e) { /* leaves the list empty; the builder says so rather than throwing */ }
+  return STACK_PRODUCTS;
+}
+
 async function loadDashboard(){
   const t=token();
   if(!t){ showLogin(); return; }
@@ -296,10 +328,71 @@ function renderDashboard(d){
     
       '<div class="msg" id="stackMsg"></div>'+
     '</div>';
-  document.getElementById('stackEdit').addEventListener('click',()=>{ stackSel = (d.items||[]).map(prodKey); renderStackBuilder(d.ship, d.supporterCode); });
-  const pauseBtn=document.getElementById('stackPause'); if(pauseBtn) pauseBtn.addEventListener('click',()=>setStackStatus('paused'));
-  const resumeBtn=document.getElementById('stackResume'); if(resumeBtn) resumeBtn.addEventListener('click',()=>setStackStatus('active'));
-  document.getElementById('stackCancel').addEventListener('click',()=>{ if(confirm('Cancel your Standing Order? This stops monthly billing and clears your selection.')) setStackStatus('cancelled'); });
+  // The standing-order panel is drawn by renderStack() below, asynchronously.
+  // These four buttons live inside it and do not exist yet at this point.
+  //
+  // Previously this wired them here regardless: getElementById returned null,
+  // .addEventListener threw, and the throw was caught by loadDashboard's
+  // catch — which reports "Couldn't reach the server". Every signed-in customer
+  // saw a network error on a page whose network call had returned 200.
+  renderStack();
+}
+
+/**
+ * The standing-order panel.
+ *
+ * Restored after the login-gate rewrite removed renderStack() and
+ * renderStackActive() but left renderDashboard still wiring their buttons.
+ * Each listener is attached to the element it belongs to, immediately after
+ * that element is created, so the two cannot drift apart again.
+ */
+async function renderStack(){
+  const el = document.getElementById('stackSection');
+  if (!el) return;
+  el.innerHTML = '<h2 class="sec">Standing Order</h2><div class="empty">Loading…</div>';
+  let d;
+  try {
+    const r = await fetch(API + '/api/shop-account/stack', { headers: { Authorization: 'Bearer ' + token() } });
+    if (!r.ok) throw new Error('load failed');
+    d = await r.json();
+  } catch (e) {
+    el.innerHTML = '<h2 class="sec">Standing Order</h2><div class="empty">Could not load your standing order.</div>';
+    return;
+  }
+
+  if (d.status !== 'active' && d.status !== 'paused') { stackSel = []; renderStackBuilder(); return; }
+
+  const paused = d.status === 'paused';
+  const items = (d.items || []).map(function(i){
+    return '<li>' + esc(i.name) + ' <span style="color:var(--silver-dim)">' + esc(i.spec) + '</span></li>';
+  }).join('');
+  el.innerHTML =
+    '<h2 class="sec">Standing Order ' +
+      (paused ? '<span class="pill pending" style="margin-left:6px;">Paused</span>'
+              : '<span class="pill paid" style="margin-left:6px;">Active</span>') + '</h2>' +
+    '<div class="panel">' +
+      '<ul style="margin:0 0 12px;padding-left:18px;font-size:14px;line-height:1.8;">' + items + '</ul>' +
+      (d.lastBilledAt ? '<p style="font-size:12.5px;color:var(--silver-dim);margin:0 0 12px;">Last billed ' + esc(new Date(d.lastBilledAt).toLocaleDateString()) + '. Renews on the 5th.</p>'
+                      : '<p style="font-size:12.5px;color:var(--silver-dim);margin:0 0 12px;">Renews on the 5th of each month.</p>') +
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;">' +
+        '<button class="btn btn-ghost" id="stackEdit">Edit</button>' +
+        (paused ? '<button class="btn btn-ghost" id="stackResume">Resume</button>'
+                : '<button class="btn btn-ghost" id="stackPause">Pause</button>') +
+        '<button class="btn btn-ghost" id="stackCancel">Cancel</button>' +
+      '</div>' +
+      '<div class="msg" id="stackMsg"></div>' +
+    '</div>';
+
+  const edit = document.getElementById('stackEdit');
+  if (edit) edit.addEventListener('click', function(){ stackSel = (d.items||[]).map(prodKey); renderStackBuilder(d.ship, d.supporterCode); });
+  const pauseBtn = document.getElementById('stackPause');
+  if (pauseBtn) pauseBtn.addEventListener('click', function(){ setStackStatus('paused'); });
+  const resumeBtn = document.getElementById('stackResume');
+  if (resumeBtn) resumeBtn.addEventListener('click', function(){ setStackStatus('active'); });
+  const cancelBtn = document.getElementById('stackCancel');
+  if (cancelBtn) cancelBtn.addEventListener('click', function(){
+    if (confirm('Cancel your Standing Order? This stops monthly billing and clears your selection.')) setStackStatus('cancelled');
+  });
 }
 
 async function setStackStatus(status){
@@ -311,8 +404,15 @@ async function setStackStatus(status){
   }catch(e){ if(msg){msg.className='msg err';msg.textContent=e.message;} }
 }
 
-function renderStackBuilder(existingShip, existingCode){
+async function renderStackBuilder(existingShip, existingCode){
   const el = document.getElementById('stackSection');
+  if (!el) return;
+  // The catalog has to be in hand before the checkbox rows can be built.
+  await loadStackProducts();
+  if (!STACK_PRODUCTS.length) {
+    el.innerHTML = '<h2 class="sec">Standing Order</h2><div class="empty">Could not load the catalog. Please refresh.</div>';
+    return;
+  }
   const s = existingShip||{};
   let supporterCode = (existingCode||'').trim().toUpperCase();
   let supporterValid = !!supporterCode; // a stored code was valid when saved
