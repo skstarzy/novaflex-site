@@ -325,7 +325,7 @@ function renderStackBuilder(existingShip, existingCode){
   el.innerHTML =
     '<h2 class="sec">Build your Standing Order</h2>'+
     '<div class="panel" style="margin-top:8px;">'+
-      '<p style="margin:0 0 4px;font-size:13.5px;color:var(--text-muted);">Pick <b style="color:var(--silver)">2 to 4 compounds</b>. Your stack renews on the 5th each month at <b style="color:var(--gold-bright)">10% off</b>.</p>'+
+      '<p style="margin:0 0 4px;font-size:13.5px;color:var(--text-muted);">Pick <b style="color:var(--silver)">2 to 4 compounds</b>. Your standing order renews on the 5th each month at <b style="color:var(--gold-bright)">10% off</b>.</p>'+
       '<div class="stack-picks" id="stackPicks">'+prodRows+'</div>'+
       '<div id="stackEst" class="stack-est"></div>'+'<div style="margin-top:14px;">'+'<input id="stSupporter" placeholder="Supporter code (optional)" maxlength="24" value="'+esc(supporterCode)+'" style="text-transform:uppercase;">'+'<div id="stSupMsg" style="font-size:12px;margin:5px 2px 0;color:var(--silver-dim);">Enter a creator\'s code to support them. Leave blank and 3% is added per compound.</div>'+'</div>'+
       '<h3 style="margin-top:22px;">Shipping address</h3>'+
@@ -338,8 +338,8 @@ function renderStackBuilder(existingShip, existingCode){
         '<input id="stPhone" placeholder="Phone number" inputmode="tel" autocomplete="tel-national" maxlength="20" value="'+esc(s.phone||'')+'">'+
         '<p style="font-size:12px;color:var(--silver-dim);margin:6px 2px 0;">Required by the carrier for delivery — used for shipping only.</p>'+
       '</div>'+
-      '<label class="check" style="margin-top:16px;"><input type="checkbox" id="stConsent"> I authorize NovaFlex to prepare and bill this stack order automatically on the 5th of each month (via a one-click pay link) until I pause or cancel it.</label>'+
-      '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;"><button class="btn btn-gold" id="stackSave">Start my stack</button>'+(stackSel.length?'<button class="btn btn-ghost" id="stackBack">Back</button>':'')+'</div>'+
+      '<label class="check" style="margin-top:16px;"><input type="checkbox" id="stConsent"> I authorize NovaFlex to prepare and bill this standing order automatically on the 5th of each month (via a one-click pay link) until I pause or cancel it.</label>'+
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;"><button class="btn btn-gold" id="stackSave">Start my standing order</button>'+(stackSel.length?'<button class="btn btn-ghost" id="stackBack">Back</button>':'')+'</div>'+
       '<div class="msg" id="stackMsg"></div>'+
     '</div>';
   const picks = document.getElementById('stackPicks');
