@@ -3,38 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Moved — MT-1 10mg | NovaFlex</title>
+<title>No longer listed | NovaFlex</title>
 <!--
-  The MT-1 listing used to live at this URL, back when the slug still carried
-  the compound's old label. The product itself hasn't changed; only the address
-  has. This page exists so that move doesn't cost anything.
+  This URL used to list a product that is not in the catalog any more.
 
-  Why a stub rather than just deleting the file: this URL was submitted to
-  IndexNow and to Search Console before the rename. GitHub Pages can't issue a
-  301, so deleting it would answer a 404 to crawlers we had only just invited,
-  and whatever the URL had accrued would be thrown away instead of passed on.
-  A zero-delay meta refresh plus a canonical is as close to a redirect as a
-  static host gets, and Google treats it as one.
+  It previously redirected to mt1-10mg.html, with a canonical pointing there
+  too. That was wrong, and not harmlessly: the two slugs are different
+  compounds, not an old and new address for the same one. Anyone arriving here
+  looking for what used to be at this URL was sent to a different product with
+  no indication anything had changed, and the canonical told Google the two
+  pages were the same thing.
 
-  Safe to delete once Search Console shows mt1-10mg.html indexed — roughly a
-  month. Deliberately absent from sitemap.xml: build-seo.py generates that from
-  the catalog, so it can never list this.
+  So this points at the catalog instead, and claims no equivalence with any
+  listing. Nothing here should be read as "we sell this under another name".
+
+  noindex rather than a redirect, because there is no successor page to pass
+  anything to. The URL should simply fall out of the index.
 -->
-<link rel="canonical" href="https://novaflexusa.com/mt1-10mg.html">
-<meta http-equiv="refresh" content="0; url=mt1-10mg.html">
-<meta name="robots" content="noai, noimageai">
+<meta name="robots" content="noindex, follow, noai, noimageai">
 <style>
   body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
        background:#f7f4ee;color:#221f18;
        font-family:-apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;text-align:center;padding:24px;}
-  a{color:#8a6a24;font-weight:600;}
+  .card{max-width:460px;}
+  h1{font-size:20px;margin:0 0 12px;color:#171410;}
+  p{font-size:14px;color:#6b675f;line-height:1.65;margin:0 0 18px;}
+  a.btn{display:inline-block;background:#171410;color:#fff;text-decoration:none;
+        padding:12px 24px;border-radius:6px;font-size:15px;font-weight:600;}
+  .legal{margin-top:26px;font-size:11.5px;color:#8c887f;line-height:1.6;}
 </style>
-
-<!-- Meta pixel — ID lives in assets/meta-pixel.js -->
-<script src="assets/meta-pixel.js" defer></script>
 </head>
 <body>
-  <p>This listing has moved to <a href="mt1-10mg.html">MT-1 10mg</a>.</p>
-  <script>location.replace('mt1-10mg.html');</script>
+  <main class="card">
+    <h1>This listing is no longer available</h1>
+    <p>The product that used to be at this address is not in our catalog. Our current
+       range is listed by product code, each with its specification, assayed purity and
+       certificate of analysis.</p>
+    <p><a class="btn" href="index.html#catalog">Browse the catalog</a></p>
+    <div class="legal">
+      NovaFlex LLC · 120 N. Tech Dr., Suite 102, Clayton, NC 27520<br>
+      For Research Use Only — not for human or veterinary use.
+    </div>
+  </main>
 </body>
 </html>
