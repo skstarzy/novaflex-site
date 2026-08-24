@@ -256,7 +256,7 @@ def write_llms(products, content, cat_labels):
         "- Research-use-only reference material for qualified researchers and laboratories, aged 21+.",
         "- 25 compounds across structural compounds, IGF compounds, copper and melanocortin compounds, multi-component vials, cofactors, and laboratory solvents.",
         "- Every lot: 99%+ assayed purity by HPLC, identity confirmed by mass spectrometry, batch Certificate of Analysis included. Independent analysis by Janoshik Analytical.",
-        "- Ships from Clayton, NC (USA), same business day before cutoff, tracked. Free US shipping over $249.",
+        "- Ships from Clayton, NC (USA), same business day before cutoff, tracked. Free US shipping over $199.",
         "",
         # The guides and calculator were unpublished for payment-processor
         # compliance. This file exists to be read by AI crawlers, so leaving the
@@ -464,8 +464,8 @@ def product_jsonld(p, c, url):
             else "https://schema.org/InStock",
             "url": url,
             "seller": {"@type": "Organization", "name": BRAND},
-            # Shipping terms are stated on policies.html: $9.95 flat under $249,
-            # free at $249+. Encoding them lets a result show delivery cost
+            # Shipping terms are stated on policies.html: $9.95 flat under $199,
+            # free at $199+. Encoding them lets a result show delivery cost
             # rather than making the shopper click to find out.
             "shippingDetails": [
                 {"@type": "OfferShippingDetails",
