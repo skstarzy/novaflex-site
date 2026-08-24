@@ -54,6 +54,18 @@ from html import escape
 # tools/ and _unpublished/ turned out to be readable at novaflexusa.com.
 ROOT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "docs")
 SITE = "https://novaflexusa.com"
+
+# Free-shipping threshold, in one place.
+#
+# It was written out three times in this file - the llms.txt line, a comment,
+# and the shippingDetails JSON-LD - and when the figure moved from 249 to 199 to
+# match the printed flyers, a rebuild for an unrelated reason put the old number
+# straight back into llms.txt. The generator is the last place a duplicated
+# constant should live, because it reprints it across 26 pages at once.
+#
+# The live figure that checkout enforces is FREE_SHIP_THRESHOLD in
+# novaflex-backend-v2/lib/pricing.js. If that moves, move this.
+FREE_SHIP_THRESHOLD = 199
 BRAND = "NovaFlex"
 
 # Pages that aren't products but belong in the sitemap.
@@ -256,7 +268,7 @@ def write_llms(products, content, cat_labels):
         "- Research-use-only reference material for qualified researchers and laboratories, aged 21+.",
         "- 25 compounds across structural compounds, IGF compounds, copper and melanocortin compounds, multi-component vials, cofactors, and laboratory solvents.",
         "- Every lot: 99%+ assayed purity by HPLC, identity confirmed by mass spectrometry, batch Certificate of Analysis included. Independent analysis by Janoshik Analytical.",
-        "- Ships from Clayton, NC (USA), same business day before cutoff, tracked. Free US shipping over $199.",
+        f"- Ships from Clayton, NC (USA), same business day before cutoff, tracked. Free US shipping over ${FREE_SHIP_THRESHOLD}.",
         "",
         # The guides and calculator were unpublished for payment-processor
         # compliance. This file exists to be read by AI crawlers, so leaving the
@@ -464,8 +476,8 @@ def product_jsonld(p, c, url):
             else "https://schema.org/InStock",
             "url": url,
             "seller": {"@type": "Organization", "name": BRAND},
-            # Shipping terms are stated on policies.html: $9.95 flat under $199,
-            # free at $199+. Encoding them lets a result show delivery cost
+            # Shipping terms are stated on policies.html: $9.95 flat under the
+            # threshold, free at or above it. Encoding them lets a result show delivery cost
             # rather than making the shopper click to find out.
             "shippingDetails": [
                 {"@type": "OfferShippingDetails",
@@ -475,7 +487,7 @@ def product_jsonld(p, c, url):
                  "shippingRate": {"@type": "MonetaryAmount", "value": 0, "currency": "USD"},
                  "shippingDestination": {"@type": "DefinedRegion", "addressCountry": "US"},
                  "eligibleTransactionVolume": {"@type": "PriceSpecification",
-                                               "price": 249, "priceCurrency": "USD"}},
+                                               "price": FREE_SHIP_THRESHOLD, "priceCurrency": "USD"}},
             ],
         }
     return data
