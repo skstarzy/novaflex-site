@@ -402,6 +402,8 @@
   .prod-spec{font-size:12.5px;color:var(--text-muted);font-family:'IBM Plex Mono';}
   .prod-foot{margin-top:auto;padding-top:14px;display:flex;align-items:center;justify-content:space-between;}
   .prod-price{font-family:'IBM Plex Mono';font-size:17px;font-weight:600;color:var(--silver-bright);}
+  .prod-price .was{color:var(--silver-dim);font-weight:500;text-decoration-thickness:1.5px;margin-right:5px;font-size:14px;}
+  .prod-price .now{color:var(--gold-bright);font-weight:700;}
   .add-btn{
     font-size:12px;font-weight:600;padding:8px 14px;border-radius:3px;
     background:transparent;border:1px solid var(--line-strong);color:var(--silver);
@@ -2331,7 +2333,12 @@ function productCard(p){
         : `<button class="add-btn" onclick="openAuthModal()">Sign in</button>`);
   const priceHTML = shopAuthed()
     ? (typeof p.price === 'number'
-        ? `<span class="prod-price">$${p.price.toFixed(2)} USD</span>`
+        ? (p.compareAtPrice && p.compareAtPrice > p.price
+            // Only when the API sent a compare-at above the charged price. It
+            // withholds one otherwise, so a struck-through figure here is always
+            // a real saving rather than a decorative one.
+            ? `<span class="prod-price"><s class="was">$${p.compareAtPrice.toFixed(2)}</s> <b class="now">Now $${p.price.toFixed(2)}</b></span>`
+            : `<span class="prod-price">$${p.price.toFixed(2)} USD</span>`)
         // Signed in, but the price has not arrived yet. Prices are no longer in
         // this file — they come from /api/shop-catalog after sign-in — so there
         // is a real moment where the user is authenticated and the number is
@@ -2462,7 +2469,7 @@ async function loadPricing(){
     (d.products || []).forEach(function(p){ by[p.name + '|' + p.spec] = p; });
     PRODUCTS.forEach(function(p){
       var m = by[p.name + '|' + p.spec];
-      if (m) { p.price = m.price; if (m.soldOut) p.soldOut = true; }
+      if (m) { p.price = m.price; p.compareAtPrice = m.compareAtPrice || null; if (m.soldOut) p.soldOut = true; }
     });
     return true;
   } catch(e){ return false; }

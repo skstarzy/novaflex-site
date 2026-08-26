@@ -78,6 +78,8 @@
   .pd-credits-t{font-size:12.5px;color:var(--text);line-height:1.4;}
   .pd-credits-t b{display:block;font-size:11px;color:var(--text-muted);font-weight:500;margin-top:1px;}
   .pd-price{font-family:'IBM Plex Mono';font-size:30px;font-weight:600;color:var(--silver-bright);}
+  .pd-price .was{color:var(--silver-dim);font-weight:500;font-size:20px;margin-right:8px;text-decoration-thickness:2px;}
+  .pd-price .now{color:var(--gold-bright);font-weight:700;}
   .pd-soldtag{font-family:'IBM Plex Mono';font-size:12px;color:var(--silver-dim);border:1px solid var(--line-strong);border-radius:3px;padding:4px 9px;text-transform:uppercase;letter-spacing:0.08em;}
   .pd-trust{margin-top:24px;display:flex;flex-wrap:wrap;gap:10px;}
   .pd-chip{font-family:'IBM Plex Mono';font-size:11px;color:var(--silver-dim);border:1px solid var(--line);border-radius:20px;padding:6px 12px;display:inline-flex;align-items:center;gap:6px;}
@@ -449,7 +451,7 @@ async function loadPricing(){
     (d.products || []).forEach(function(p){ by[p.name + '|' + p.spec] = p; });
     PRODUCTS.forEach(function(p){
       var m = by[p.name + '|' + p.spec];
-      if (m) { p.price = m.price; if (m.soldOut) p.soldOut = true; }
+      if (m) { p.price = m.price; p.compareAtPrice = m.compareAtPrice || null; if (m.soldOut) p.soldOut = true; }
     });
     return true;
   } catch(e){ return false; }
@@ -560,7 +562,14 @@ function render(){
         '<h1 class="pd-name">'+escapeHtml(p.display || p.name)+'</h1>'+
         '<div class="pd-sub"><span>'+escapeHtml(p.spec)+'</span>'+(p.purity?'<span class="dot">•</span><span>'+p.purity+' purity</span>':'')+'</div>'+
         '<p class="pd-tagline">'+escapeHtml(c.tagline)+'</p>'+
-        '<div class="pd-buy">'+(shopAuthed()?('<span class="pd-price">'+(money(p.price)||'Loading…')+'</span>'+buyHTML):'<button class="btn btn-gold" onclick="openAuthModal()">Sign in to view pricing</button>')+'</div>'+
+        '<div class="pd-buy">'+(shopAuthed()?('<span class="pd-price">'+(
+          // A struck-through was-price when the API sent one above the charged
+          // price. It withholds it otherwise, so this can never show a saving
+          // that is not real.
+          (p.compareAtPrice && p.compareAtPrice > p.price)
+            ? '<s class="was">'+money(p.compareAtPrice)+'</s> <b class="now">Now '+money(p.price)+'</b>'
+            : (money(p.price)||'Loading…')
+        )+'</span>'+buyHTML):'<button class="btn btn-gold" onclick="openAuthModal()">Sign in to view pricing</button>')+'</div>'+
         // Only shown alongside a visible price — quoting an earn figure next to
         // a hidden price just raises a question we haven't answered yet.
         (shopAuthed() && typeof p.price === 'number' ? '<div class="pd-credits"><span class="pd-credits-n">+'+creditsFor(p.price)+'</span>'+
