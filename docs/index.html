@@ -402,8 +402,11 @@
   .prod-spec{font-size:12.5px;color:var(--text-muted);font-family:'IBM Plex Mono';}
   .prod-foot{margin-top:auto;padding-top:14px;display:flex;align-items:center;justify-content:space-between;}
   .prod-price{font-family:'IBM Plex Mono';font-size:17px;font-weight:600;color:var(--silver-bright);}
-  .prod-price .was{color:var(--silver-dim);font-weight:500;text-decoration-thickness:1.5px;margin-right:5px;font-size:14px;}
-  .prod-price .now{color:var(--gold-bright);font-weight:700;}
+  /* Each part on its own line. Inline, a narrow card broke between the old
+     price and its amount — "$75.00 Now" then "$65.00" — which reads as two
+     unrelated numbers and, on a price, as a mistake. */
+  .prod-price .was{display:block;color:var(--silver-dim);font-weight:500;text-decoration-thickness:1.5px;font-size:13.5px;line-height:1.25;}
+  .prod-price .now{display:block;color:var(--gold-bright);font-weight:700;white-space:nowrap;line-height:1.2;}
   .add-btn{
     font-size:12px;font-weight:600;padding:8px 14px;border-radius:3px;
     background:transparent;border:1px solid var(--line-strong);color:var(--silver);
