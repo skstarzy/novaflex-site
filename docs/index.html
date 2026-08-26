@@ -2620,7 +2620,24 @@ function renderCatalog(cat, sort){
 }
 renderCatalog("All","az");
 // Prices arrive after sign-in, so re-render once they land.
-loadPricing().then(function(ok){ if (ok) renderCatalog(); });
+/*
+ * Re-render BOTH grids, not just the catalog.
+ *
+ * Prices arrive after the page has already drawn, so whatever is on screen at
+ * that moment has to be redrawn. This re-rendered the catalog and not the
+ * "Researcher favorites" grid above it, which therefore kept the placeholder it
+ * was first painted with — eight cards reading "Loading…" permanently, on the
+ * first thing a signed-in customer sees.
+ *
+ * It only showed up on a page load with a session already stored. Signing in
+ * goes through applyPricingGate(), which redraws both, so it looked fine in
+ * every test that signed in first.
+ */
+loadPricing().then(function(ok){
+  if (!ok) return;
+  if (typeof renderFeatured === 'function') renderFeatured();
+  if (typeof renderCatalog === 'function') renderCatalog();
+});
 updateSpotlightGate();
 // If a stored session has expired, drop it so pricing re-locks correctly.
 (async function(){
