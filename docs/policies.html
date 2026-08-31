@@ -107,6 +107,22 @@
 <script src="assets/meta-pixel.js" defer></script>
 </head>
 <body>
+<style>
+  /* Labor Day sale strip. Dated copy: the end date here is stated in the same
+     words as SALE_CODES.LABORDAY in the API, and the two have to be retired
+     together - a strip advertising an offer the checkout has stopped honouring
+     is worse than no strip. */
+  .nf-lds{display:block;text-decoration:none;position:relative;z-index:1250;background:linear-gradient(90deg,#171410,#2a2318,#171410);
+    border-bottom:1px solid #b08d2e;color:#f5efdf;text-align:center;
+    padding:9px 16px;font-size:12.5px;letter-spacing:.02em;line-height:1.45;}
+  .nf-lds:hover{background:linear-gradient(90deg,#1d1913,#332a1d,#1d1913);}
+  .nf-lds .nf-lds-tag{color:#d4af49;font-weight:700;letter-spacing:.09em;}
+  .nf-lds .nf-lds-code{color:#d4af49;font-weight:700;font-family:'IBM Plex Mono',ui-monospace,monospace;}
+  .nf-lds .nf-lds-when{opacity:.78;}
+  .nf-lds .nf-lds-sep{color:#b08d2e;opacity:.5;margin:0 7px;}
+  @media (max-width:600px){ .nf-lds{font-size:11.5px;padding:8px 12px;} }
+</style>
+<a class="nf-lds" href="index.html?promo=LABORDAY#catalog"><span class="nf-lds-tag">LABOR DAY</span><span class="nf-lds-sep">·</span><b>15% off sitewide</b> with code <span class="nf-lds-code">LABORDAY</span><span class="nf-lds-sep">·</span><span class="nf-lds-when">through Monday, September 7</span></a>
 <header class="nav">
   <div class="nav-inner">
     <a href="index.html" class="brand">
@@ -363,15 +379,24 @@
         <p>All prices on this site are shown and charged in <strong>United States Dollars (USD)</strong>.
         We do not currently sell in any other currency.</p>
 
+        <h3>Labor Day &mdash; 15% off sitewide</h3>
+        <p><strong>This offer runs through Monday, September 7, 2026</strong> and ends automatically at
+        11:59pm Eastern that day. Enter code <strong>LABORDAY</strong> at checkout; it is not applied
+        automatically. Reduces the order total by 15%, calculated on the order subtotal after any
+        volume-tier reduction and after any current catalog price reduction &mdash; so it applies on
+        top of a reduced catalog price rather than in place of it. Shipping and tax are not
+        discounted. One code per order; it cannot be combined with another discount code. Available
+        while the offer is running and may be withdrawn at any time; orders already placed are
+        unaffected.</p>
+
         <h3>Buy 2, get 1 free</h3>
-        <p><strong>This offer runs through Friday, August 28, 2026</strong> and ends automatically at
-        11:59pm Eastern that day. Applies automatically at checkout, in complete sets of three items.
+        <p><strong>This offer closed on Friday, August 28, 2026</strong> at 11:59pm Eastern and is no
+        longer available. Applies automatically at checkout, in complete sets of three items.
         The free item is the <strong>lowest-priced</strong> item in each set. Quantities of the same product count
         individually, so three of one vial qualifies. Six items give two free, five items give one
         free with the remainder charged at list price. The discount is calculated on list price and
         cannot be combined with another promotional code — where both would apply, whichever
-        gives the larger saving is used. Available while the offer is running and may be withdrawn
-        at any time; orders already placed are unaffected.</p>
+        gives the larger saving is used. Orders placed while it ran are unaffected.</p>
 
         <h3>Volume pricing</h3>
         <p>Per-item price reduces automatically at set quantity tiers for the same product. Tier

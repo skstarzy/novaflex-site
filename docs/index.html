@@ -975,6 +975,10 @@
         <span class="eg-access">Restricted Access</span>
         <h2 class="eg-h2">Enter the catalog</h2>
         <p class="eg-p">Sign in to your researcher account — or create one — to unlock pricing, certificates of analysis, and verified ordering.</p>
+        <!-- Carries .show in the markup on purpose: the credits perk beside it is
+             toggled on only in register mode, but the sale applies to everyone,
+             so a returning customer signing in has to see it too. -->
+        <div class="signup-perk show" id="egLaborDay"><span class="sp-star">✦</span><span><b>Labor Day &mdash; 15% off sitewide</b> with code <b>LABORDAY</b> at checkout, through Monday, September 7. Stacks with current catalog reductions. <a href="policies.html#promotions" style="color:inherit;text-decoration:underline;">Terms apply.</a></span></div>
         <div class="eg-tabs">
           <button type="button" class="eg-tab active" id="egTabLogin" onclick="egSetMode('login')">Sign in</button>
           <button type="button" class="eg-tab" id="egTabRegister" onclick="egSetMode('register')">Create account</button>
@@ -1043,6 +1047,22 @@
   </div>
 </div>
 
+<style>
+  /* Labor Day sale strip. Dated copy: the end date here is stated in the same
+     words as SALE_CODES.LABORDAY in the API, and the two have to be retired
+     together - a strip advertising an offer the checkout has stopped honouring
+     is worse than no strip. */
+  .nf-lds{display:block;text-decoration:none;position:relative;z-index:1250;background:linear-gradient(90deg,#171410,#2a2318,#171410);
+    border-bottom:1px solid #b08d2e;color:#f5efdf;text-align:center;
+    padding:9px 16px;font-size:12.5px;letter-spacing:.02em;line-height:1.45;}
+  .nf-lds:hover{background:linear-gradient(90deg,#1d1913,#332a1d,#1d1913);}
+  .nf-lds .nf-lds-tag{color:#d4af49;font-weight:700;letter-spacing:.09em;}
+  .nf-lds .nf-lds-code{color:#d4af49;font-weight:700;font-family:'IBM Plex Mono',ui-monospace,monospace;}
+  .nf-lds .nf-lds-when{opacity:.78;}
+  .nf-lds .nf-lds-sep{color:#b08d2e;opacity:.5;margin:0 7px;}
+  @media (max-width:600px){ .nf-lds{font-size:11.5px;padding:8px 12px;} }
+</style>
+<a class="nf-lds" href="?promo=LABORDAY#catalog"><span class="nf-lds-tag">LABOR DAY</span><span class="nf-lds-sep">·</span><b>15% off sitewide</b> with code <span class="nf-lds-code">LABORDAY</span><span class="nf-lds-sep">·</span><span class="nf-lds-when">through Monday, September 7</span></a>
 <div class="announce">
   <b>For research use only</b> — not for human or veterinary use <span class="announce-sep">·</span> Third-party tested (HPLC &amp; MS) <span class="announce-sep">·</span> <b style="color:var(--gold-bright)">$0 U.S. shipping on orders $199+ · Volume discounts 5+ &amp; 10+</b> <a href="#catalog" style="border-bottom:1px solid var(--gold);">Browse catalog →</a>
 </div>
