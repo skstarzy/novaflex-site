@@ -196,7 +196,15 @@ def rebuild(src_path, dst_path, name, dose, purity):
                 p = px[x, y]
                 px[x, y] = (p[0], p[1], p[2], 0)
     out.alpha_composite(band)
-    out.save(dst_path, "WEBP", quality=90, method=6)
+    # Write to a sibling temp file and rename over the target. Saving straight
+    # onto dst_path means an interrupted run - a timeout, a sleep, a Ctrl-C -
+    # leaves a half-written .webp in the published tree that no longer decodes.
+    # That happened while testing the drift guard: one interrupted rebuild left
+    # NF-nv5ks-5mg.webp corrupt and serveable. rename() on the same filesystem
+    # is atomic, so the published file is either the old one or the new one.
+    tmp = dst_path + ".tmp"
+    out.save(tmp, "WEBP", quality=90, method=6)
+    os.replace(tmp, dst_path)
 
 
 def catalog():
