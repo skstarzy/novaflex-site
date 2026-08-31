@@ -76,6 +76,26 @@
   @media (max-width:600px){ .nf-lds{font-size:11.5px;padding:8px 12px;} }
 </style>
 <a class="nf-lds" href="index.html?promo=LABORDAY#catalog"><span class="nf-lds-tag">LABOR DAY</span><span class="nf-lds-sep">·</span><b>15% off sitewide</b> with code <span class="nf-lds-code">LABORDAY</span><span class="nf-lds-sep">·</span><span class="nf-lds-when">through Monday, September 7</span></a>
+<script data-nf-lds-expiry="1">
+/* The strip retires itself at the same instant the API stops honouring the
+   code (end of Monday 7 September, Clayton time). Without this the site would
+   go on advertising 15% off after checkout began refusing LABORDAY, which is a
+   bait-and-switch from the customer's side and invites chargebacks - the exact
+   failure the buy-2-get-1 offer was given a hard deadline to avoid. Belt and
+   braces: the markup should still be taken out when the sale ends. */
+(function(){
+  var ENDS = Date.parse('2026-09-08T03:59:59Z');
+  function sweep(){
+    if (Date.now() <= ENDS) return;
+    var els = document.querySelectorAll('.nf-lds, #egLaborDay');
+    for (var i = 0; i < els.length; i++) els[i].remove();
+  }
+  sweep();
+  /* A tab left open across the deadline would otherwise keep showing it. */
+  if (Date.now() <= ENDS) setTimeout(sweep, Math.min(ENDS - Date.now() + 1000, 2147483647));
+})();
+</script>
+
 <header class="nav">
   <div class="nav-inner">
     <a href="index.html" class="brand">
