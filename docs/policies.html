@@ -107,41 +107,6 @@
 <script src="assets/meta-pixel.js" defer></script>
 </head>
 <body>
-<style>
-  /* Labor Day sale strip. Dated copy: the end date here is stated in the same
-     words as SALE_CODES.LABORDAY in the API, and the two have to be retired
-     together - a strip advertising an offer the checkout has stopped honouring
-     is worse than no strip. */
-  .nf-lds{display:block;text-decoration:none;position:relative;z-index:1250;background:linear-gradient(90deg,#171410,#2a2318,#171410);
-    border-bottom:1px solid #b08d2e;color:#f5efdf;text-align:center;
-    padding:9px 16px;font-size:12.5px;letter-spacing:.02em;line-height:1.45;}
-  .nf-lds:hover{background:linear-gradient(90deg,#1d1913,#332a1d,#1d1913);}
-  .nf-lds .nf-lds-tag{color:#d4af49;font-weight:700;letter-spacing:.09em;}
-  .nf-lds .nf-lds-code{color:#d4af49;font-weight:700;font-family:'IBM Plex Mono',ui-monospace,monospace;}
-  .nf-lds .nf-lds-when{opacity:.78;}
-  .nf-lds .nf-lds-sep{color:#b08d2e;opacity:.5;margin:0 7px;}
-  @media (max-width:600px){ .nf-lds{font-size:11.5px;padding:8px 12px;} }
-</style>
-<a class="nf-lds" href="index.html?promo=LABORDAY#catalog"><span class="nf-lds-tag">LABOR DAY</span><span class="nf-lds-sep">·</span><b>15% off sitewide</b> with code <span class="nf-lds-code">LABORDAY</span><span class="nf-lds-sep">·</span><span class="nf-lds-when">through Monday, September 7</span></a>
-<script data-nf-lds-expiry="1">
-/* The strip retires itself at the same instant the API stops honouring the
-   code (end of Monday 7 September, Clayton time). Without this the site would
-   go on advertising 15% off after checkout began refusing LABORDAY, which is a
-   bait-and-switch from the customer's side and invites chargebacks - the exact
-   failure the buy-2-get-1 offer was given a hard deadline to avoid. Belt and
-   braces: the markup should still be taken out when the sale ends. */
-(function(){
-  var ENDS = Date.parse('2026-09-08T03:59:59Z');
-  function sweep(){
-    if (Date.now() <= ENDS) return;
-    var els = document.querySelectorAll('.nf-lds, #egLaborDay');
-    for (var i = 0; i < els.length; i++) els[i].remove();
-  }
-  sweep();
-  /* A tab left open across the deadline would otherwise keep showing it. */
-  if (Date.now() <= ENDS) setTimeout(sweep, Math.min(ENDS - Date.now() + 1000, 2147483647));
-})();
-</script>
 
 <header class="nav">
   <div class="nav-inner">
@@ -400,14 +365,13 @@
         We do not currently sell in any other currency.</p>
 
         <h3>Labor Day &mdash; 15% off sitewide</h3>
-        <p><strong>This offer runs through Monday, September 7, 2026</strong> and ends automatically at
-        11:59pm Eastern that day. Enter code <strong>LABORDAY</strong> at checkout; it is not applied
-        automatically. Reduces the order total by 15%, calculated on the order subtotal after any
-        volume-tier reduction and after any current catalog price reduction &mdash; so it applies on
-        top of a reduced catalog price rather than in place of it. Shipping and tax are not
-        discounted. One code per order; it cannot be combined with another discount code. Available
-        while the offer is running and may be withdrawn at any time; orders already placed are
-        unaffected.</p>
+        <p><strong>This offer closed on Monday, September 7, 2026</strong> at 11:59pm Eastern and is
+        no longer available. It required code <strong>LABORDAY</strong> at checkout and was not applied
+        automatically. It reduced the order total by 15%, calculated on the order subtotal after any
+        volume-tier reduction and after any catalog price reduction then in effect &mdash; so it applied
+        on top of a reduced catalog price rather than in place of it. Shipping and tax were not
+        discounted. One code per order; it could not be combined with another discount code. Orders
+        placed while it ran are unaffected.</p>
 
         <h3>Buy 2, get 1 free</h3>
         <p><strong>This offer closed on Friday, August 28, 2026</strong> at 11:59pm Eastern and is no
