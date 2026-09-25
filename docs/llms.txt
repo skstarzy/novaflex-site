@@ -58,6 +58,23 @@
 - [Water 3ml vial](https://novaflexusa.com/solvent-3ml.html)
 - [Water 10ml vial](https://novaflexusa.com/solvent-10ml.html)
 
+## Reference guides
+
+Written by NovaFlex, about how research material is tested and documented rather than about
+any product. Free to cite.
+
+- [How to read a Certificate of Analysis](https://novaflexusa.com/how-to-read-a-coa.html) — what
+  an HPLC purity figure is measuring, how mass spectrometry confirms identity, and how to tell a
+  real certificate from a decorative one.
+- [HPLC vs mass spectrometry](https://novaflexusa.com/hplc-vs-mass-spectrometry.html) — what each
+  test proves on its own, and why a certificate carrying only one of them is incomplete.
+- [Reconstitution calculator](https://novaflexusa.com/reconstitution-calculator.html) — working
+  concentration in mg/mL from vial mass and diluent volume, plus aliquot volume for a target dose
+  in a research protocol.
+- [GLP-1, GIP and glucagon receptor agonists](https://novaflexusa.com/glp1-gip-glucagon-receptor-agonists.html)
+  — how single, dual and triple receptor agonists are classified in the literature.
+- [All guides](https://novaflexusa.com/blog.html)
+
 ## Compliance
 
 All materials are supplied solely for lawful laboratory research by qualified professionals. Products are not drugs, food, or cosmetics and are not intended for human or animal consumption, diagnosis, cure, mitigation, treatment, or prevention of any disease. Sales are restricted to purchasers aged 21 or older acting on behalf of a qualified laboratory, institution, or business entity.
