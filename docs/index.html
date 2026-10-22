@@ -947,7 +947,7 @@
 <body>
 
 
-<div id="enterGate">
+<div id="enterGate" class="hidden">
   <div class="eg-bg">
   <svg class="eg-dial" viewBox="0 0 200 200" fill="none" aria-hidden="true">
     <circle cx="100" cy="100" r="92" stroke="#c9a44c" stroke-opacity="0.35" stroke-width="0.6"/>
@@ -2653,7 +2653,7 @@ updateSpotlightGate();
   if(shopAuthed()){
     try{
       const r=await fetch(SHOP_API+'/api/shop-account/me',{headers:{Authorization:'Bearer '+localStorage.getItem(SHOP_TKEY)}});
-      if(r.status===401){ try{localStorage.removeItem(SHOP_TKEY);}catch(e){} applyPricingGate(); if(typeof showEnterGate==='function') showEnterGate(); }
+      if(r.status===401){ try{localStorage.removeItem(SHOP_TKEY);}catch(e){} applyPricingGate(); }
     }catch(e){}
   }
 })();
@@ -2835,25 +2835,35 @@ function egSetMode(mode){
   });
 })();
 /**
- * First open: the gate blocks until a session exists.
+ * First open: the site is browsable. The gate is summoned, not met.
  *
- * This used to call hideEnterGate() unconditionally so ad and search traffic
- * could read the catalog before being asked for anything. That is no longer the
- * position — an account is required before the catalog is reachable — and the
- * old behaviour meant the gate rendered and then immediately hid itself, so it
- * was present in the markup while gating nothing.
+ * The processor confirmed on 22 Oct 2026 that the hard wall is not required -
+ * only that prices and ordering sit behind an account. Those were always gated
+ * separately: a signed-out card renders "Sign in for price" and its button
+ * opens the auth modal, and no price is ever present in the static HTML.
  *
- * Arriving from /verify with #create-account or #sign-in opens the gate in that
- * mode rather than dropping the visitor into the catalog.
+ * The wall was costing the entire business its discoverability. It was in the
+ * markup before any script ran, so a crawler that executes nothing saw a locked
+ * door and one that renders saw it painted over the catalog. The site does not
+ * appear in search for its own domain name.
+ *
+ * What still requires an account is unchanged: every price, add-to-cart, the
+ * assistant, and the 21+/research-use attestation taken at registration. The
+ * research-use-only line sits in the announce bar on every page, above all of
+ * this, signed in or not.
+ *
+ * Arriving with #create-account or #sign-in still opens the gate in that mode.
  */
 (function(){
   if (shopAuthed()) { hideEnterGate(); return; }
+  // Only when the visitor asked for it: arriving from /verify or a CTA with
+  // #sign-in / #create-account. Everyone else gets the catalog.
   try {
     var h = (location.hash || '').toLowerCase();
-    if (h === '#create-account') egSetMode('register');
-    else if (h === '#sign-in') egSetMode('login');
+    if (h === '#create-account') { egSetMode('register'); showEnterGate(); return; }
+    if (h === '#sign-in')        { egSetMode('login');    showEnterGate(); return; }
   } catch(e){}
-  showEnterGate();
+  hideEnterGate();
 })();
 </script>
 <script>
