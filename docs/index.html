@@ -809,6 +809,13 @@
      reads immediately on a phone without covering the nav. */
   /* Above #enterGate (1200): scan traffic lands on the sign-in gate first, and
      the discount is exactly what motivates them to push through it. */
+  /* Quiet by design: a researcher signing in should not be nudged toward a
+     programme they are not in, but a member who lands here needs the door. */
+  .nova-elite-row{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);
+    display:flex;gap:7px;justify-content:center;align-items:baseline;flex-wrap:wrap;
+    font-size:12.5px;color:var(--silver-dim);}
+  .nova-elite-row a{color:var(--gold);border-bottom:1px solid transparent;}
+  .nova-elite-row a:hover{border-bottom-color:var(--gold);}
   .promo-banner{position:fixed;top:0;left:0;right:0;z-index:1300;display:flex;align-items:center;
     justify-content:center;gap:10px;padding:11px 44px 11px 16px;
     background:linear-gradient(90deg,#171410,#2a2318);color:#f5efdf;
@@ -988,6 +995,16 @@
         </form>
         <div class="eg-msg" id="egMsg"></div>
 
+        <!-- NOVA Elite is a different account on a different system: members
+             sign in against /api/affiliate-portal, researchers against
+             /api/shop-account. Someone arriving with a member login and trying
+             it here would only be told their password is wrong, so the way
+             across is stated rather than left to be discovered. -->
+        <div class="nova-elite-row">
+          <span>NOVA Elite member?</span>
+          <a href="nova-elite.html">Open your dashboard &rarr;</a>
+        </div>
+
         
         <!-- An unauthenticated browse path was removed: the catalog now
              requires an account. Kept as a note rather than silence because it
@@ -1018,6 +1035,15 @@
       <button type="submit" class="btn btn-gold" id="authSubmit" style="width:100%;margin-top:18px;">Log in</button>
     </form>
     <div class="auth-msg" id="authMsg"></div>
+    <!-- NOVA Elite is a different account on a different system: members
+         sign in against /api/affiliate-portal, researchers against
+         /api/shop-account. Someone arriving with a member login and trying
+         it here would only be told their password is wrong, so the way
+         across is stated rather than left to be discovered. -->
+    <div class="nova-elite-row">
+      <span>NOVA Elite member?</span>
+      <a href="nova-elite.html">Open your dashboard &rarr;</a>
+    </div>
   </div>
 </div>
 
