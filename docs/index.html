@@ -416,6 +416,10 @@
   .add-btn.added{background:var(--gold-bright);border-color:var(--gold-bright);color:#141008;}
   .add-btn.soldout{color:var(--silver-dim);border-color:var(--line);cursor:not-allowed;}
   .add-btn.soldout:hover{background:transparent;border-color:var(--line);color:var(--silver-dim);}
+  /* Restocking is news, not a dead end - gold rather than the muted grey the
+     plain sold-out badge uses. */
+  .badge.soldout.restocking{background:var(--gold);color:#141008;}
+  .add-btn.soldout:not(:disabled){cursor:not-allowed;}
   .prod-card.is-soldout .vial-photo{opacity:.4;filter:grayscale(0.5);}
 
   @media (max-width:1100px){.prod-grid{grid-template-columns:repeat(3,1fr);}}
@@ -2363,10 +2367,18 @@ function applyPricingGate(){
 })();
 
 function productCard(p){
-  const badgeHTML = p.soldOut ? `<span class="badge soldout">Sold Out</span>` : '';
+  // "Sold Out" is the end of the conversation; "Back in stock soon" is not.
+  // Only shown where it is true - GHK 50mg is out with no inventory row behind
+  // it and is not coming back, so a blanket restock promise would be false on
+  // at least one card.
+  const badgeHTML = p.soldOut
+    ? (p.restockingSoon
+        ? `<span class="badge soldout restocking">Back in stock soon</span>`
+        : `<span class="badge soldout">Sold Out</span>`)
+    : '';
   const purityHTML = p.purity ? `<span class="purity-tag">${p.purity}</span>` : '';
   const btnHTML = p.soldOut
-    ? `<button class="add-btn soldout" disabled aria-disabled="true">Sold Out</button>`
+    ? `<button class="add-btn soldout" disabled aria-disabled="true">${p.restockingSoon ? 'Back in stock soon' : 'Sold Out'}</button>`
     : (shopAuthed()
         ? `<button class="add-btn" onclick='cartBtnClick(this,${JSON.stringify(p.name)},${JSON.stringify(p.spec)},${p.price})'>Add to Order</button>`
         : `<button class="add-btn" onclick="openAuthModal()">Sign in</button>`);
@@ -2445,7 +2457,7 @@ renderFeatured();
         "image":"https://novaflexusa.com/assets/vials/NF-"+p.slug+".webp",
         "brand":{"@type":"Brand","name":"NovaFlex"},
         "url":"https://novaflexusa.com/#catalog",
-        "offers":(typeof p.price==="number"?{"@type":"Offer","price":p.price.toFixed(2),"priceCurrency":"USD","availability":p.soldOut?"https://schema.org/OutOfStock":"https://schema.org/InStock","url":"https://novaflexusa.com/#catalog"}:undefined)
+        "offers":(typeof p.price==="number"?{"@type":"Offer","price":p.price.toFixed(2),"priceCurrency":"USD","availability":p.soldOut?(p.restockingSoon?"https://schema.org/BackOrder":"https://schema.org/OutOfStock"):"https://schema.org/InStock","url":"https://novaflexusa.com/#catalog"}:undefined)
       }
     };})
   };
@@ -2508,7 +2520,7 @@ async function loadPricing(){
     (d.products || []).forEach(function(p){ by[p.name + '|' + p.spec] = p; });
     PRODUCTS.forEach(function(p){
       var m = by[p.name + '|' + p.spec];
-      if (m) { p.price = m.price; p.compareAtPrice = m.compareAtPrice || null; if (m.soldOut) p.soldOut = true; }
+      if (m) { p.price = m.price; p.compareAtPrice = m.compareAtPrice || null; if (m.soldOut) p.soldOut = true; p.restockingSoon = !!m.restockingSoon; }
     });
     return true;
   } catch(e){ return false; }
