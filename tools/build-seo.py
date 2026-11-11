@@ -150,7 +150,7 @@ def check_catalog_drift(index_products, product_products):
         if not q:
             problems.append("%s is in index.html but not product.html" % p["slug"])
             continue
-        for field in ("name", "display", "spec", "price", "purity"):
+        for field in ("name", "display", "spec", "price", "purity", "cert"):
             a, b = p.get(field), q.get(field)
             if (a or "") != (b or ""):
                 problems.append(
@@ -268,6 +268,7 @@ def write_llms(products, content, cat_labels):
         "- Research-use-only reference material for qualified researchers and laboratories, aged 21+.",
         "- 26 catalog items across the structural, NV-4, GHK, MT, NV-5 and NV-6 series, multi-component vials, cofactors, and laboratory solvents.",
         "- Every lot: 99%+ assayed purity by HPLC, identity confirmed by mass spectrometry, batch Certificate of Analysis included. Independent analysis by Janoshik Analytical.",
+        "- Items marked \"lot certificate pending\" are listed before their own lot report is in; no purity figure is given for them until it is.",
         f"- Ships from Clayton, NC (USA), same business day before cutoff, tracked. Free US shipping over ${FREE_SHIP_THRESHOLD}.",
         "",
         # The guides and calculator were unpublished for payment-processor
@@ -286,7 +287,8 @@ def write_llms(products, content, cat_labels):
         lines.append("### %s" % cat_labels.get(cat, cat))
         lines.append("")
         for p in sorted(by_cat[cat], key=lambda p: label(p).lower()):
-            purity = " — %s HPLC purity" % p["purity"] if p.get("purity") else ""
+            purity = " — %s HPLC purity" % p["purity"] if p.get("purity") else (
+                " — lot certificate pending" if p.get("cert") == "pending" else "")
             lines.append("- [%s %s](%s/%s.html)%s" % (label(p), p.get("spec", ""), SITE, p["slug"], purity))
         lines.append("")
 
@@ -425,6 +427,8 @@ def description_for(p, c):
             p.get("spec", ""),
             purity,
         )
+    elif p.get("cert") == "pending":
+        lead = "%s %s — lyophilized reference material; lot Certificate of Analysis pending." % (label, p.get("spec", ""))
     else:
         lead = "%s %s — laboratory supply, batch documented." % (label, p.get("spec", ""))
     tail = " For research use only. Ships from the USA."

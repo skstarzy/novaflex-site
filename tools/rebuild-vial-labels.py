@@ -128,7 +128,7 @@ def tracked(draw, cx, y, text, fnt, fill, track=0.0, squeeze=1.0):
     return layer, (int(cx - layer.width / 2), int(y - pad))
 
 
-def rebuild(src_path, dst_path, name, dose, purity):
+def rebuild(src_path, dst_path, name, dose, purity, note="STERILE DILUENT"):
     im = Image.open(src_path).convert("RGBA")
     if im.size != (450, 798):
         sys.exit("%s is %dx%d; the measured geometry assumes 450x798" % (src_path, *im.size))
@@ -173,10 +173,11 @@ def rebuild(src_path, dst_path, name, dose, purity):
         lines.append(("%s PURITY" % purity, 600, font(14, "medium"), MUTED, 3.6))
         lines.append(("RESEARCH USE ONLY", 626, font(14, "medium"), GOLD, 3.6))
     else:
-        # Solvents carry no assay, so the label centres volume over the notice
-        # rather than leaving a conspicuous gap where a purity figure would be.
+        # No purity figure: solvents carry no assay, and a compound whose lot
+        # certificate is still pending shows none until it has one. The label
+        # centres volume over a plain notice rather than leaving a gap.
         lines.append((dose, 556, font(21, "medium"), GOLD, 4.0))
-        lines.append(("STERILE DILUENT", 606, font(14, "medium"), MUTED, 3.6))
+        lines.append((note, 606, font(14, "medium"), MUTED, 3.6))
         lines.append(("RESEARCH USE ONLY", 632, font(14, "medium"), GOLD, 3.6))
 
     for text, y, fnt, fill, track in lines:
@@ -227,7 +228,8 @@ def catalog():
         # so the components are now what goes on the label. set_type auto-fits,
         # so the four-component vial still holds its margins.
         dose = d.get("spec", "").replace(" vial", "").upper().replace("MG", " MG").replace("ML", " ML")
-        out.append((d["slug"], label, " ".join(dose.split()), d.get("purity")))
+        note = "STERILE DILUENT" if d.get("cat") == "solvents" else "LYOPHILIZED POWDER"
+        out.append((d["slug"], label, " ".join(dose.split()), d.get("purity"), note))
     return out
 
 
@@ -241,13 +243,13 @@ def main():
               % len(os.listdir(ORIGINAL)))
 
     done = 0
-    for slug, name, dose, purity in catalog():
+    for slug, name, dose, purity, note in catalog():
         fn = "NF-%s.webp" % slug
         src = os.path.join(ORIGINAL, fn)
         if not os.path.exists(src):
             print("  skip %-18s (no source render)" % slug)
             continue
-        rebuild(src, os.path.join(VIALS, fn), name, dose, purity)
+        rebuild(src, os.path.join(VIALS, fn), name, dose, purity, note)
         print("  %-18s %-14s %-8s %s" % (slug, name, dose, purity or "—"))
         done += 1
     print("relabelled %d vials" % done)
